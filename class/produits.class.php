@@ -43,7 +43,7 @@
                 $stmt->bindValue(':image', $this->image);
                 $stmt->bindValue(':stock', $this->stock);
                 $stmt->execute();
-                
+
                 $this->pdo->commit();
 
                 $_SESSION['mesgs']['success'][] = 'Produit ajouté avec succès';
@@ -74,8 +74,10 @@
 
         public static function fetchAll($db){
             try {
-                $stmt = $db->query("SELECT * FROM produits");
-                return $stmt->fetchAll();
+                $requet = "SELECT * FROM produits";
+                $stmt = $db->prepare($requet);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $e) {
                 error_log("Erreur lors de la récupération des produits: " . $e->getMessage());
                 return [];
