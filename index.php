@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__) . '/lib/security.lib.php');
 require_once(dirname(__FILE__) . '/lib/myproject.lib.php');
 $db=require(dirname((__FILE__)) . '/lib/mypdo.php' );
 if (GETPOST('debug') == true) {
