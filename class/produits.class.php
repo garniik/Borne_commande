@@ -4,6 +4,7 @@
         private object $pdo;
         private int $id;
         private string $nom;
+        private string $categorie;
         private string $description;
         private float $prix;
         private string $image;
@@ -14,6 +15,7 @@
             foreach ($data as $key => $value) {
                 $this->id = filter_var($data['id'], FILTER_VALIDATE_INT);
                 $this->nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
+                $this->categorie = filter_var($data['categorie'], FILTER_SANITIZE_STRING);
                 $this->description = filter_var($data['description'], FILTER_SANITIZE_STRING);
                 $this->prix = filter_var($data['prix'], FILTER_VALIDATE_FLOAT);
                 $this->image = filter_var($data['image'], FILTER_SANITIZE_STRING);
@@ -26,6 +28,7 @@
             $this->pdo = $pdo;
             $this->id = 0;
             $this->nom = '';
+            $this->categorie = '';
             $this->description = '';
             $this->prix = 0;
             $this->image = '';
@@ -36,8 +39,9 @@
         {
             try{
                 $this->pdo->beginTransaction();
-                $stmt = $this->pdo->prepare("INSERT INTO produits (nom, description, prix, image, stock) VALUES (:nom, :description, :prix, :image, :stock)");
+                $stmt = $this->pdo->prepare("INSERT INTO produits (nom, categorie, description, prix, image, stock) VALUES (:nom, :categorie, :description, :prix, :image, :stock)");
                 $stmt->bindValue(':nom', $this->nom);
+                $stmt->bindValue(':categorie', $this->categorie);
                 $stmt->bindValue(':description', $this->description);
                 $stmt->bindValue(':prix', $this->prix);
                 $stmt->bindValue(':image', $this->image);
@@ -56,16 +60,82 @@
 
         public static function delete()
         {
-            pass;
+            try{
+                $this->pdo->exec("DELETE FROM produits WHERE id = " . $this->id);
+            }
+            catch (Exception $e){
+                $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            }
         }
 
         public static function update()
         {
-            pass;
+            try{
+                $this->pdo->beginTransaction();
+                $stmt = $this->pdo->prepare("UPDATE produits SET nom = :nom, categorie = :categorie, description = :description, prix = :prix, image = :image, stock = :stock WHERE id = :id");
+                $stmt->bindValue(':id', $this->id);
+                $stmt->bindValue(':nom', $this->nom);
+                $stmt->bindValue(':categorie', $this->categorie);
+                $stmt->bindValue(':description', $this->description);
+                $stmt->bindValue(':prix', $this->prix);
+                $stmt->bindValue(':image', $this->image);
+                $stmt->bindValue(':stock', $this->stock);
+                $stmt->execute();
+
+                $this->pdo->commit();
+
+                $_SESSION['mesgs']['success'][] = 'Produit modifié avec succès';
+
+            }catch (Exception $e){
+                $this->pdo->rollBack();
+                $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            }
         }
 
-        public static function find(){
-            pass;
+        public static function find($db,$data){
+            try{
+                $id = $data['id']??'';
+                $nom = $data ['nom']??'';
+                $categorie = $data['categorie']??'';
+                $prix = $data ['prix']??'';
+                
+                $sql = "SELECT * FROM produits WHERE 1 ";
+
+                if($id){
+                    $sql .= " AND id = :id";
+                }
+                if($nom){
+                    $sql .= " AND nom like :nom";
+                }
+                if($categorie){
+                    $sql .= " AND categorie = :categorie";
+                }
+                if($prix){
+                    $sql .= " AND prix = :prix";
+                }
+
+                $stm = $db->prepare($sql);
+
+                if($id){
+                    $stm->bindValue(':id', $data['id']);
+                }
+                if($nom){
+                    $stm->bindValue(':nom', $data['nom']);
+                }
+                if($categorie){
+                    $stm->bindValue(':categorie', $data['categorie']);
+                }
+                if($prix){
+                    $stm->bindValue(':prix', $data['prix']);
+                }
+
+                $stm->execute();
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
+                
+
+            }catch(Exception $e){
+                $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            }
         }
         
         public static function fetch(){
