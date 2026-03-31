@@ -138,8 +138,11 @@
             }
         }
         
-        public static function fetch(){
-            pass;
+        public static function findById(PDO $pdo, int $id): ?array {
+            $stmt = $pdo->prepare("SELECT * FROM produits WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row ?: null;
         }
 
         public static function fetchAll($db){
