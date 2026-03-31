@@ -22,9 +22,6 @@ if (!empty($_SESSION['mesgs']['errors'])) {
       <h1><i class="fa-solid fa-boxes-stacked" style="color:var(--accent);font-size:1.4rem;vertical-align:-2px;margin-right:6px;"></i>Gestion des <span>Produits</span></h1>
       <p>Visualisez et gérez l'ensemble de vos produits en stock.</p>
     </div>
-    <button class="btn-add" onclick="toggleForm()">
-      <i class="fa-solid fa-plus"></i> Ajouter un produit
-    </button>
   </div>
  
   <!-- ── Statistiques rapides ───────────────────────────────────── -->
@@ -63,11 +60,8 @@ if (!empty($_SESSION['mesgs']['errors'])) {
   <div class="panel" id="form-panel">
     <div class="panel-header">
       <span class="panel-title"><i class="fa-solid fa-circle-plus"></i> Nouveau produit</span>
-      <button class="btn-cancel-form" onclick="toggleForm()" style="padding:6px 12px;font-size:.8rem;">
-        <i class="fa-solid fa-xmark"></i> Fermer
-      </button>
     </div>
-    <div class="panel-body form-collapse" id="form-collapse">
+    <div class="panel-body">
       <form method="POST" action="index.php?element=admin&action=produits">
         <input type="hidden" name="action_produit" value="add">
         <div class="form-grid">
