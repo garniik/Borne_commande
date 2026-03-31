@@ -37,7 +37,7 @@ if (!empty($_SESSION['mesgs']['errors'])) {
     <p>Merci ! Votre commande a été enregistrée.</p>
     <?php unset($_SESSION['panier']); ?>
     <p><a href="?element=client&action=index">← Retour à la liste</a></p>
-<?php elseif ($selected): ?>
+<?php else: ?>
     <!-- ── Liste des produits ───────────────────────── -->
     <h2>Liste des produits</h2>
     <?php if (empty($produits)): ?>
