@@ -38,27 +38,6 @@ if (!empty($_SESSION['mesgs']['errors'])) {
     <?php unset($_SESSION['panier']); ?>
     <p><a href="?element=client&action=index">← Retour à la liste</a></p>
 <?php elseif ($selected): ?>
-    <!-- ── Card du produit sélectionné ───────────────────────── -->
-    <h2>Fiche produit</h2>
-    <div style="border:1px solid #ddd;padding:12px;max-width:400px;">
-        <h3><?= htmlspecialchars($selected['nom']) ?></h3>
-        <p>Catégorie : <?= htmlspecialchars($selected['categorie']) ?></p>
-        <p><?= htmlspecialchars($selected['description'] ?? 'Pas de description') ?></p>
-        <p><strong><?= number_format((float)$selected['prix'], 2, ',', ' ') ?> €</strong></p>
-        <p>Stock : <?= (int)$selected['stock'] ?></p>
-        <?php if (!empty($selected['image'])): ?>
-            <img src="<?= htmlspecialchars($selected['image']) ?>" style="max-width:100%;height:auto;">
-        <?php endif; ?>
-        <form method="POST" action="?element=client&action=index">
-            <input type="hidden" name="action_panier" value="add">
-            <input type="hidden" name="id_produit" value="<?= (int)$selected['id'] ?>">
-            <label>Quantité : <input type="number" name="quantite" value="1" min="1" max="<?= (int)$selected['stock'] ?>"></label><br><br>
-            <button type="submit">Ajouter au panier</button>
-        </form>
-        <br>
-        <a href="?element=client&action=index">← Retour à la liste</a>
-    </div>
-<?php else: ?>
     <!-- ── Liste des produits ───────────────────────── -->
     <h2>Liste des produits</h2>
     <?php if (empty($produits)): ?>
@@ -72,7 +51,12 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                     Prix : <?= number_format((float)$p['prix'], 2, ',', ' ') ?> € — 
                     Stock : <?= (int)$p['stock'] ?>
                     <br>
-                    <a href="?element=client&action=index&id=<?= (int)$p['id'] ?>">Voir la fiche</a>
+                    <form method="POST" action="?element=client&action=index" style="display:inline;">
+                        <input type="hidden" name="action_panier" value="add">
+                        <input type="hidden" name="id_produit" value="<?= (int)$p['id'] ?>">
+                        <input type="number" name="quantite" value="1" min="1" max="<?= (int)$p['stock'] ?>" style="width:50px;">
+                        <button type="submit">Ajouter au panier</button>
+                    </form>
                 </li>
             <?php endforeach; ?>
         </ul>
