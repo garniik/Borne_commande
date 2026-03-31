@@ -35,7 +35,7 @@
             $this->stock = 0;
         }
 
-        public static function create()
+        public function create()
         {
             try{
                 $this->pdo->beginTransaction();
@@ -58,7 +58,7 @@
             }
         }
 
-        public static function delete()
+        public function delete()
         {
             try{
                 $this->pdo->exec("DELETE FROM produits WHERE id = " . $this->id);
@@ -68,7 +68,7 @@
             }
         }
 
-        public static function update()
+        public function update()
         {
             try{
                 $this->pdo->beginTransaction();
