@@ -22,6 +22,8 @@
                 <th>Nom</th>
                 <th>Prix</th>
                 <th>Quantité</th>
+                <th>Catégorie</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +32,8 @@
                 <td><?php echo $produit['nom']; ?></td>
                 <td><?php echo $produit['prix']; ?></td>
                 <td><?php echo $produit['quantite']; ?></td>
+                <td><?php echo $produit['categorie']; ?></td>
+                <td><button class="w3-button w3-blue">Ajouter</button></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
