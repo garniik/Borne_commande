@@ -31,7 +31,12 @@
             <td><?php echo $produit['stock']; ?></td>
             <td><?php echo $produit['description']; ?></td>
             <td><?php echo $produit['image']; ?></td>
-            <button class="btn btn-danger" type="submit" name="delete">Supprimer</button>
+            <td>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="<?php echo (int)$produit['id']; ?>">
+                    <button class="btn btn-danger" type="submit" name="delete" onclick="return confirm('Supprimer ?')">Supprimer</button>
+                </form>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>

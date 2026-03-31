@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../class/produits.class.php');
+require_once(dirname(__FILE__) . '/../../class/produits.class.php');
 
 if (isset($_POST['add'])) {
     $produit = new Produits($db);
@@ -12,15 +12,12 @@ if (isset($_POST['add'])) {
         'image' => $_POST['image'],
     ]);
     $produit->create();
-    
 }
 
 if (isset($_POST['delete'])) {
     $produit = new Produits($db);
     $produit->hydrate(['id' => $_POST['id']]);
     $produit->delete();
-    header('Location: index.php?element=admin&action=produits');
-    exit;
 }
 
-$produits = Produits::fetchAll($db);
+$donnee = Produits::fetchAll($db);
