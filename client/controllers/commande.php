@@ -1,4 +1,8 @@
 <?php
+// Afficher les erreurs PHP (temporaire)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 require_once dirname(__FILE__) . '/../../class/commandes.class.php';
 require_once dirname(__FILE__) . '/../../class/produits.class.php';
 
@@ -30,5 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     } else {
         $_SESSION['mesgs']['errors'][] = 'Erreur lors de la création de la commande.';
+        header('Location: ?element=client&action=commande');
+        exit;
     }
 }
