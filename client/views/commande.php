@@ -17,9 +17,8 @@ if (!empty($_SESSION['mesgs']['errors'])) {
 <h2>Valider la commande</h2>
 
 <form method="POST" action="?element=client&action=commande">
-    <label>Nom *<br><input type="text" name="nom" required></label><br><br>
-    <label>Téléphone *<br><input type="text" name="tel" required></label><br><br>
-    <label>Borne<br><input type="number" name="id_borne"></label><br><br>
+    <label>Téléphone *<br><input type="text" name="phone" required></label><br><br>
+    <label>Borne<br><input type="number" name="Num_Borne"></label><br><br>
     <button type="submit">Valider</button>
 </form>
 
