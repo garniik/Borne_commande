@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Créer la commande
     $commande = new Commandes($db);
-    $commande->tel = $tel;
-    $commande->id_borne = $id_borne;
+    $commande->phone = $tel;
+    $commande->num_borne = $id_borne;
     if ($commande->create()) {
         // Ajouter chaque produit du panier à la commande
         foreach ($panier as $id_produit => $quantite) {
