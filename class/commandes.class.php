@@ -51,7 +51,7 @@ class Commandes
     {
         try{
             $this->pdo->beginTransaction();
-            $stmt = $this->pdo->prepare("INSERT INTO commandes_produits (id_commande, id_produit, quantite) VALUES (:id_commande, :id_produit, :quantite)");
+            $stmt = $this->pdo->prepare("INSERT INTO produit_commander (id_commande, id_produit, quantite) VALUES (:id_commande, :id_produit, :quantite)");
             $stmt->bindValue(':id_commande', $this->id);
             $stmt->bindValue(':id_produit', $id_produit);
             $stmt->bindValue(':quantite', $quantite);
