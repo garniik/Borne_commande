@@ -50,6 +50,7 @@ class Commandes
     public function addProduit($id_produit, $quantite)
     {
         try{
+            error_log("addProduit appelé avec id_commande={$this->id}, id_produit=$id_produit, quantite=$quantite");
             $this->pdo->beginTransaction();
             $stmt = $this->pdo->prepare("INSERT INTO produit_commander (id_commande, id_produit, quantite) VALUES (:id_commande, :id_produit, :quantite)");
             $stmt->bindValue(':id_commande', $this->id);
@@ -58,11 +59,13 @@ class Commandes
             $stmt->execute();
 
             $this->pdo->commit();
+            error_log("addProduit réussi pour commande {$this->id}");
 
             $_SESSION['mesgs']['success'][] = 'Produit ajouté à la commande avec succès';
 
         }catch (Exception $e){
             $this->pdo->rollBack();
+            error_log("Erreur addProduit : " . $e->getMessage());
             $_SESSION['mesgs']['errors'][] = $e->getMessage();
         }
     }
