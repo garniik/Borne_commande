@@ -4,16 +4,16 @@ class Commandes
 {
     private object $pdo;
     private int $id;
-    private int $phone;
+    protected string $phone;
     private string $heure;
-    private int $num_borne;
+    protected int $num_borne;
 
     public function hydrate(array $data)
     {
         foreach ($data as $key => $value) {
             $this->id = filter_var($data['id'], FILTER_VALIDATE_INT);
-            $this->phone = filter_var($data['phone'], FILTER_VALIDATE_INT);
-            $this->date = filter_var($data['date'], FILTER_SANITIZE_STRING);
+            $this->phone = filter_var($data['phone'], FILTER_SANITIZE_STRING);
+            $this->heure = filter_var($data['heure'], FILTER_SANITIZE_STRING);
             $this->num_borne = filter_var($data['num_borne'], FILTER_VALIDATE_INT);
         }
     }
@@ -22,7 +22,7 @@ class Commandes
     {
         $this->pdo = $pdo;
         $this->id = 0;
-        $this->phone = 0;
+        $this->phone = '';
         $this->heure = '';
         $this->num_borne = 0;
     }
