@@ -18,7 +18,7 @@ if (!empty($_SESSION['mesgs']['errors'])) {
 
 <form method="POST" action="?element=client&action=commande">
     <label>Téléphone *<br><input type="text" name="phone" required></label><br><br>
-    <label>Borne<br><input type="number" name="Num_Borne"></label><br><br>
+    <label>Borne<br><input type="number" name="num_borne"></label><br><br>
     <button type="submit">Valider</button>
 </form>
 

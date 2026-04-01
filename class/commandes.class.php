@@ -31,7 +31,7 @@ class Commandes
     {
         try{
             $this->pdo->beginTransaction();
-            $stmt = $this->pdo->prepare("INSERT INTO commandes (phone, heure, Num_Borne) VALUES (:phone, NOW(), :num_borne)");
+            $stmt = $this->pdo->prepare("INSERT INTO commandes (phone, heure, num_borne) VALUES (:phone, NOW(), :num_borne)");
             $stmt->bindValue(':phone', $this->phone);
             $stmt->bindValue(':num_borne', $this->num_borne);
             $stmt->execute();
