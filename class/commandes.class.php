@@ -31,11 +31,12 @@ class Commandes
     {
         try{
             $this->pdo->beginTransaction();
-            $stmt = $this->pdo->prepare("INSERT INTO commandes (phone, heure, num_borne) VALUES (:phone, :heure, :num_borne)");
+            $stmt = $this->pdo->prepare("INSERT INTO commandes (phone, heure, num_borne, created_at) VALUES (:phone, :heure, :num_borne, DEFAULT CURRENT_TIMESTAMP)");
             $stmt->bindValue(':phone', $this->phone);
-            $stmt->bindValue(':heure', $this->heure);
+            $stmt->bindValue(':heure', $this->heure);   
             $stmt->bindValue(':num_borne', $this->num_borne);
             $stmt->execute();
+            $this->id = (int)$this->pdo->lastInsertId();
 
             $this->pdo->commit();
 
