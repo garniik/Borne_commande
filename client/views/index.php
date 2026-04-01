@@ -27,7 +27,7 @@ if (!empty($_SESSION['mesgs']['errors'])) {
         <?php endforeach; ?>
     </ul>
     <p><strong>Total : <?= number_format($total, 2, ',', ' ') ?> €</strong></p>
-    <p><a href="?element=client&action=index&valider=1">Valider la commande</a></p>
+    <p><a href="?element=client&action=commande">Valider la commande</a></p>
 <?php endif; ?>
 
 <hr>
@@ -81,10 +81,4 @@ if (!empty($_SESSION['mesgs']['errors'])) {
     </table>
 </div>
 
-<?php if (GETPOST('valider')): ?>
-    <h2>Commande validée</h2>
-    <p>Merci ! Votre commande a été enregistrée.</p>
-    <?php unset($_SESSION['panier']); ?>
-    <p><a href="?element=client&action=index">← Retour à la liste</a></p>
-<?php endif; ?>
 
