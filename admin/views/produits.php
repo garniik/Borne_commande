@@ -22,6 +22,7 @@
         <th>Description</th>
         <th>Image</th>
         <th>Actions</th>
+        <th>Ajouter du stock</th>
     </tr>
     <?php foreach ($donnee as $produit): ?>
         <tr>
@@ -35,6 +36,13 @@
                 <form method="post" style="display:inline;">
                     <input type="hidden" name="id" value="<?php echo (int)$produit['id']; ?>">
                     <button class="btn btn-danger" type="submit" name="delete" onclick="return confirm('Supprimer ?')">Supprimer</button>
+                </form>
+            </td>
+            <td>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="<?php echo (int)$produit['id']; ?>">
+                    <input type="number" name="quantite" placeholder="Quantité">
+                    <button class="btn btn-success" type="submit" name="add_stock" onclick="return confirm('Ajouter du stock ?')">Ajouter</button>
                 </form>
             </td>
         </tr>

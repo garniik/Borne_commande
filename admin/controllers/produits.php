@@ -20,4 +20,10 @@ if (isset($_POST['delete'])) {
     $produit->delete();
 }
 
+if (isset($_POST['add_stock'])) {
+    $produit = new Produits($db);
+    $produit->hydrate(['id' => $_POST['id']]);
+    $produit->addStock($_POST['quantite']);
+}
+
 $donnee = Produits::fetchAll($db);

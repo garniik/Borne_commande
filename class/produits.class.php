@@ -68,30 +68,6 @@
             }
         }
 
-        public function update()
-        {
-            try{
-                $this->pdo->beginTransaction();
-                $stmt = $this->pdo->prepare("UPDATE produits SET nom = :nom, categorie = :categorie, description = :description, prix = :prix, image = :image, stock = :stock WHERE id = :id");
-                $stmt->bindValue(':id', $this->id);
-                $stmt->bindValue(':nom', $this->nom);
-                $stmt->bindValue(':categorie', $this->categorie);
-                $stmt->bindValue(':description', $this->description);
-                $stmt->bindValue(':prix', $this->prix);
-                $stmt->bindValue(':image', $this->image);
-                $stmt->bindValue(':stock', $this->stock);
-                $stmt->execute();
-
-                $this->pdo->commit();
-
-                $_SESSION['mesgs']['success'][] = 'Produit modifié avec succès';
-
-            }catch (Exception $e){
-                $this->pdo->rollBack();
-                $_SESSION['mesgs']['errors'][] = $e->getMessage();
-            }
-        }
-
         public static function find($db,$data){
             try{
                 $id = $data['id']??'';
@@ -143,6 +119,12 @@
             $stmt->execute([':id' => $id]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             return $row ?: null;
+        }
+
+        public function addStock(int $quantite): bool {
+            if ($this->id === 0) return false;
+            $stmt = $this->pdo->prepare("UPDATE produits SET stock = stock + :quantite WHERE id = :id");
+            return $stmt->execute([':quantite' => $quantite, ':id' => $this->id]);
         }
 
         public static function fetchAll($db){
