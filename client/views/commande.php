@@ -14,6 +14,13 @@ if (!empty($_SESSION['mesgs']['errors'])) {
 }
 ?>
 
+<!-- ── Debug ─────────────────────────────────────────────── -->
+<?php if (!empty($debug)): ?>
+    <div style="background:#fff3cd;color:#856404;border:1px solid #ffeaa7;padding:8px;margin-bottom:10px;font-family:monospace;white-space:pre-wrap;">
+        <?= htmlspecialchars(implode("\n", $debug)) ?>
+    </div>
+<?php endif; ?>
+
 <h2>Valider la commande</h2>
 
 <form method="POST" action="?element=client&action=commande">
