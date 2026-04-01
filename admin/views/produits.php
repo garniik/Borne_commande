@@ -42,7 +42,7 @@
                 <form method="post" style="display:inline;">
                     <input type="hidden" name="id" value="<?php echo (int)$produit['id']; ?>">
                     <input type="number" name="quantite" placeholder="Quantité">
-                    <button class="btn btn-success" type="submit" name="add_stock" onclick="return confirm('Ajouter du stock ?')">Ajouter</button>
+                    <button class="btn btn-success" type="submit" name="add_stock">Ajouter</button>
                 </form>
             </td>
         </tr>
