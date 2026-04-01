@@ -23,8 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commande = new Commandes($db);
     $commande->hydrate($_POST);
     if ($commande->create()) {
+        // Debug : affiche l'ID de la commande
+        error_log("ID commande créé : " . $commande->id);
         // Ajouter chaque produit du panier à la commande
         foreach ($panier as $id_produit => $quantite) {
+            error_log("Ajout produit $id_produit qty $quantite à commande {$commande->id}");
             $commande->addProduit($id_produit, $quantite);
         }
         $_SESSION['mesgs']['success'][] = 'Commande enregistrée avec succès.';
