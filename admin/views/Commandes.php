@@ -44,10 +44,10 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                         $produits->bindValue(':id_commande', $commande['id']);
                         $produits->execute();
                         $liste = $produits->fetchAll(PDO::FETCH_ASSOC);
-                        // Debug complet
-                        echo "<!-- Debug commande {$commande['id']}: " . print_r($liste, true) . " -->";
-                        foreach ($liste as $p) {
-                            echo htmlspecialchars($p['nom']) . ' x' . $p['quantite'] . '<br>';
+                        // Debug temporaire
+                        echo "<!-- Debug commande {$commande['id']}: " . count($liste) . " produits -->";
+                        for ($i = 0; $i < count($liste); $i++) {
+                            echo htmlspecialchars($liste[$i]['nom']) . ' x' . $liste[$i]['quantite'] . '<br>';
                         }
                         if (empty($liste)) {
                             echo "Aucun produit";
