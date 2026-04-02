@@ -36,23 +36,16 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                     <td><?= htmlspecialchars($commande['num_borne']) ?></td>
                     <td>
                         <?php
-                        // Utiliser findById pour récupérer les produits de cette commande
-                        $detail = (new Commandes($db))->findById($commande['id']);
-                        if ($detail && !empty($detail['nom'])) {
-                            // Si plusieurs produits, ils seront dans plusieurs lignes
-                            echo htmlspecialchars($detail['nom']) . ' x' . htmlspecialchars($detail['quantite']);
-                        } else {
-                            // Récupérer tous les produits si plusieurs
-                            $produits = $pdo->prepare("SELECT p.nom, cp.quantite
-                                FROM produit_commander cp
-                                JOIN produits p ON cp.id_produit = p.id
-                                WHERE cp.id_commande = :id_commande");
-                            $produits->bindValue(':id_commande', $commande['id']);
-                            $produits->execute();
-                            $liste = $produits->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($liste as $p) {
-                                echo htmlspecialchars($p['nom']) . ' x' . $p['quantite'] . '<br>';
-                            }
+                        // Récupérer tous les produits de cette commande
+                        $produits = $pdo->prepare("SELECT p.nom, cp.quantite
+                            FROM produit_commander cp
+                            JOIN produits p ON cp.id_produit = p.id
+                            WHERE cp.id_commande = :id_commande");
+                        $produits->bindValue(':id_commande', $commande['id']);
+                        $produits->execute();
+                        $liste = $produits->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($liste as $p) {
+                            echo htmlspecialchars($p['nom']) . ' x' . $p['quantite'] . '<br>';
                         }
                         ?>
                     </td>
