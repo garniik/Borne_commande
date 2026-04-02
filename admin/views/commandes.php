@@ -44,8 +44,8 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                         $produits->bindValue(':id_commande', $commande['id']);
                         $produits->execute();
                         $liste = $produits->fetchAll(PDO::FETCH_ASSOC);
-                        // Debug temporaire
-                        echo "<!-- Debug commande {$commande['id']}: " . count($liste) . " produits -->";
+                        // Debug simple
+                        echo "Nb produits: " . count($liste) . "<br>";
                         for ($i = 0; $i < count($liste); $i++) {
                             echo htmlspecialchars($liste[$i]['nom']) . ' x' . $liste[$i]['quantite'] . '<br>';
                         }
