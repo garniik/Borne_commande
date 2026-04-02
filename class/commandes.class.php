@@ -40,10 +40,12 @@ class Commandes
             $this->pdo->commit();
 
             $_SESSION['mesgs']['success'][] = 'Commande ajoutée avec succès';
+            return $this->id > 0;
 
         }catch (Exception $e){
             $this->pdo->rollBack();
             $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            return false;
         }
     }
 
