@@ -37,7 +37,7 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                     <td>
                         <?php
                         // Récupérer tous les produits de cette commande (plusieurs lignes possibles)
-                        $produits = $pdo->prepare("SELECT p.nom, cp.quantite
+                        $produits = $db->prepare("SELECT p.nom, cp.quantite
                             FROM produit_commander cp
                             JOIN produits p ON cp.id_produit = p.id
                             WHERE cp.id_commande = :id_commande");
