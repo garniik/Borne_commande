@@ -3,7 +3,7 @@
 class Commandes
 {
     private object $pdo;
-    protected int $id;
+    private int $id;
     protected string $phone;
     private string $heure;
     protected int $num_borne;
@@ -48,6 +48,11 @@ class Commandes
             return false;
         }
     }
+
+    public function getId(): int
+{
+    return $this->id;
+}
 
     public function addProduit($id_produit, $quantite)
     {
@@ -101,10 +106,10 @@ class Commandes
     public function findById($id)
     {
         try{
-            $stmt = $this->pdo->prepare("SELECT c.*, p.nom, p.prix, cp.quantite
+            $stmt = $this->pdo->prepare("SELECT c.*, p.nom, p.prix, pc.quantite
              FROM commandes c
-             LEFT JOIN commande_produit cp ON c.id = cp.id_commande
-             LEFT JOIN produits p ON cp.id_produit = p.id
+             LEFT JOIN produit_commander pc ON c.id = pc.id_commande
+             LEFT JOIN produits p ON pc.id_produit = p.id
              WHERE c.id = :id");
             $stmt->bindValue(':id', $id);
             $stmt->execute();
