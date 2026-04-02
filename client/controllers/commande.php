@@ -8,14 +8,17 @@ require_once dirname(__FILE__) . '/../../class/produits.class.php';
 
 // Traitement du formulaire de validation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $debug = []; // Pour afficher sur la page
+    $debug[] = "POST reçu : " . print_r($_POST, true);
     $nom = trim($_POST['nom'] ?? '');
     $tel = trim($_POST['tel'] ?? '');
     $id_borne = (int)($_POST['id_borne'] ?? 0);
     $panier = $_SESSION['panier'] ?? [];
+    $debug[] = "Panier : " . print_r($panier, true);
 
     if (empty($panier)) {
         $_SESSION['mesgs']['errors'][] = 'Votre panier est vide.';
-        header('Location: ?element=client&action=index');
+        header('Location: ?element=client&action=commande');
         exit;
     }
 
@@ -23,18 +26,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commande = new Commandes($db);
     $commande->hydrate($_POST);
     if ($commande->create()) {
+        $debug[] = "ID commande créé : " . $commande->id;
         // Ajouter chaque produit du panier à la commande
-        echo $_POST;
         foreach ($panier as $id_produit => $quantite) {
+            $debug[] = "Ajout produit $id_produit qty $quantite à commande {$commande->id}";
             $commande->addProduit($id_produit, $quantite);
         }
         $_SESSION['mesgs']['success'][] = 'Commande enregistrée avec succès.';
         unset($_SESSION['panier']);
+        $_SESSION['debug'] = $debug; // Stocker le debug en session
         header('Location: ?element=client&action=merci');
         exit;
     } else {
         $_SESSION['mesgs']['errors'][] = 'Erreur lors de la création de la commande.';
+        $_SESSION['debug'] = $debug; // Stocker le debug même en erreur
         header('Location: ?element=client&action=commande');
         exit;
     }
 }
+
+// Récupérer le debug depuis la session s'il existe
+$debug = $_SESSION['debug'] ?? [];
+unset($_SESSION['debug']); // Nettoyer après affichage
