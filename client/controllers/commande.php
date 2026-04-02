@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $_SESSION['mesgs']['success'][] = 'Commande enregistrée avec succès.';
         unset($_SESSION['panier']);
-        header('Location: ?element=client&action=merci');
+        header('Location: ?element=client&action=index');
         exit;
     } else {
         $_SESSION['mesgs']['errors'][] = 'Erreur lors de la création de la commande.';
