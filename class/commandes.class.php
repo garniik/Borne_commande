@@ -11,10 +11,10 @@ class Commandes
     public function hydrate(array $data)
     {
         foreach ($data as $key => $value) {
-            $this->id = filter_var($data['id'], FILTER_VALIDATE_INT);
-            $this->phone = filter_var($data['phone'], FILTER_SANITIZE_STRING);
-            $this->heure = filter_var($data['heure'], FILTER_SANITIZE_STRING);
-            $this->num_borne = filter_var($data['num_borne'], FILTER_VALIDATE_INT);
+            $this->id = filter_var($data['id'] ?? 0, FILTER_VALIDATE_INT);
+            $this->phone = htmlspecialchars($data['phone'] ?? '');
+            $this->heure = htmlspecialchars($data['heure'] ?? '');
+            $this->num_borne = filter_var($data['num_borne'] ?? 0, FILTER_VALIDATE_INT);
         }
     }
     
