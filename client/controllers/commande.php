@@ -6,16 +6,12 @@ error_reporting(E_ALL);
 require_once dirname(__FILE__) . '/../../class/commandes.class.php';
 require_once dirname(__FILE__) . '/../../class/produits.class.php';
 
-$debug = []; // Pour afficher sur la page
-
 // Traitement du formulaire de validation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $debug[] = "POST reçu : " . print_r($_POST, true);
     $nom = trim($_POST['nom'] ?? '');
     $tel = trim($_POST['tel'] ?? '');
     $id_borne = (int)($_POST['id_borne'] ?? 0);
     $panier = $_SESSION['panier'] ?? [];
-    $debug[] = "Panier : " . print_r($panier, true);
 
     if (empty($panier)) {
         $_SESSION['mesgs']['errors'][] = 'Votre panier est vide.';
@@ -27,10 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commande = new Commandes($db);
     $commande->hydrate($_POST);
     if ($commande->create()) {
-        $debug[] = "ID commande créé : " . $commande->id;
         // Ajouter chaque produit du panier à la commande
+        echo $_POST;
         foreach ($panier as $id_produit => $quantite) {
-            $debug[] = "Ajout produit $id_produit qty $quantite à commande {$commande->id}";
             $commande->addProduit($id_produit, $quantite);
         }
         $_SESSION['mesgs']['success'][] = 'Commande enregistrée avec succès.';
