@@ -36,7 +36,7 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                     <td><?= htmlspecialchars($commande['num_borne']) ?></td>
                     <td>
                         <?php
-                        // Récupérer tous les produits de cette commande
+                        // Récupérer tous les produits de cette commande (plusieurs lignes possibles)
                         $produits = $pdo->prepare("SELECT p.nom, cp.quantite
                             FROM produit_commander cp
                             JOIN produits p ON cp.id_produit = p.id
@@ -44,8 +44,13 @@ if (!empty($_SESSION['mesgs']['errors'])) {
                         $produits->bindValue(':id_commande', $commande['id']);
                         $produits->execute();
                         $liste = $produits->fetchAll(PDO::FETCH_ASSOC);
+                        // Debug temporaire
+                        echo "<!-- Debug commande {$commande['id']}: " . count($liste) . " produits -->";
                         foreach ($liste as $p) {
                             echo htmlspecialchars($p['nom']) . ' x' . $p['quantite'] . '<br>';
+                        }
+                        if (empty($liste)) {
+                            echo "Aucun produit";
                         }
                         ?>
                     </td>
