@@ -3,7 +3,7 @@
 class Commandes
 {
     private object $pdo;
-    private int $id;
+    protected int $id;
     protected string $phone;
     private string $heure;
     protected int $num_borne;
