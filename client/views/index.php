@@ -53,10 +53,10 @@
                     $icons = ['Boisson' => '🥤', 'Snack' => '🍪', 'Nourriture' => '🍔'];
                     $emoji = $icons[$produit['categorie']] ?? '🛒';
                 ?>
-                <div class="prod-card <?= $stockClass ?>" onclick="openProductModal(<?= $produit['id'] ?>)">
+                <div class="prod-card <?= $stockClass ?>">
 
                     <!-- Image Url -->
-                    <div class="prod-card-img" onclick="event.stopPropagation()">
+                    <div class="prod-card-img">
                         <?php if (!empty($produit['image'])): ?>
                             <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy">
                         <?php else: ?>
@@ -65,15 +65,19 @@
                     </div>
 
                     <!-- Infos produit -->
-                    <div class="prod-card-body" onclick="event.stopPropagation()">
+                    <div class="prod-card-body">
                         <div class="prod-card-cat"><?= htmlspecialchars($produit['categorie']) ?></div>
                         <div class="prod-card-name"><?= htmlspecialchars($produit['nom']) ?></div>
                         <div class="prod-card-price"><?= formaterPrix($produit['prix']) ?></div>
                     </div>
 
-                    <!-- Action ajouter au panier -->
-                    <div class="prod-card-footer" onclick="event.stopPropagation()">
-                        <form method="POST" action="" style="display:contents;">
+                    <!-- Actions -->
+                    <div class="prod-card-footer">
+                        <button type="button" class="btn btn-ghost btn-sm" onclick="openProductModal(<?= $produit['id'] ?>)" style="padding: 0 12px;">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        
+                        <form method="POST" action="" style="display:contents; flex: 1;">
                             <input type="hidden" name="action_panier" value="add">
                             <input type="hidden" name="id_produit"    value="<?= (int)$produit['id'] ?>">
                             <?php if (isset($_GET['categorie'])): ?>
