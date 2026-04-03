@@ -75,8 +75,6 @@
                 $categorie = $data['categorie']??'';
                 $prix = $data ['prix']??'';
                 
-                $_SESSION['mesgs']['success'][] = 'Debug find: id=' . $id . ', nom=' . $nom . ', categorie=' . $categorie . ', prix=' . $prix;
-                
                 $sql = "SELECT * FROM produits WHERE 1 ";
 
                 if($id){
@@ -91,8 +89,6 @@
                 if($prix){
                     $sql .= " AND prix = :prix";
                 }
-
-                $_SESSION['mesgs']['success'][] = 'Debug SQL: ' . $sql;
 
                 $stm = $db->prepare($sql);
 
@@ -110,10 +106,7 @@
                 }
 
                 $stm->execute();
-                $result = $stm->fetchAll(PDO::FETCH_ASSOC);
-                $_SESSION['mesgs']['success'][] = 'Debug résultat: ' . count($result) . ' produits trouvés';
-                return $result;
-                
+                return $stm->fetchAll(PDO::FETCH_ASSOC);
 
             }catch(Exception $e){
                 $_SESSION['mesgs']['errors'][] = $e->getMessage();

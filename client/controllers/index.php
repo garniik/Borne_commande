@@ -11,11 +11,7 @@ if ($filtre_actif && $categorie !== '') {
     $nom_categorie = $categories[$categorie] ?? $categorie;
     
     $filter_data = ['categorie' => $nom_categorie];
-    // Debug pour voir les données
-    $_SESSION['mesgs']['success'][] = 'Debug: Filtre catégorie = ' . $nom_categorie;
     $donnee = Produits::find($db, $filter_data);
-    // Debug pour voir le nombre de résultats
-    $_SESSION['mesgs']['success'][] = 'Debug: Nombre de produits trouvés = ' . count($donnee ?? []);
 } else {
     $donnee = Produits::fetchAll($db);
 }
