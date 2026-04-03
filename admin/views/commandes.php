@@ -1,56 +1,101 @@
 <?php afficherMessagesFlash(); ?>
 
-<div class="table-container">
-    <h2>Commandes en cours</h2>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Téléphone</th>
-                <th>Heure</th>
-                <th>Borne</th>
-                <th>Produits</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($commandes)): ?>
-                <?php foreach ($commandes as $commande): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($commande['id']) ?></td>
-                        <td><?= htmlspecialchars($commande['phone']) ?></td>
-                        <td><?= htmlspecialchars($commande['heure']) ?></td>
-                        <td><?= htmlspecialchars($commande['num_borne']) ?></td>
-                        <td>
-                            <?php
-                            $produits = $db->prepare("SELECT p.nom, cp.quantite
-                                FROM produit_commander cp
-                                JOIN produits p ON cp.id_produit = p.id
-                                WHERE cp.id_commande = :id_commande");
-                            $produits->bindValue(':id_commande', $commande['id']);
-                            $produits->execute();
-                            $liste = $produits->fetchAll(PDO::FETCH_ASSOC);
-                            
-                            if (!empty($liste)) {
-                                foreach ($liste as $produit) {
-                                    echo htmlspecialchars($produit['nom']) . ' x' . $produit['quantite'] . '<br>';
-                                }
-                            } else {
-                                echo '<em>Aucun produit</em>';
-                            }
-                            ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 20px;">
-                        Aucune commande
-                    </td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+<!-- En-tête -->
+<div style="margin-bottom: 28px;">
+    <h1 class="page-title">
+        Commandes <span>en cours</span>
+    </h1>
+    <p class="page-subtitle">
+        <?= count($commandes ?? []) ?> commande<?= count($commandes ?? []) > 1 ? 's' : '' ?> active<?= count($commandes ?? []) > 1 ? 's' : '' ?>
+    </p>
 </div>
 
-<a href="?element=admin&action=index" class="retour">← Retour admin</a>
+
+<!-- ══════════════════════════════════════════════════════
+     GRILLE DE CARDS COMMANDES
+══════════════════════════════════════════════════════ -->
+<?php if (!empty($commandes)): ?>
+
+    <div class="commandes-grid">
+        <?php foreach ($commandes as $commande):
+
+            // Récupérer les produits de cette commande
+            $stmtProd = $db->prepare("
+                SELECT p.nom, cp.quantite
+                FROM produit_commander cp
+                JOIN produits p ON cp.id_produit = p.id
+                WHERE cp.id_commande = :id_commande
+            ");
+            $stmtProd->bindValue(':id_commande', $commande['id']);
+            $stmtProd->execute();
+            $produits_cmd = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
+        ?>
+            <div class="commande-card">
+
+                <!-- En-tête de la card -->
+                <div class="commande-card-header">
+                    <span class="commande-id">
+                        <i class="fa-solid fa-hashtag"></i>
+                        Commande <?= (int)$commande['id'] ?>
+                    </span>
+                    <?php if (!empty($commande['num_borne'])): ?>
+                        <span class="commande-borne">
+                            <i class="fa-solid fa-desktop"></i>
+                            Borne <?= htmlspecialchars($commande['num_borne']) ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Corps de la card -->
+                <div class="commande-card-body">
+
+                    <!-- Téléphone -->
+                    <div class="commande-info">
+                        <i class="fa-solid fa-phone"></i>
+                        <?= htmlspecialchars($commande['phone']) ?>
+                    </div>
+
+                    <!-- Heure -->
+                    <div class="commande-info">
+                        <i class="fa-solid fa-clock"></i>
+                        <?= htmlspecialchars($commande['heure']) ?>
+                    </div>
+
+                    <!-- Liste des produits commandés -->
+                    <?php if (!empty($produits_cmd)): ?>
+                        <ul class="commande-produits">
+                            <?php foreach ($produits_cmd as $p): ?>
+                                <li class="commande-produit-item">
+                                    <span><?= htmlspecialchars($p['nom']) ?></span>
+                                    <span class="qty">×<?= (int)$p['quantite'] ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p style="color:var(--text-muted); font-size:.85rem; font-style:italic;">
+                            Aucun produit associé.
+                        </p>
+                    <?php endif; ?>
+
+                </div><!-- /card-body -->
+
+            </div><!-- /commande-card -->
+
+        <?php endforeach; ?>
+    </div><!-- /commandes-grid -->
+
+<?php else: ?>
+
+    <div class="empty-state">
+        <i class="fa-solid fa-inbox"></i>
+        <p>Aucune commande en cours pour le moment.</p>
+    </div>
+
+<?php endif; ?>
+
+
+<!-- Lien retour admin -->
+<a href="?element=admin&action=index" class="btn-back" style="margin-top: 32px; display:inline-flex;">
+    <i class="fa-solid fa-arrow-left"></i>
+    Retour au tableau de bord
+</a>
