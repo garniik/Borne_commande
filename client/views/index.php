@@ -23,6 +23,17 @@
 </div>
 
 <div class="filtre-container">
+    <?php if (isset($_GET['categorie']) && $_GET['categorie'] !== ''): ?>
+        <div class="filtre-actif">
+            Filtre actif : 
+            <?php 
+            $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Nourriture'];
+            echo htmlspecialchars($categories[$_GET['categorie']] ?? 'Catégorie inconnue'); 
+            ?>
+            <a href="?element=client&action=index" class="btn btn-secondary" style="margin-left: 10px;">✕ Annuler le filtre</a>
+        </div>
+    <?php endif; ?>
+    
     <form method="get" action="">
         <input type="hidden" name="element" value="client">
         <input type="hidden" name="action" value="index">
@@ -57,9 +68,12 @@
                 <td><?= (int)$produit['stock'] ?></td>
                 <td><?= htmlspecialchars($produit['categorie']) ?></td>
                 <td>
-                    <form method="POST" action="?element=client&action=index" style="display:inline;">
+                    <form method="POST" action="" style="display:inline;">
                         <input type="hidden" name="action_panier" value="add">
                         <input type="hidden" name="id_produit" value="<?= (int)$produit['id'] ?>">
+                        <?php if (isset($_GET['categorie'])): ?>
+                            <input type="hidden" name="categorie" value="<?= htmlspecialchars($_GET['categorie']) ?>">
+                        <?php endif; ?>
                         <input type="number" name="quantite" value="1" min="1" max="<?= (int)$produit['stock'] ?>" class="quantite-input">
                         <button type="submit" class="btn btn-primary">Ajouter</button>
                     </form>

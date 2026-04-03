@@ -1,9 +1,14 @@
 <?php
 require_once(dirname(__FILE__) . '/../../class/produits.class.php');
 
-if(isset($_GET['filtrer'])){
-    $donnee = Produits::find($db,$_GET);
-} else{
+// Récupérer les paramètres de filtre (GET ou POST)
+$categorie = $_GET['categorie'] ?? $_POST['categorie'] ?? '';
+$filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST['categorie'] !== '');
+
+if ($filtre_actif && $categorie !== '') {
+    $filter_data = ['categorie' => $categorie];
+    $donnee = Produits::find($db, $filter_data);
+} else {
     $donnee = Produits::fetchAll($db);
 }
 
@@ -21,7 +26,13 @@ if ($action_panier === 'add' && $id_produit) {
     } else {
         $_SESSION['mesgs']['errors'][] = 'Produit indisponible ou stock insuffisant.';
     }
-    header('Location: ?element=client&action=index');
+    
+    // Préserver les paramètres de filtre lors de la redirection
+    $redirect_url = '?element=client&action=index';
+    if (isset($_POST['categorie']) && $_POST['categorie'] !== '') {
+        $redirect_url .= '&categorie=' . urlencode($_POST['categorie']) . '&filtrer=1';
+    }
+    header('Location: ' . $redirect_url);
     exit;
 }
 

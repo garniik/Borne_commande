@@ -70,6 +70,19 @@ body {
     margin-bottom: 20px;
 }
 
+.filtre-actif {
+    background-color: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+    color: #1976d2;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .filtre-container form {
     display: flex;
     gap: 10px;
