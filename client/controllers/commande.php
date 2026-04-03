@@ -27,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_commande = $commande->getId();
         foreach ($panier as $id_produit => $quantite) {
             $commande->addProduit($id_produit, $quantite);
+            
+            // Déduire le stock du produit
+            $produit = new Produits($db);
+            $produit->hydrate(['id' => $id_produit]);
+            $produit->addStock(-$quantite); // Quantité négative pour déduire
         }
         $_SESSION['mesgs']['success'][] = 'Commande enregistrée avec succès.';
         unset($_SESSION['panier']);
