@@ -57,6 +57,7 @@
 
                     <!-- Image Url -->
                     <div class="prod-card-img">
+                        <!-- DEBUG: Image = [<?= $produit['image'] ?? 'VIDE' ?>] -->
                         <?php if (!empty($produit['image'])): ?>
                             <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy">
                         <?php else: ?>

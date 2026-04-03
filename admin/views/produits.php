@@ -72,7 +72,7 @@
 
                 <div class="form-group form-full">
                     <label class="form-label" for="image">URL de l'image</label>
-                    <input type="url" id="image" name="image(URL)" class="form-control"
+                    <input type="url" id="image" name="image" class="form-control"
                            placeholder="https://exemple.com/image.jpg">
                 </div>
 
