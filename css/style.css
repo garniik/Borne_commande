@@ -1,29 +1,30 @@
 /* ═══════════════════════════════════════════════════════
    BORNE COMMANDE — Design Système Tablette
    Police : Nunito (ronde, lisible, tactile)
-   Thème  : Fond sombre chaud + accents orange vif
+   Thème  : Fond blanc + accents vert vif
 ═══════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 /* ── Variables globales ─────────────────────────────── */
 :root {
-    --bg:         #1c1c28;
-    --bg2:        #252535;
-    --card:       #2e2e42;
-    --card-hover: #363650;
-    --border:     #3a3a52;
-    --accent:     #ff6b35;
-    --accent2:    #ff8c5a;
+    --bg:         #ffffff;
+    --bg2:        #f8fafc;
+    --card:       #ffffff;
+    --card-hover: #f1f5f9;
+    --border:     #e2e8f0;
+    --accent:     #22c55e;
+    --accent2:    #16a34a;
     --green:      #22c55e;
     --yellow:     #f59e0b;
     --red:        #ef4444;
     --blue:       #3b82f6;
-    --text:       #f0f0f8;
-    --text-muted: #8888aa;
+    --text:       #1e293b;
+    --text-muted: #64748b;
     --radius:     16px;
     --radius-sm:  10px;
-    --shadow:     0 8px 32px rgba(0,0,0,.35);
+    --shadow:     0 4px 20px rgba(0,0,0,.08);
+    --shadow-hover: 0 8px 30px rgba(34,197,94,.15);
     --transition: .18s ease;
     --touch:      52px; /* hauteur min pour les éléments tactiles */
 }
