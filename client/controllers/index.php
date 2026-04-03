@@ -6,9 +6,13 @@ $categorie = $_GET['categorie'] ?? $_POST['categorie'] ?? '';
 $filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST['categorie'] !== '');
 
 if ($filtre_actif && $categorie !== '') {
-    $filter_data = ['categorie' => $categorie];
+    // Convertir l'ID de catégorie en nom
+    $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Nourriture'];
+    $nom_categorie = $categories[$categorie] ?? $categorie;
+    
+    $filter_data = ['categorie' => $nom_categorie];
     // Debug pour voir les données
-    $_SESSION['mesgs']['success'][] = 'Debug: Filtre catégorie = ' . $categorie;
+    $_SESSION['mesgs']['success'][] = 'Debug: Filtre catégorie = ' . $nom_categorie;
     $donnee = Produits::find($db, $filter_data);
     // Debug pour voir le nombre de résultats
     $_SESSION['mesgs']['success'][] = 'Debug: Nombre de produits trouvés = ' . count($donnee ?? []);
@@ -34,7 +38,10 @@ if ($action_panier === 'add' && $id_produit) {
     // Préserver les paramètres de filtre lors de la redirection
     $redirect_url = '?element=client&action=index';
     if (isset($_POST['categorie']) && $_POST['categorie'] !== '') {
-        $redirect_url .= '&categorie=' . urlencode($_POST['categorie']) . '&filtrer=1';
+        // Chercher l'ID correspondant au nom de catégorie
+        $categories_noms_to_ids = ['Boisson' => '1', 'Snack' => '2', 'Nourriture' => '3'];
+        $categorie_id = $categories_noms_to_ids[$_POST['categorie']] ?? $_POST['categorie'];
+        $redirect_url .= '&categorie=' . urlencode($categorie_id) . '&filtrer=1';
     }
     header('Location: ' . $redirect_url);
     exit;
