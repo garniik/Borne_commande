@@ -127,6 +127,12 @@
             return $stmt->execute([':quantite' => $quantite, ':id' => $this->id]);
         }
 
+        public function setStock(int $quantite): bool {
+            if ($this->id === 0) return false;
+            $stmt = $this->pdo->prepare("UPDATE produits SET stock = :quantite WHERE id = :id");
+            return $stmt->execute([':quantite' => $quantite, ':id' => $this->id]);
+        }
+
         public static function fetchAll($db){
             try {
                 $requet = "SELECT * FROM produits";

@@ -26,4 +26,10 @@ if (isset($_POST['add_stock'])) {
     $produit->addStock($_POST['quantite']);
 }
 
+if (isset($_POST['set_stock'])) {
+    $produit = new Produits($db);
+    $produit->hydrate(['id' => $_POST['id']]);
+    $produit->setStock($_POST['quantite']);
+}
+
 $donnee = Produits::fetchAll($db);

@@ -109,6 +109,7 @@
                         <th>Prix</th>
                         <th>Stock</th>
                         <th>Ajouter stock</th>
+                        <th>Définir stock</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -166,6 +167,22 @@
                                     <button type="submit" name="add_stock" class="btn btn-success btn-sm">
                                         <i class="fa-solid fa-plus"></i>
                                         Ajouter
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Définir le stock -->
+                            <td>
+                                <form method="post" class="stock-form">
+                                    <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
+                                    <input type="number" name="quantite"
+                                           class="form-control"
+                                           placeholder="Stock"
+                                           min="0"
+                                           style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;">
+                                    <button type="submit" name="set_stock" class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-pen"></i>
+                                        Définir
                                     </button>
                                 </form>
                             </td>
