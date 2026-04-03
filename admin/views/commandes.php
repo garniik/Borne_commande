@@ -76,6 +76,15 @@
                             Aucun produit associé.
                         </p>
                     <?php endif; ?>
+                    
+                    <!-- Bouton suppression -->
+                    <form method="POST" action="" style="margin-top: 15px;">
+                        <input type="hidden" name="id" value="<?= (int)$commande['id'] ?>">
+                        <button type="submit" name="delete_commande" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer cette commande ?')">
+                            <i class="fa-solid fa-trash"></i>
+                            Supprimer
+                        </button>
+                    </form>
 
                 </div><!-- /card-body -->
 
