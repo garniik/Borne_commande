@@ -162,7 +162,6 @@
                                     <input type="number" name="quantite"
                                            class="form-control"
                                            placeholder="Qté"
-                                           min="1"
                                            style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;">
                                     <button type="submit" name="add_stock" class="btn btn-success btn-sm">
                                         <i class="fa-solid fa-plus"></i>
@@ -210,7 +209,7 @@
         </div>
     <?php endif; ?>
 
-</div><!-- /card -->
+</div>
 
 
 <script>
