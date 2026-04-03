@@ -7,7 +7,11 @@ $filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST
 
 if ($filtre_actif && $categorie !== '') {
     $filter_data = ['categorie' => $categorie];
+    // Debug pour voir les données
+    $_SESSION['mesgs']['success'][] = 'Debug: Filtre catégorie = ' . $categorie;
     $donnee = Produits::find($db, $filter_data);
+    // Debug pour voir le nombre de résultats
+    $_SESSION['mesgs']['success'][] = 'Debug: Nombre de produits trouvés = ' . count($donnee ?? []);
 } else {
     $donnee = Produits::fetchAll($db);
 }
