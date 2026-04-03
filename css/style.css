@@ -213,7 +213,7 @@ img { display: block; max-width: 100%; }
 .badge-yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
 .badge-red    { background: rgba(239,68,68,.15);  color: var(--red); }
 .badge-blue   { background: rgba(59,130,246,.15); color: var(--blue); }
-.badge-orange { background: rgba(255,107,53,.15); color: var(--accent); }
+.badge-orange { background: rgba(34,197,94,.15); color: var(--accent); }
 
 /* ═══════════════════════════════════════════════════════
    FORMULAIRES — touch-friendly
@@ -251,7 +251,7 @@ img { display: block; max-width: 100%; }
 .form-control:focus {
     border-color: var(--accent);
     background: var(--card);
-    box-shadow: 0 0 0 3px rgba(255,107,53,.15);
+    box-shadow: 0 0 0 3px rgba(34,197,94,.15);
 }
 
 .form-control::placeholder { color: var(--text-muted); }
@@ -363,7 +363,7 @@ select.form-control { cursor: pointer; }
 .cat-btn.active {
     border-color: var(--accent);
     color: var(--accent);
-    background: rgba(255,107,53,.1);
+    background: rgba(34,197,94,.1);
 }
 
 .cat-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -391,7 +391,7 @@ select.form-control { cursor: pointer; }
 .prod-card:hover {
     border-color: var(--accent);
     transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(255,107,53,.2);
+    box-shadow: 0 12px 40px rgba(34,197,94,.2);
 }
 
 .prod-card-img {
@@ -568,7 +568,7 @@ select.form-control { cursor: pointer; }
 
 .commande-recap-header {
     padding: 14px 20px;
-    background: rgba(255,107,53,.1);
+    background: rgba(34,197,94,.1);
     border-bottom: 1px solid var(--border);
     font-weight: 800;
     font-size: .95rem;
@@ -706,7 +706,7 @@ select.form-control { cursor: pointer; }
 .commande-card:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255,107,53,.15);
+    box-shadow: 0 10px 30px rgba(34,197,94,.15);
 }
 
 .commande-card-header {
@@ -799,7 +799,7 @@ select.form-control { cursor: pointer; }
     flex-shrink: 0;
 }
 
-.stat-icon.orange { background: rgba(255,107,53,.15); color: var(--accent); }
+.stat-icon.orange { background: rgba(34,197,94,.15); color: var(--accent); }
 .stat-icon.green  { background: rgba(34,197,94,.15);  color: var(--green); }
 .stat-icon.blue   { background: rgba(59,130,246,.15); color: var(--blue); }
 .stat-icon.yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
