@@ -11,13 +11,11 @@
     <h1 class="page-title">Valider la <span>commande</span></h1>
     <p class="page-subtitle">Vérifiez votre panier puis renseignez vos informations.</p>
 
-    <!-- Récap du panier (si disponible) -->
+    <!-- Récap du panier -->
     <?php
     $panier  = $_SESSION['panier'] ?? [];
     ?>
     <?php if (!empty($panier)): ?>
-        <!-- NOTE : le controller client/index calcule déjà $details et $total.
-             Ici on les réaffiche en récap lecture-seule. -->
     <?php endif; ?>
 
     <!-- Formulaire de validation -->
@@ -71,4 +69,4 @@
         </div>
     </div>
 
-</div><!-- /commande-wrapper -->
+</div>

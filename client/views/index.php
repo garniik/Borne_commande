@@ -57,7 +57,11 @@
 
                     <!-- Image Url -->
                     <div class="prod-card-img">
-                        <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy">
+                        <?php if (!empty($produit['image'])): ?>
+                            <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy">
+                        <?php else: ?>
+                            <?= $emoji ?>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Infos produit -->
