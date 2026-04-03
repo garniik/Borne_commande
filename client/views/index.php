@@ -55,21 +55,9 @@
                 ?>
                 <div class="prod-card <?= $stockClass ?>">
 
-                    <!-- Image / icône -->
+                    <!-- Image Url -->
                     <div class="prod-card-img">
-                        <?php if (!empty($produit['image'])): ?>
-                            <img src="<?= htmlspecialchars($produit['image']) ?>"
-                                 alt="<?= htmlspecialchars($produit['nom']) ?>"
-                                 loading="lazy">
-                        <?php else: ?>
-                            <?= $emoji ?>
-                        <?php endif; ?>
-
-                        <?php if ($badgeLabel): ?>
-                            <span class="stock-badge badge <?= $badgeClass ?>">
-                                <?= $badgeLabel ?>
-                            </span>
-                        <?php endif; ?>
+                        <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy">
                     </div>
 
                     <!-- Infos produit -->
