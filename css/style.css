@@ -921,3 +921,68 @@ select.form-control { cursor: pointer; }
     .filter-bar { flex-direction: column; }
     .filter-input { min-width: unset; width: 100%; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   VALIDATION TÉLÉPHONE
+═══════════════════════════════════════════════════════ */
+
+/* Wrapper pour positionner l'icône de statut dans le champ */
+.phone-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.phone-input-wrapper .form-control {
+    padding-right: 44px; /* place pour l'icône */
+}
+
+/* Icône ✓ / ✗ à droite du champ */
+.phone-status {
+    position: absolute;
+    right: 14px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.phone-status.status-ok    { color: var(--green); }
+.phone-status.status-error { color: var(--red); }
+
+/* Bordure colorée selon l'état */
+.form-control.is-valid {
+    border-color: var(--green);
+    background: rgba(34, 197, 94, .06);
+}
+
+.form-control.is-invalid {
+    border-color: var(--red);
+    background: rgba(239, 68, 68, .06);
+}
+
+/* Message d'erreur inline sous le champ */
+.field-error {
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--red);
+    min-height: 1.2em; /* évite le saut de layout quand le message apparaît */
+    display: block;
+    animation: slideIn .2s ease;
+}
+
+/* Texte d'aide grisé sous le champ */
+.field-hint {
+    font-size: .78rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+}
+
+/* Bouton désactivé */
+button:disabled,
+.btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none !important;
+}
