@@ -108,9 +108,3 @@
 
 <?php endif; ?>
 
-
-<!-- Lien retour admin -->
-<a href="?element=admin&action=index" class="btn-back" style="margin-top: 32px; display:inline-flex;">
-    <i class="fa-solid fa-arrow-left"></i>
-    Retour au tableau de bord
-</a>
