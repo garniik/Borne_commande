@@ -37,11 +37,7 @@
                                placeholder="0612345678 "
                                autocomplete="tel"
                                required>
-                        <!-- Icône de statut (✓ / ✗) affichée dynamiquement -->
-                        <span class="phone-status" id="phoneStatus" aria-hidden="true"></span>
                     </div>
-                    <!-- Message d'erreur inline -->
-                    <span class="field-error" id="phoneError" role="alert"></span>
                 </div>
 
                 <!-- Numéro de borne -->
@@ -74,7 +70,7 @@
 </div><!-- /commande-wrapper -->
 
 
-<script>
+<!-- <script>
 /**
  * Validation du numéro de téléphone (côté client)
  *
@@ -158,4 +154,4 @@ document.getElementById('formCommande').addEventListener('submit', function(e) {
         phoneInput.focus();
     }
 });
-</script>
+</script> -->
