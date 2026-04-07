@@ -139,16 +139,34 @@
                             <span class="panier-item-prix">
                                 <?= formaterPrix($ligne['produit']['prix'] * $ligne['quantite']) ?>
                             </span>
+                            <!-- Bouton supprimer -->
+                            <form method="POST" action="" style="display:inline; margin-left: 8px;">
+                                <input type="hidden" name="action_panier" value="remove">
+                                <input type="hidden" name="id_produit" value="<?= (int)$ligne['produit']['id'] ?>">
+                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 4px 8px; min-height: auto; font-size: 0.75rem;">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
                         </li>
                     <?php endforeach; ?>
                 </ul>
 
-                <!-- Total + bouton valider -->
+                <!-- Total + boutons -->
                 <div class="panier-footer">
                     <div class="panier-total">
                         <span>Total</span>
                         <span class="panier-total-montant"><?= formaterPrix($total) ?></span>
                     </div>
+                    
+                    <!-- Bouton vider le panier -->
+                    <form method="POST" action="" style="margin-bottom: 10px;">
+                        <input type="hidden" name="action_panier" value="clear">
+                        <button type="submit" class="btn btn-ghost btn-sm btn-full" onclick="return confirm('Vider tout le panier ?')">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Vider le panier
+                        </button>
+                    </form>
+                    
                     <a href="?element=client&action=commande" class="btn btn-success btn-full btn-lg">
                         <i class="fa-solid fa-circle-check"></i>
                         Valider la commande

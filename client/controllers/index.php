@@ -43,6 +43,24 @@ if ($action_panier === 'add' && $id_produit) {
     exit;
 }
 
+// Supprimer un article du panier
+if ($action_panier === 'remove' && $id_produit) {
+    if (isset($_SESSION['panier'][$id_produit])) {
+        unset($_SESSION['panier'][$id_produit]);
+        $_SESSION['mesgs']['success'][] = 'Produit retiré du panier.';
+    }
+    header('Location: ?element=client&action=index');
+    exit;
+}
+
+// Vider tout le panier
+if ($action_panier === 'clear') {
+    $_SESSION['panier'] = [];
+    $_SESSION['mesgs']['success'][] = 'Panier vidé.';
+    header('Location: ?element=client&action=index');
+    exit;
+}
+
 // Préparer les détails du panier pour l’affichage
 $panier = $_SESSION['panier'] ?? [];
 $details = [];
