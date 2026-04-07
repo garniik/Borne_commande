@@ -67,16 +67,67 @@
                         <?= htmlspecialchars($commande['heure']) ?>
                     </div>
 
-                    <!-- Liste des produits commandés -->
-                    <?php if (!empty($produits_cmd)): ?>
+                    <!-- Liste des produits commandés (max 3) -->
+                    <?php if (!empty($produits_cmd)): 
+                        $total_produits = count($produits_cmd);
+                        $produits_afficher = array_slice($produits_cmd, 0, 3);
+                    ?>
                         <ul class="commande-produits">
-                            <?php foreach ($produits_cmd as $p): ?>
+                            <?php foreach ($produits_afficher as $p): ?>
                                 <li class="commande-produit-item">
                                     <span><?= htmlspecialchars($p['nom']) ?></span>
                                     <span class="qty">×<?= (int)$p['quantite'] ?></span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
+                        
+                        <?php if ($total_produits > 3): ?>
+                            <div style="text-align:center; margin-top:8px;">
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="openCommandeModal(<?= (int)$commande['id'] ?>)" style="font-size:0.8rem; padding:4px 12px;">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Voir les <?= $total_produits - 3 ?> article(s) supplémentaire(s)
+                                </button>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <!-- Modal pour cette commande -->
+                        <div id="modal-cmd-<?= (int)$commande['id'] ?>" class="commande-modal">
+                            <div class="modal-content" style="max-width: 400px;">
+                                <button class="modal-close" onclick="closeCommandeModal(<?= (int)$commande['id'] ?>)">&times;</button>
+                                
+                                <div class="modal-header" style="margin-bottom: 20px;">
+                                    <h3 style="margin: 0; font-size: 1.2rem;">
+                                        <i class="fa-solid fa-hashtag"></i>
+                                        Commande <?= (int)$commande['id'] ?>
+                                    </h3>
+                                    <?php if (!empty($commande['num_borne'])): ?>
+                                        <span class="commande-borne" style="margin-top: 8px; display: inline-block;">
+                                            <i class="fa-solid fa-desktop"></i>
+                                            Borne <?= htmlspecialchars($commande['num_borne']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <div class="commande-info" style="margin-bottom: 15px;">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <?= htmlspecialchars($commande['heure']) ?>
+                                </div>
+                                
+                                <h4 style="margin: 15px 0 10px 0; font-size: 1rem; color: var(--text-muted);">
+                                    Articles (<?= $total_produits ?>)
+                                </h4>
+                                
+                                <ul class="commande-produits" style="max-height: 300px; overflow-y: auto;">
+                                    <?php foreach ($produits_cmd as $p): ?>
+                                        <li class="commande-produit-item">
+                                            <span><?= htmlspecialchars($p['nom']) ?></span>
+                                            <span class="qty">×<?= (int)$p['quantite'] ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                        
                     <?php else: ?>
                         <p style="color:var(--text-muted); font-size:.85rem; font-style:italic;">
                             Aucun produit associé.
