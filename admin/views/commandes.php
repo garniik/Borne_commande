@@ -83,12 +83,12 @@
                         </p>
                     <?php endif; ?>
                     
-                    <!-- Bouton suppression -->
+                    <!-- Bouton validation -->
                     <form method="POST" action="" style="margin-top: 15px;">
                         <input type="hidden" name="id" value="<?= (int)$commande['id'] ?>">
-                        <button type="submit" name="delete_commande" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer cette commande ?')">
-                            <i class="fa-solid fa-trash"></i>
-                            Supprimer
+                        <button type="submit" name="validate_commande" class="btn btn-success btn-sm" onclick="return confirm('Valider cette commande ?')">
+                            <i class="fa-solid fa-check"></i>
+                            Valider la commande
                         </button>
                     </form>
 
