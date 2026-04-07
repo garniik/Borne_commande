@@ -21,15 +21,25 @@ if (isset($_POST['delete'])) {
 }
 
 if (isset($_POST['add_stock'])) {
-    $produit = new Produits($db);
-    $produit->hydrate(['id' => $_POST['id']]);
-    $produit->addStock($_POST['quantite']);
+    $quantite = $_POST['quantite'] ?? '';
+    if ($quantite === '' || $quantite === null) {
+        $_SESSION['mesgs']['errors'][] = 'Veuillez saisir une quantité pour ajouter au stock.';
+    } else {
+        $produit = new Produits($db);
+        $produit->hydrate(['id' => $_POST['id']]);
+        $produit->addStock((int)$quantite);
+    }
 }
 
 if (isset($_POST['set_stock'])) {
-    $produit = new Produits($db);
-    $produit->hydrate(['id' => $_POST['id']]);
-    $produit->setStock($_POST['quantite']);
+    $quantite = $_POST['quantite'] ?? '';
+    if ($quantite === '' || $quantite === null) {
+        $_SESSION['mesgs']['errors'][] = 'Veuillez saisir une quantité pour définir le stock.';
+    } else {
+        $produit = new Produits($db);
+        $produit->hydrate(['id' => $_POST['id']]);
+        $produit->setStock((int)$quantite);
+    }
 }
 
 $donnee = Produits::fetchAll($db);
