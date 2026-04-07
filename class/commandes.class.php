@@ -4,7 +4,6 @@ class Commandes
 {
     private object $pdo;
     private int $id;
-    protected string $phone;
     private string $heure;
     protected int $num_borne;
 
@@ -12,7 +11,6 @@ class Commandes
     {
         foreach ($data as $key => $value) {
             $this->id = filter_var($data['id'] ?? 0, FILTER_VALIDATE_INT);
-            $this->phone = htmlspecialchars($data['phone'] ?? '');
             $this->heure = htmlspecialchars($data['heure'] ?? '');
             $this->num_borne = filter_var($data['num_borne'] ?? 0, FILTER_VALIDATE_INT);
         }
@@ -22,7 +20,6 @@ class Commandes
     {
         $this->pdo = $pdo;
         $this->id = 0;
-        $this->phone = '';
         $this->heure = '';
         $this->num_borne = 0;
     }
@@ -31,8 +28,7 @@ class Commandes
     {
         try{
             $this->pdo->beginTransaction();
-            $stmt = $this->pdo->prepare("INSERT INTO commandes (phone, heure, num_borne) VALUES (:phone, NOW(), :num_borne)");
-            $stmt->bindValue(':phone', $this->phone);
+            $stmt = $this->pdo->prepare("INSERT INTO commandes (heure, num_borne) VALUES (NOW(), :num_borne)");
             $stmt->bindValue(':num_borne', $this->num_borne);
             $stmt->execute();
             $this->id = (int)$this->pdo->lastInsertId();

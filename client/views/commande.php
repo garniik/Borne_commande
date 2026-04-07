@@ -22,22 +22,6 @@
 
         <div class="card-body">
             <form method="POST" action="?element=client&action=commande">
-
-                <!-- Champ téléphone -->
-                <div class="form-group">
-                    <label class="form-label" for="phone">
-                        <i class="fa-solid fa-phone"></i>
-                        Téléphone <span style="color:var(--red)">*</span>
-                    </label>
-                    <input type="tel"
-                           id="phone"
-                           name="phone"
-                           class="form-control"
-                           placeholder="0612345678"
-                           autocomplete="tel"
-                           required>
-                </div>
-
                 <!-- Numéro de borne -->
                 <div class="form-group">
                     <label class="form-label" for="num_borne">

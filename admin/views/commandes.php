@@ -49,12 +49,6 @@
                 <!-- Corps de la card -->
                 <div class="commande-card-body">
 
-                    <!-- Téléphone -->
-                    <div class="commande-info">
-                        <i class="fa-solid fa-phone"></i>
-                        <?= htmlspecialchars($commande['phone']) ?>
-                    </div>
-
                     <!-- Heure -->
                     <div class="commande-info">
                         <i class="fa-solid fa-clock"></i>

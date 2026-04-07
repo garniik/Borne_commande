@@ -922,33 +922,6 @@ select.form-control { cursor: pointer; }
     .filter-input { min-width: unset; width: 100%; }
 }
 
-/* ═══════════════════════════════════════════════════════
-   VALIDATION TÉLÉPHONE
-═══════════════════════════════════════════════════════ */
-
-/* Wrapper pour positionner l'icône de statut dans le champ */
-.phone-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.phone-input-wrapper .form-control {
-    padding-right: 44px; /* place pour l'icône */
-}
-
-/* Icône ✓ / ✗ à droite du champ */
-.phone-status {
-    position: absolute;
-    right: 14px;
-    font-size: 1.1rem;
-    font-weight: 900;
-    pointer-events: none;
-    transition: var(--transition);
-}
-
-.phone-status.status-ok    { color: var(--green); }
-.phone-status.status-error { color: var(--red); }
 
 /* Bordure colorée selon l'état */
 .form-control.is-valid {

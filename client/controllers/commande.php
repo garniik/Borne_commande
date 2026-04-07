@@ -18,31 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Récupérer et nettoyer le numéro de téléphone
-    $phone_brut  = trim($_POST['phone'] ?? '');
-    $phone_clean = preg_replace('/[\s\-\.]/', '', $phone_brut); // supprime espaces, tirets, points
-
-    // ── Validation PHP du téléphone ──────────────────
-    // Accepte : 10 chiffres locaux (0XXXXXXXXX) ou international (+XX... entre 7 et 15 chiffres)
-    $phone_regex = '/^(\+\d{7,15}|0\d{9})$/';
-
-    if (empty($phone_brut)) {
-        $_SESSION['mesgs']['errors'][] = 'Le numéro de téléphone est obligatoire.';
-        header('Location: ?element=client&action=commande');
-        exit;
-    }
-
-    if (!preg_match($phone_regex, $phone_clean)) {
-        $_SESSION['mesgs']['errors'][] = 'Numéro de téléphone invalide. '
-            . 'Formats acceptés : 0612345678 ou +33612345678.';
-        header('Location: ?element=client&action=commande');
-        exit;
-    }
-
     // ── Création de la commande ───────────────────────
-    // On passe le numéro nettoyé dans $_POST pour que hydrate() le récupère proprement
-    $_POST['phone'] = $phone_clean;
-
     $commande = new Commandes($db);
     $commande->hydrate($_POST);
 
