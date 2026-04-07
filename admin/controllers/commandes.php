@@ -1,8 +1,8 @@
 <?php
 require_once dirname(__FILE__) . '/../../class/commandes.class.php';
 
-// Supprimer une commande
-if (isset($_POST['delete_commande'])) {
+// Valider (supprimer) une commande
+if (isset($_POST['validate_commande'])) {
     $commande = new Commandes($db);
     $commande->hydrate(['id' => $_POST['id']]);
     $commande->delete();
