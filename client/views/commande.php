@@ -34,7 +34,7 @@
                                id="phone"
                                name="phone"
                                class="form-control"
-                               placeholder="Ex. 0612345678 ou +33612345678"
+                               placeholder="0612345678 "
                                autocomplete="tel"
                                required>
                         <!-- Icône de statut (✓ / ✗) affichée dynamiquement -->
@@ -42,9 +42,6 @@
                     </div>
                     <!-- Message d'erreur inline -->
                     <span class="field-error" id="phoneError" role="alert"></span>
-                    <span class="field-hint">
-                        10 chiffres (ex. 0612345678) ou format international (ex. +33612345678)
-                    </span>
                 </div>
 
                 <!-- Numéro de borne -->
