@@ -1,5 +1,21 @@
 <?php afficherMessagesFlash(); ?>
 
+<!-- Navigation admin -->
+<div style="display:flex; gap:10px; margin-bottom:20px;">
+    <a href="?element=admin&action=index" class="btn btn-ghost">
+        <i class="fa-solid fa-gauge"></i>
+        Dashboard
+    </a>
+    <a href="?element=produits&action=index" class="btn btn-ghost">
+        <i class="fa-solid fa-box"></i>
+        Produits
+    </a>
+    <a href="?element=commandes&action=index" class="btn btn-primary">
+        <i class="fa-solid fa-clipboard-list"></i>
+        Commandes
+    </a>
+</div>
+
 <!-- En-tête -->
 <div style="margin-bottom: 28px;">
     <h1 class="page-title">
