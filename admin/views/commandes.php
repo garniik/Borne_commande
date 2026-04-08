@@ -1,5 +1,6 @@
 <?php afficherMessagesFlash(); ?>
 
+<!-- Navigation admin -->
 <div style="display:flex; gap:10px; margin-bottom:20px;">
     <a href="?element=admin&action=produits" class="btn btn-ghost">
         <i class="fa-solid fa-box"></i>
@@ -10,6 +11,7 @@
         Commandes
     </a>
 </div>
+
 <!-- En-tête -->
 <div style="margin-bottom: 28px;">
     <h1 class="page-title">
@@ -17,21 +19,23 @@
     </h1>
     <p class="page-subtitle">
         <?= count($commandes ?? []) ?> commande<?= count($commandes ?? []) > 1 ? 's' : '' ?> active<?= count($commandes ?? []) > 1 ? 's' : '' ?>
+        — Cliquez sur une card pour voir tous les articles
     </p>
 </div>
-<!-- Navigation admin -->
-
 
 
 <!-- ══════════════════════════════════════════════════════
      GRILLE DE CARDS COMMANDES
+     - Affiche les 3 premiers articles en vue réduite
+     - Clic sur la card => agrandissement (expand) sans changer de page
 ══════════════════════════════════════════════════════ -->
 <?php if (!empty($commandes)): ?>
 
-    <div class="commandes-grid">
+    <div class="commandes-grid" id="commandesGrid">
+
         <?php foreach ($commandes as $commande):
 
-            // Récupérer les produits de cette commande
+            // Récupérer tous les produits de cette commande
             $stmtProd = $db->prepare("
                 SELECT p.nom, cp.quantite
                 FROM produit_commander cp
@@ -41,103 +45,103 @@
             $stmtProd->bindValue(':id_commande', $commande['id']);
             $stmtProd->execute();
             $produits_cmd = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
-        ?>
-            <div class="commande-card">
 
-                <!-- En-tête de la card -->
+            $nb_total    = count($produits_cmd);
+            $nb_preview  = 3; // nombre d'articles visibles en vue réduite
+            $a_plus      = $nb_total > $nb_preview;
+            $id_card     = 'card-' . (int)$commande['id'];
+        ?>
+
+            <!-- data-expanded="false" géré par JS -->
+            <div class="commande-card"
+                 id="<?= $id_card ?>"
+                 data-expanded="false"
+                 onclick="toggleCard('<?= $id_card ?>')"
+                 role="button"
+                 tabindex="0"
+                 aria-label="Commande <?= (int)$commande['id'] ?>, cliquer pour agrandir"
+                 onkeydown="if(event.key==='Enter'||event.key===' ') toggleCard('<?= $id_card ?>')">
+
+                <!-- ── En-tête ──────────────────────────────── -->
                 <div class="commande-card-header">
                     <span class="commande-id">
                         <i class="fa-solid fa-hashtag"></i>
                         Commande <?= (int)$commande['id'] ?>
                     </span>
-                    <?php if (!empty($commande['num_borne'])): ?>
-                        <span class="commande-borne">
-                            <i class="fa-solid fa-desktop"></i>
-                            Borne <?= htmlspecialchars($commande['num_borne']) ?>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <?php if (!empty($commande['num_borne'])): ?>
+                            <span class="commande-borne">
+                                <i class="fa-solid fa-desktop"></i>
+                                Borne <?= htmlspecialchars($commande['num_borne']) ?>
+                            </span>
+                        <?php endif; ?>
+                        <!-- Chevron indiquant l'état ouvert/fermé -->
+                        <span class="card-chevron" aria-hidden="true">
+                            <i class="fa-solid fa-chevron-down"></i>
                         </span>
-                    <?php endif; ?>
+                    </div>
                 </div>
 
-                <!-- Corps de la card -->
+                <!-- ── Corps ───────────────────────────────── -->
                 <div class="commande-card-body">
 
-                    <!-- Heure -->
+                    <!-- Infos principales (toujours visibles) -->
+                    <div class="commande-info">
+                        <i class="fa-solid fa-phone"></i>
+                        <?= htmlspecialchars($commande['phone'] ?? '—') ?>
+                    </div>
                     <div class="commande-info">
                         <i class="fa-solid fa-clock"></i>
                         <?= htmlspecialchars($commande['heure']) ?>
                     </div>
 
-                    <!-- Liste des produits commandés (max 3) -->
-                    <?php if (!empty($produits_cmd)): 
-                        $total_produits = count($produits_cmd);
-                        $produits_afficher = array_slice($produits_cmd, 0, 3);
-                    ?>
+                    <?php if (!empty($produits_cmd)): ?>
+
+                        <!-- Articles visibles en vue réduite (max 3) -->
                         <ul class="commande-produits">
-                            <?php foreach ($produits_afficher as $p): ?>
+                            <?php foreach (array_slice($produits_cmd, 0, $nb_preview) as $p): ?>
                                 <li class="commande-produit-item">
                                     <span><?= htmlspecialchars($p['nom']) ?></span>
                                     <span class="qty">×<?= (int)$p['quantite'] ?></span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
-                        
-                        <?php if ($total_produits > 3): ?>
-                            <div style="text-align:center; margin-top:8px;">
-                                <button type="button" class="btn btn-ghost btn-sm" onclick="openCommandeModal(<?= (int)$commande['id'] ?>)" style="font-size:0.8rem; padding:4px 12px;">
-                                    <i class="fa-solid fa-eye"></i>
-                                    Voir les <?= $total_produits - 3 ?> article(s) supplémentaire(s)
-                                </button>
+
+                        <!-- Badge "X articles de plus" — masqué quand la card est ouverte -->
+                        <?php if ($a_plus): ?>
+                            <div class="card-more-badge">
+                                <i class="fa-solid fa-circle-plus"></i>
+                                <?= $nb_total - $nb_preview ?> article<?= ($nb_total - $nb_preview) > 1 ? 's' : '' ?> de plus
                             </div>
                         <?php endif; ?>
-                        
-                        <!-- Modal pour cette commande -->
-                        <div id="modal-cmd-<?= (int)$commande['id'] ?>" class="commande-modal">
-                            <div class="modal-content" style="max-width: 400px;">
-                                <button class="modal-close" onclick="closeCommandeModal(<?= (int)$commande['id'] ?>)">&times;</button>
-                                
-                                <div class="modal-header" style="margin-bottom: 20px;">
-                                    <h3 style="margin: 0; font-size: 1.2rem;">
-                                        <i class="fa-solid fa-hashtag"></i>
-                                        Commande <?= (int)$commande['id'] ?>
-                                    </h3>
-                                    <?php if (!empty($commande['num_borne'])): ?>
-                                        <span class="commande-borne" style="margin-top: 8px; display: inline-block;">
-                                            <i class="fa-solid fa-desktop"></i>
-                                            Borne <?= htmlspecialchars($commande['num_borne']) ?>
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <div class="commande-info" style="margin-bottom: 15px;">
-                                    <i class="fa-solid fa-clock"></i>
-                                    <?= htmlspecialchars($commande['heure']) ?>
-                                </div>
-                                
-                                <h4 style="margin: 15px 0 10px 0; font-size: 1rem; color: var(--text-muted);">
-                                    Articles (<?= $total_produits ?>)
-                                </h4>
-                                
-                                <ul class="commande-produits" style="max-height: 300px; overflow-y: auto;">
-                                    <?php foreach ($produits_cmd as $p): ?>
-                                        <li class="commande-produit-item">
-                                            <span><?= htmlspecialchars($p['nom']) ?></span>
-                                            <span class="qty">×<?= (int)$p['quantite'] ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                        
+
+                        <!-- Articles supplémentaires — cachés par défaut, révélés à l'expand -->
+                        <?php if ($a_plus): ?>
+                            <ul class="commande-produits commande-produits-extra">
+                                <?php foreach (array_slice($produits_cmd, $nb_preview) as $p): ?>
+                                    <li class="commande-produit-item">
+                                        <span><?= htmlspecialchars($p['nom']) ?></span>
+                                        <span class="qty">×<?= (int)$p['quantite'] ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+
                     <?php else: ?>
                         <p style="color:var(--text-muted); font-size:.85rem; font-style:italic;">
                             Aucun produit associé.
                         </p>
                     <?php endif; ?>
-                    
-                    <!-- Bouton validation -->
-                    <form method="POST" action="" style="margin-top: 15px;">
+
+                    <!-- Bouton valider — empêche le clic de déclencher le toggle de la card -->
+                    <form method="POST" action=""
+                          style="margin-top: 16px;"
+                          onclick="event.stopPropagation()">
                         <input type="hidden" name="id" value="<?= (int)$commande['id'] ?>">
-                        <button type="submit" name="validate_commande" class="btn btn-success btn-sm" onclick="return confirm('Valider cette commande ?')">
+                        <button type="submit"
+                                name="validate_commande"
+                                class="btn btn-success btn-sm"
+                                onclick="return confirm('Valider cette commande ?')">
                             <i class="fa-solid fa-check"></i>
                             Valider la commande
                         </button>
@@ -148,6 +152,7 @@
             </div><!-- /commande-card -->
 
         <?php endforeach; ?>
+
     </div><!-- /commandes-grid -->
 
 <?php else: ?>
@@ -159,3 +164,42 @@
 
 <?php endif; ?>
 
+
+<script>
+/**
+ * toggleCard(id)
+ * Agrandit ou réduit une card commande.
+ * - Ajoute la classe CSS "expanded" sur la card ciblée
+ * - Les articles supplémentaires (.commande-produits-extra) s'affichent via CSS
+ * - Le badge "X articles de plus" disparaît
+ * - Le chevron tourne à 180°
+ */
+function toggleCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+
+    const estOuverte = card.dataset.expanded === 'true';
+
+    // Fermer toutes les autres cards ouvertes (comportement accordéon optionnel)
+    // Décommenter les lignes ci-dessous pour n'avoir qu'une card ouverte à la fois :
+    // document.querySelectorAll('.commande-card[data-expanded="true"]').forEach(c => {
+    //     if (c.id !== cardId) fermerCard(c);
+    // });
+
+    if (estOuverte) {
+        fermerCard(card);
+    } else {
+        ouvrirCard(card);
+    }
+}
+
+function ouvrirCard(card) {
+    card.dataset.expanded = 'true';
+    card.classList.add('expanded');
+}
+
+function fermerCard(card) {
+    card.dataset.expanded = 'false';
+    card.classList.remove('expanded');
+}
+</script>

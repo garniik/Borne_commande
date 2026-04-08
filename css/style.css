@@ -689,26 +689,50 @@ select.form-control { cursor: pointer; }
    ★ ADMIN — COMMANDES (cards)
 ═══════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════
+   GRILLE & CARDS COMMANDES (admin)
+═══════════════════════════════════════════════════════ */
+
 .commandes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 18px;
 }
 
+/* ── Card de base ─────────────────────────────────── */
 .commande-card {
     background: var(--card);
     border-radius: var(--radius);
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     overflow: hidden;
-    transition: var(--transition);
+    cursor: pointer;
+    /* transition sur toutes les propriétés animées */
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    /* grid-column s'anime via JS avec transition */
+    will-change: transform;
 }
 
 .commande-card:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(34,197,94,.15);
+    box-shadow: 0 10px 30px rgba(255,107,53,.18);
 }
 
+/* ── Card agrandie ────────────────────────────────── */
+.commande-card.expanded {
+    border-color: var(--accent);
+    box-shadow: 0 16px 48px rgba(255,107,53,.25);
+    transform: none; /* pas de translateY quand ouverte */
+    /* Prend 2 colonnes si la grille le permet */
+    grid-column: span 2;
+}
+
+/* Sur petits écrans (1 colonne), span 2 n'a pas d'effet, c'est correct */
+@media (max-width: 640px) {
+    .commande-card.expanded { grid-column: span 1; }
+}
+
+/* ── En-tête ─────────────────────────────────────── */
 .commande-card-header {
     background: var(--bg2);
     padding: 14px 18px;
@@ -716,6 +740,7 @@ select.form-control { cursor: pointer; }
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border);
+    user-select: none;
 }
 
 .commande-id {
@@ -735,6 +760,19 @@ select.form-control { cursor: pointer; }
     gap: 5px;
 }
 
+/* Chevron qui tourne quand la card est ouverte */
+.card-chevron i {
+    font-size: .8rem;
+    color: var(--text-muted);
+    transition: transform .25s ease;
+}
+
+.commande-card.expanded .card-chevron i {
+    transform: rotate(180deg);
+    color: var(--accent);
+}
+
+/* ── Corps ───────────────────────────────────────── */
 .commande-card-body { padding: 16px 18px; }
 
 .commande-info {
@@ -743,17 +781,17 @@ select.form-control { cursor: pointer; }
     gap: 8px;
     font-size: .9rem;
     color: var(--text-muted);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-weight: 600;
 }
 
 .commande-info i { color: var(--accent); font-size: .85rem; }
 
+/* ── Liste produits (preview + extra) ────────────── */
 .commande-produits {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 6px;
 }
 
 .commande-produit-item {
@@ -767,6 +805,44 @@ select.form-control { cursor: pointer; }
 
 .commande-produit-item:last-child { border-bottom: none; }
 .commande-produit-item .qty { font-weight: 800; color: var(--accent); }
+
+/* Articles supplémentaires : cachés par défaut, visibles quand expanded */
+.commande-produits-extra {
+    /* height: 0 + overflow:hidden permet une transition douce */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height .35s ease, opacity .25s ease;
+    /* séparateur visuel entre preview et extra */
+    border-top: 1px dashed var(--border);
+    margin-top: 4px;
+}
+
+.commande-card.expanded .commande-produits-extra {
+    max-height: 500px; /* valeur haute, jamais atteinte en pratique */
+    opacity: 1;
+}
+
+/* ── Badge "X articles de plus" ──────────────────── */
+.card-more-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 5px 12px;
+    background: rgba(255,107,53,.12);
+    color: var(--accent);
+    border-radius: 20px;
+    font-size: .78rem;
+    font-weight: 800;
+    transition: opacity .2s ease;
+    cursor: pointer;
+}
+
+/* Masquer le badge quand la card est ouverte */
+.commande-card.expanded .card-more-badge {
+    display: none;
+}
 
 /* ═══════════════════════════════════════════════════════
    ★ STATS CARDS (admin dashboard)
@@ -958,4 +1034,57 @@ button:disabled,
     opacity: .45;
     cursor: not-allowed;
     transform: none !important;
+}
+
+/* ════════════════════════════════════════════════════════
+   MODAL COMMANDE (admin)
+════════════════════════════════════════════════════════ */
+.commande-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.commande-modal.open {
+    display: flex;
+}
+
+.commande-modal .modal-content {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-xl);
+}
+
+.commande-modal .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+}
+
+.commande-modal .modal-close:hover {
+    background: var(--gray-100);
+    color: var(--red);
 }
