@@ -42,12 +42,10 @@
      onclick="toggleCard('<?= $id_card ?>')">
 
     <div class="commande-card-header">
-        <strong>Commande <?= (int)$commande['id'] ?></strong>
+        <span>Borne <?= (int)$commande['borne'] ?></span>
     </div>
 
     <div class="commande-card-body">
-
-        <div><?= htmlspecialchars($commande['phone'] ?? '—') ?></div>
         <div><?= htmlspecialchars($commande['heure']) ?></div>
 
         <?php if (!empty($produits_cmd)): ?>
