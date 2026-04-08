@@ -52,15 +52,7 @@
             $id_card     = 'card-' . (int)$commande['id'];
         ?>
 
-            <!-- data-expanded="false" géré par JS -->
-            <div class="commande-card"
-                 id="<?= $id_card ?>"
-                 data-expanded="false"
-                 onclick="toggleCard('<?= $id_card ?>')"
-                 role="button"
-                 tabindex="0"
-                 aria-label="Commande <?= (int)$commande['id'] ?>, cliquer pour agrandir"
-                 onkeydown="if(event.key==='Enter'||event.key===' ') toggleCard('<?= $id_card ?>')">
+            <div class="commande-card" id="<?= $id_card ?>">
 
                 <!-- ── En-tête ──────────────────────────────── -->
                 <div class="commande-card-header">
@@ -68,18 +60,12 @@
                         <i class="fa-solid fa-hashtag"></i>
                         Commande <?= (int)$commande['id'] ?>
                     </span>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <?php if (!empty($commande['num_borne'])): ?>
-                            <span class="commande-borne">
-                                <i class="fa-solid fa-desktop"></i>
-                                Borne <?= htmlspecialchars($commande['num_borne']) ?>
-                            </span>
-                        <?php endif; ?>
-                        <!-- Chevron indiquant l'état ouvert/fermé -->
-                        <span class="card-chevron" aria-hidden="true">
-                            <i class="fa-solid fa-chevron-down"></i>
+                    <?php if (!empty($commande['num_borne'])): ?>
+                        <span class="commande-borne">
+                            <i class="fa-solid fa-desktop"></i>
+                            Borne <?= htmlspecialchars($commande['num_borne']) ?>
                         </span>
-                    </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- ── Corps ───────────────────────────────── -->
@@ -107,24 +93,11 @@
                             <?php endforeach; ?>
                         </ul>
 
-                        <!-- Badge "X articles de plus" — masqué quand la card est ouverte -->
                         <?php if ($a_plus): ?>
-                            <div class="card-more-badge">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <?= $nb_total - $nb_preview ?> article<?= ($nb_total - $nb_preview) > 1 ? 's' : '' ?> de plus
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Articles supplémentaires — cachés par défaut, révélés à l'expand -->
-                        <?php if ($a_plus): ?>
-                            <ul class="commande-produits commande-produits-extra">
-                                <?php foreach (array_slice($produits_cmd, $nb_preview) as $p): ?>
-                                    <li class="commande-produit-item">
-                                        <span><?= htmlspecialchars($p['nom']) ?></span>
-                                        <span class="qty">×<?= (int)$p['quantite'] ?></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+                            <button type="button" class="btn btn-ghost btn-sm" onclick="openModal(<?= (int)$commande['id'] ?>)" style="margin-top:8px; width:100%;">
+                                <i class="fa-solid fa-eye"></i>
+                                Voir les <?= $nb_total - $nb_preview ?> article(s) supplémentaire(s)
+                            </button>
                         <?php endif; ?>
 
                     <?php else: ?>
