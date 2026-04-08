@@ -52,7 +52,10 @@
             $id_card     = 'card-' . (int)$commande['id'];
         ?>
 
-            <div class="commande-card" id="<?= $id_card ?>">
+            <div class="commande-card"
+                 id="<?= $id_card ?>"
+                 data-expanded="false"
+                 onclick="toggleCard('<?= $id_card ?>')">
 
                 <!-- ── En-tête ──────────────────────────────── -->
                 <div class="commande-card-header">

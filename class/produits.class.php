@@ -12,15 +12,13 @@
 
         public function hydrate(array $data)
         {
-            foreach ($data as $key => $value) {
-                $this->id = filter_var($data['id'], FILTER_VALIDATE_INT);
-                $this->nom = filter_var($data['nom'], FILTER_SANITIZE_STRING);
-                $this->categorie = filter_var($data['categorie'], FILTER_SANITIZE_STRING);
-                $this->description = filter_var($data['description'], FILTER_SANITIZE_STRING);
-                $this->prix = filter_var($data['prix'], FILTER_VALIDATE_FLOAT);
-                $this->image = filter_var($data['image'], FILTER_SANITIZE_STRING);
-                $this->stock = filter_var($data['stock'], FILTER_VALIDATE_INT);
-            }
+            $this->id = filter_var($data['id'] ?? 0, FILTER_VALIDATE_INT);
+            $this->nom = htmlspecialchars($data['nom'] ?? '');
+            $this->categorie = htmlspecialchars($data['categorie'] ?? '');
+            $this->description = htmlspecialchars($data['description'] ?? '');
+            $this->prix = filter_var($data['prix'] ?? 0, FILTER_VALIDATE_FLOAT);
+            $this->image = htmlspecialchars($data['image'] ?? '');
+            $this->stock = filter_var($data['stock'] ?? 0, FILTER_VALIDATE_INT);
         }
 
         function __construct(object $pdo)
