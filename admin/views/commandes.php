@@ -42,7 +42,7 @@
      onclick="toggleCard('<?= $id_card ?>')">
 
     <div class="commande-card-header">
-        <span>Borne <?= (int)$commande['borne'] ?></span>
+        <span>Borne <?= (int)$commande['num_borne'] ?></span>
     </div>
 
     <div class="commande-card-body">
