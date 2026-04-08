@@ -1,6 +1,5 @@
 <?php afficherMessagesFlash(); ?>
 
-<!-- Navigation admin -->
 <div style="display:flex; gap:10px; margin-bottom:20px;">
     <a href="?element=admin&action=produits" class="btn btn-ghost">
         <i class="fa-solid fa-box"></i>
@@ -12,15 +11,10 @@
     </a>
 </div>
 
-<!-- En-tête -->
 <div style="margin-bottom: 28px;">
     <h1 class="page-title">
         Commandes <span>en cours</span>
     </h1>
-    <p class="page-subtitle">
-        <?= count($commandes ?? []) ?> commande<?= count($commandes ?? []) > 1 ? 's' : '' ?> active<?= count($commandes ?? []) > 1 ? 's' : '' ?>
-        — Cliquez sur une card pour voir tous les articles
-    </p>
 </div>
 
 <?php if (!empty($commandes)): ?>
@@ -39,9 +33,8 @@
     $stmtProd->execute();
     $produits_cmd = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
 
-    $nb_total   = count($produits_cmd);
-    $nb_preview = 3;
-    $id_card    = 'card-' . (int)$commande['id'];
+    $nb_total = count($produits_cmd);
+    $id_card  = 'card-' . (int)$commande['id'];
 ?>
 
 <div class="commande-card"
@@ -49,51 +42,34 @@
      onclick="toggleCard('<?= $id_card ?>')">
 
     <div class="commande-card-header">
-        <span class="commande-id">
-            <i class="fa-solid fa-hashtag"></i>
-            Commande <?= (int)$commande['id'] ?>
-        </span>
-        <?php if (!empty($commande['num_borne'])): ?>
-            <span class="commande-borne">
-                <i class="fa-solid fa-desktop"></i>
-                Borne <?= htmlspecialchars($commande['num_borne']) ?>
-            </span>
-        <?php endif; ?>
+        <strong>Commande <?= (int)$commande['id'] ?></strong>
     </div>
 
     <div class="commande-card-body">
 
-        <div class="commande-info">
-            <i class="fa-solid fa-phone"></i>
-            <?= htmlspecialchars($commande['phone'] ?? '—') ?>
-        </div>
-
-        <div class="commande-info">
-            <i class="fa-solid fa-clock"></i>
-            <?= htmlspecialchars($commande['heure']) ?>
-        </div>
+        <div><?= htmlspecialchars($commande['phone'] ?? '—') ?></div>
+        <div><?= htmlspecialchars($commande['heure']) ?></div>
 
         <?php if (!empty($produits_cmd)): ?>
 
+            <!-- Liste complète -->
             <ul class="commande-produits">
-                <?php foreach (array_slice($produits_cmd, 0, $nb_preview) as $p): ?>
-                    <li class="commande-produit-item">
+
+                <?php foreach ($produits_cmd as $index => $p): ?>
+                    <li class="commande-produit-item <?= $index >= 3 ? 'extra-produit' : '' ?>">
                         <span><?= htmlspecialchars($p['nom']) ?></span>
-                        <span class="qty">×<?= (int)$p['quantite'] ?></span>
+                        <span>×<?= (int)$p['quantite'] ?></span>
                     </li>
                 <?php endforeach; ?>
+
             </ul>
 
-            <?php if ($nb_total > $nb_preview): ?>
-                <p style="margin-top:8px; font-size:.85rem; color:var(--text-muted);">
-                    + <?= $nb_total - $nb_preview ?> article(s) supplémentaire(s)
+            <?php if ($nb_total > 3): ?>
+                <p class="produits-more">
+                    + <?= $nb_total - 3 ?> article(s) supplémentaire(s)
                 </p>
             <?php endif; ?>
 
-        <?php else: ?>
-            <p style="color:var(--text-muted); font-size:.85rem; font-style:italic;">
-                Aucun produit associé.
-            </p>
         <?php endif; ?>
 
         <form method="POST"
@@ -102,10 +78,8 @@
             <input type="hidden" name="id" value="<?= (int)$commande['id'] ?>">
             <button type="submit"
                     name="validate_commande"
-                    class="btn btn-success btn-sm"
-                    onclick="return confirm('Valider cette commande ?')">
-                <i class="fa-solid fa-check"></i>
-                Valider la commande
+                    class="btn btn-success btn-sm">
+                Valider
             </button>
         </form>
 
@@ -116,44 +90,31 @@
 <?php endforeach; ?>
 </div>
 
-<?php else: ?>
-
-<div class="empty-state">
-    <i class="fa-solid fa-inbox"></i>
-    <p>Aucune commande en cours pour le moment.</p>
-</div>
-
 <?php endif; ?>
 
-<!-- Overlay sombre -->
 <div id="overlay"></div>
 
 <style>
 
-/* Overlay */
+/* Overlay simple sans blur */
 #overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.3s ease;
+    display: none;
     z-index: 998;
 }
 
 #overlay.active {
-    opacity: 1;
-    visibility: visible;
+    display: block;
 }
 
 /* Card normale */
 .commande-card {
     cursor: pointer;
-    transition: 0.3s ease;
 }
 
-/* Card en premier plan */
+/* Card ouverte */
 .commande-card.expanded {
     position: fixed;
     top: 50%;
@@ -164,7 +125,23 @@
     max-height: 85vh;
     overflow-y: auto;
     z-index: 999;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    background: white;
+    padding: 20px;
+}
+
+/* Produits cachés par défaut */
+.extra-produit {
+    display: none;
+}
+
+/* Quand card ouverte → tout afficher */
+.commande-card.expanded .extra-produit {
+    display: list-item;
+}
+
+/* Cacher le "+ X articles" quand ouvert */
+.commande-card.expanded .produits-more {
+    display: none;
 }
 
 </style>
