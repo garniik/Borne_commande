@@ -22,7 +22,9 @@
 </div>
 
 
-<?php if (!empty($commandes)): ?>
+<?php if (!empty($commandes)):
+    $produitsParCommande = [];
+?>
 
     <div class="commandes-grid">
 
@@ -37,6 +39,9 @@
             $stmtProd->bindValue(':id_commande', $commande['id']);
             $stmtProd->execute();
             $produits_cmd = $stmtProd->fetchAll(PDO::FETCH_ASSOC);
+
+            // Stocker pour réutilisation dans les modals
+            $produitsParCommande[$commande['id']] = $produits_cmd;
 
             $nb_total   = count($produits_cmd);
             $nb_preview = 3;
@@ -117,16 +122,8 @@
     <!-- ══ MODALS ═══════════════════════════════════════ -->
     <?php foreach ($commandes as $commande):
 
-        // Re-requête pour les produits du modal
-        $stmtM = $db->prepare("
-            SELECT p.nom, cp.quantite
-            FROM produit_commander cp
-            JOIN produits p ON cp.id_produit = p.id
-            WHERE cp.id_commande = :id_commande
-        ");
-        $stmtM->bindValue(':id_commande', $commande['id']);
-        $stmtM->execute();
-        $produits_modal = $stmtM->fetchAll(PDO::FETCH_ASSOC);
+        // Réutilise les produits déjà récupérés
+        $produits_modal = $produitsParCommande[$commande['id']] ?? [];
         $id_modal = 'modal-' . (int)$commande['id'];
     ?>
 
