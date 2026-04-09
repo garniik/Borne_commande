@@ -384,24 +384,12 @@ select.form-control { cursor: pointer; }
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    /* Transition limitée aux seules props animées — évite le repaint global */
-    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+
     cursor: pointer;
-    /* Promote sur un layer GPU pour éviter le repaint des éléments voisins */
-    will-change: transform;
-    /* Isole la card dans son propre contexte de rendu */
-    contain: layout style;
 }
 
 .prod-card:hover {
     border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(34,197,94,.2);
-}
-
-/* Supprime will-change une fois le hover terminé pour ne pas sur-utiliser la VRAM */
-.prod-card:not(:hover) {
-    will-change: auto;
 }
 
 .prod-card-img {
@@ -731,7 +719,7 @@ select.form-control { cursor: pointer; }
     /* flexbox colonne : pousse le footer en bas */
     display: flex;
     flex-direction: column;
-    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+
     user-select: none;
 }
 
