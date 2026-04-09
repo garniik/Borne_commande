@@ -61,10 +61,6 @@
 
             <!-- En-tête coloré -->
             <div class="cmd-card-header">
-                <div class="cmd-card-id">
-                    <i class="fa-solid fa-receipt"></i>
-                    Commande #<?= (int)$commande['id'] ?>
-                </div>
                 <?php if (!empty($commande['num_borne'])): ?>
                     <div class="cmd-card-borne">
                         <i class="fa-solid fa-desktop"></i>
