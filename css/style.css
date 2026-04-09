@@ -725,17 +725,8 @@ select.form-control { cursor: pointer; }
 
 .cmd-card:hover {
     border-color: var(--accent);
-    box-shadow: 0 4px 12px rgba(34,197,94,.15);
-}
-
-/* Optimisation Raspberry Pi : réduire les animations */
-@media (prefers-reduced-motion: reduce) {
-    .cmd-card, .cmd-modal, .cmd-modal-box {
-        transition: none !important;
-    }
-    .cmd-card:hover {
-        transform: none;
-    }
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(34,197,94,.15);
 }
 
 .cmd-card:focus-visible {
@@ -874,7 +865,9 @@ select.form-control { cursor: pointer; }
 #cmdOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.6);
+    background: rgba(0,0,0,.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     z-index: 900;
     display: none;
     cursor: pointer;
@@ -891,8 +884,7 @@ select.form-control { cursor: pointer; }
     justify-content: center;
     pointer-events: none;
     opacity: 0;
-    /* Animation simplifiée : uniquement opacity pour Raspberry Pi */
-    transition: opacity .15s ease;
+    transition: opacity .2s ease;
 }
 
 .cmd-modal.open {
@@ -904,15 +896,19 @@ select.form-control { cursor: pointer; }
     background: var(--card);
     border-radius: var(--radius);
     border: 2px solid var(--border);
-    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    box-shadow: 0 24px 64px rgba(0,0,0,.18);
     width: 520px;
     max-width: 92vw;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Suppression du transform pour performance - utilisation d'une ombre plus légère */
-    will-change: opacity;
+    transform: translateY(12px) scale(.98);
+    transition: transform .22s ease;
+}
+
+.cmd-modal.open .cmd-modal-box {
+    transform: translateY(0) scale(1);
 }
 
 /* En-tête modal */
