@@ -693,155 +693,347 @@ select.form-control { cursor: pointer; }
    GRILLE & CARDS COMMANDES (admin)
 ═══════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════
+   GRILLE COMMANDES
+═══════════════════════════════════════════════════════ */
+
 .commandes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+    /* align-items: start évite que les cards s'étirent verticalement */
+    align-items: start;
 }
 
-/* ── Card de base ─────────────────────────────────── */
-.commande-card {
+/* ── Card résumé ─────────────────────────────────── */
+.cmd-card {
     background: var(--card);
     border-radius: var(--radius);
     border: 2px solid var(--border);
     overflow: hidden;
     cursor: pointer;
-    /* transition sur toutes les propriétés animées */
-    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
-    /* grid-column s'anime via JS avec transition */
-    will-change: transform;
-}
-
-.commande-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255,107,53,.18);
-}
-
-/* ── Card agrandie ────────────────────────────────── */
-.commande-card.expanded {
-    border-color: var(--accent);
-    box-shadow: 0 16px 48px rgba(255,107,53,.25);
-    transform: none; /* pas de translateY quand ouverte */
-    /* Prend 2 colonnes si la grille le permet */
-    grid-column: span 2;
-}
-
-/* Sur petits écrans (1 colonne), span 2 n'a pas d'effet, c'est correct */
-@media (max-width: 640px) {
-    .commande-card.expanded { grid-column: span 1; }
-}
-
-/* ── En-tête ─────────────────────────────────────── */
-.commande-card-header {
-    background: var(--bg2);
-    padding: 14px 18px;
+    /* flexbox colonne : pousse le footer en bas */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
     user-select: none;
 }
 
-.commande-id {
-    font-size: .8rem;
-    font-weight: 800;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: .06em;
+.cmd-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(34,197,94,.15);
 }
 
-.commande-borne {
-    font-size: .85rem;
+.cmd-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ── En-tête coloré ──────────────────────────────── */
+.cmd-card-header {
+    background: var(--accent);
+    padding: 13px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.cmd-card-id {
+    font-size: .9rem;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.cmd-card-borne {
+    font-size: .78rem;
     font-weight: 700;
-    color: var(--accent);
+    color: rgba(255,255,255,.9);
+    background: rgba(0,0,0,.18);
+    border-radius: 20px;
+    padding: 3px 10px;
     display: flex;
     align-items: center;
     gap: 5px;
+    white-space: nowrap;
 }
 
-/* Chevron qui tourne quand la card est ouverte */
-.card-chevron i {
-    font-size: .8rem;
-    color: var(--text-muted);
-    transition: transform .25s ease;
-}
-
-.commande-card.expanded .card-chevron i {
-    transform: rotate(180deg);
-    color: var(--accent);
-}
-
-/* ── Corps ───────────────────────────────────────── */
-.commande-card-body { padding: 16px 18px; }
-
-.commande-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: .9rem;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.commande-info i { color: var(--accent); font-size: .85rem; }
-
-/* ── Liste produits (preview + extra) ────────────── */
-.commande-produits {
-    list-style: none;
+/* ── Corps : flex: 1 pour occuper tout l'espace ──── */
+.cmd-card-body {
+    padding: 16px 18px;
+    flex: 1;             /* pousse le footer vers le bas */
     display: flex;
     flex-direction: column;
 }
 
-.commande-produit-item {
+.cmd-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.cmd-meta-icon { color: var(--accent); }
+
+.cmd-separator {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 12px;
+}
+
+.cmd-articles-label {
+    font-size: .7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+/* Liste articles preview */
+.cmd-articles-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.cmd-article-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: .88rem;
     padding: 7px 0;
     border-bottom: 1px solid var(--border);
+    font-size: .88rem;
 }
 
-.commande-produit-item:last-child { border-bottom: none; }
-.commande-produit-item .qty { font-weight: 800; color: var(--accent); }
+.cmd-article-item:last-child { border-bottom: none; }
+.cmd-article-name { font-weight: 600; color: var(--text); }
+.cmd-article-qty  { font-weight: 800; color: var(--accent); white-space: nowrap; }
 
-/* Articles supplémentaires : cachés par défaut, visibles quand expanded */
-.commande-produits-extra {
-    /* height: 0 + overflow:hidden permet une transition douce */
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height .35s ease, opacity .25s ease;
-    /* séparateur visuel entre preview et extra */
-    border-top: 1px dashed var(--border);
-    margin-top: 4px;
-}
-
-.commande-card.expanded .commande-produits-extra {
-    max-height: 500px; /* valeur haute, jamais atteinte en pratique */
-    opacity: 1;
-}
-
-/* ── Badge "X articles de plus" ──────────────────── */
-.card-more-badge {
+/* Badge "X articles de plus" — mt: auto le pousse en bas du body */
+.cmd-more-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     margin-top: 10px;
     padding: 5px 12px;
-    background: rgba(255,107,53,.12);
+    background: rgba(34,197,94,.1);
     color: var(--accent);
     border-radius: 20px;
     font-size: .78rem;
-    font-weight: 800;
-    transition: opacity .2s ease;
+    font-weight: 700;
+    align-self: flex-start;
+}
+
+/* ── Pied épinglé en bas (grâce à flex-direction:column sur .cmd-card) */
+.cmd-card-footer {
+    padding: 11px 18px;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.cmd-footer-hint {
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   OVERLAY + MODAL COMMANDE
+═══════════════════════════════════════════════════════ */
+
+#cmdOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 900;
+    display: none;
     cursor: pointer;
 }
 
-/* Masquer le badge quand la card est ouverte */
-.commande-card.expanded .card-more-badge {
-    display: none;
+#cmdOverlay.active { display: block; }
+
+.cmd-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 901;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.cmd-modal.open {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.cmd-modal-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    box-shadow: 0 24px 64px rgba(0,0,0,.18);
+    width: 520px;
+    max-width: 92vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(12px) scale(.98);
+    transition: transform .22s ease;
+}
+
+.cmd-modal.open .cmd-modal-box {
+    transform: translateY(0) scale(1);
+}
+
+/* En-tête modal */
+.cmd-modal-header {
+    background: var(--accent);
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.cmd-modal-title {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.cmd-modal-close {
+    background: rgba(255,255,255,.2);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background .15s;
+}
+
+.cmd-modal-close:hover { background: rgba(255,255,255,.35); }
+
+/* Corps modal — scrollable */
+.cmd-modal-body {
+    padding: 22px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Tuiles infos (heure, borne) */
+.cmd-modal-infos {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.cmd-modal-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--bg2);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 130px;
+}
+
+.cmd-modal-info-label {
+    font-size: .7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-muted);
+}
+
+.cmd-modal-info-label i { color: var(--accent); }
+
+.cmd-modal-info-value {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Titre section articles */
+.cmd-modal-articles-title {
+    font-size: .8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cmd-modal-articles-title i { color: var(--accent); }
+
+/* Liste articles modal — tous stylés de façon identique */
+.cmd-modal-articles {
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.cmd-modal-article-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: .9rem;
+}
+
+.cmd-modal-article-item:last-child { border-bottom: none; }
+.cmd-modal-article-item:nth-child(even) { background: var(--bg2); }
+
+.cmd-modal-article-name { font-weight: 600; }
+.cmd-modal-article-qty  { font-weight: 900; color: var(--accent); font-size: 1rem; }
+
+/* Pied modal */
+.cmd-modal-footer {
+    padding: 16px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+    background: var(--bg2);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1090,349 +1282,3 @@ button:disabled,
 }
 
 
-/* ═══════════════════════════════════════════════════════
-   CARDS COMMANDES ADMIN  (cmd-card)
-═══════════════════════════════════════════════════════ */
-
-/* ── Grille ──────────────────────────────────────── */
-.commandes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 20px;
-}
-
-/* ── Card ────────────────────────────────────────── */
-.cmd-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 2px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
-    overflow: hidden;
-    user-select: none;
-}
-
-.cmd-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(34,197,94,.15);
-}
-
-.cmd-card:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-}
-
-/* ── En-tête ─────────────────────────────────────── */
-.cmd-card-header {
-    background: var(--accent);
-    padding: 13px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.cmd-card-id {
-    font-size: .9rem;
-    font-weight: 800;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.cmd-card-borne {
-    font-size: .8rem;
-    font-weight: 700;
-    color: rgba(255,255,255,.85);
-    background: rgba(0,0,0,.15);
-    border-radius: 20px;
-    padding: 3px 10px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-}
-
-/* ── Corps ───────────────────────────────────────── */
-.cmd-card-body {
-    padding: 16px 18px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.cmd-meta-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: .88rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-}
-
-.cmd-meta-icon { color: var(--accent); }
-
-.cmd-separator {
-    height: 1px;
-    background: var(--border);
-    margin-bottom: 12px;
-}
-
-.cmd-articles-label {
-    font-size: .72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .07em;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-}
-
-/* Liste preview */
-.cmd-articles-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-bottom: 8px;
-}
-
-.cmd-article-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 7px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: .88rem;
-}
-
-.cmd-article-item:last-child { border-bottom: none; }
-
-.cmd-article-name { font-weight: 600; color: var(--text); }
-.cmd-article-qty  { font-weight: 800; color: var(--accent); white-space: nowrap; }
-
-/* Badge "X articles de plus" */
-.cmd-more-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
-    padding: 5px 12px;
-    background: rgba(34,197,94,.1);
-    color: var(--accent);
-    border-radius: 20px;
-    font-size: .78rem;
-    font-weight: 700;
-    align-self: flex-start;
-}
-
-/* ── Pied de card ────────────────────────────────── */
-.cmd-card-footer {
-    padding: 11px 18px;
-    border-top: 1px solid var(--border);
-    background: var(--bg2);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.cmd-footer-hint {
-    font-size: .78rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-/* ═══════════════════════════════════════════════════════
-   MODAL COMMANDE
-═══════════════════════════════════════════════════════ */
-
-/* Overlay derrière le modal */
-#cmdOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.5);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    z-index: 900;
-    display: none;
-    cursor: pointer;
-}
-
-#cmdOverlay.active { display: block; }
-
-/* Boîte du modal */
-.cmd-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 901;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;   /* invisible par défaut */
-    opacity: 0;
-    transition: opacity .2s ease;
-}
-
-.cmd-modal.open {
-    pointer-events: auto;
-    opacity: 1;
-}
-
-.cmd-modal-box {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 2px solid var(--border);
-    box-shadow: 0 24px 64px rgba(0,0,0,.2);
-    width: 520px;
-    max-width: 92vw;
-    max-height: 85vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    /* animation d'apparition */
-    transform: translateY(12px) scale(.98);
-    transition: transform .22s ease;
-}
-
-.cmd-modal.open .cmd-modal-box {
-    transform: translateY(0) scale(1);
-}
-
-/* En-tête modal */
-.cmd-modal-header {
-    background: var(--accent);
-    padding: 16px 22px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-}
-
-.cmd-modal-title {
-    font-size: 1.05rem;
-    font-weight: 900;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-.cmd-modal-close {
-    background: rgba(255,255,255,.2);
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background .15s;
-}
-
-.cmd-modal-close:hover { background: rgba(255,255,255,.35); }
-
-/* Corps modal */
-.cmd-modal-body {
-    padding: 22px;
-    overflow-y: auto;
-    flex: 1;
-}
-
-/* Bloc infos résumé */
-.cmd-modal-infos {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--border);
-}
-
-.cmd-modal-info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    background: var(--bg2);
-    border-radius: var(--radius-sm);
-    padding: 10px 16px;
-    flex: 1;
-    min-width: 130px;
-}
-
-.cmd-modal-info-label {
-    font-size: .72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--text-muted);
-}
-
-.cmd-modal-info-label i { color: var(--accent); }
-
-.cmd-modal-info-value {
-    font-size: .95rem;
-    font-weight: 700;
-    color: var(--text);
-}
-
-/* Titre section articles */
-.cmd-modal-articles-title {
-    font-size: .85rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.cmd-modal-articles-title i { color: var(--accent); }
-
-/* Liste articles modal */
-.cmd-modal-articles {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-}
-
-.cmd-modal-article-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: .9rem;
-}
-
-.cmd-modal-article-item:last-child { border-bottom: none; }
-.cmd-modal-article-item:nth-child(even) { background: var(--bg2); }
-
-.cmd-modal-article-name { font-weight: 600; }
-.cmd-modal-article-qty  { font-weight: 900; color: var(--accent); font-size: 1rem; }
-
-/* Pied modal */
-.cmd-modal-footer {
-    padding: 16px 22px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    flex-shrink: 0;
-    background: var(--bg2);
-}
