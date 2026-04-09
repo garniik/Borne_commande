@@ -173,7 +173,7 @@
                 <span class="cmd-modal-info-value">Borne ${escapeHtml(meta.num_borne)}</span>
             </div>` : '';
 
-        return `<div class="cmd-modal" id="modal-${id}" role="dialog" aria-modal="true" aria-label="Détail commande ${id}">
+        return `<div class="cmd-modal" id="modal-${id}" role="dialog" aria-modal="true" aria-label="Détail commande ${id}" onclick="fermerModal('modal-${id}')">
             <div class="cmd-modal-box" onclick="event.stopPropagation()">
                 <div class="cmd-modal-header">
                     <div class="cmd-modal-title">

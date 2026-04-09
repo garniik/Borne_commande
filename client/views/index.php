@@ -43,6 +43,8 @@
                     $stock     = (int)$produit['stock'];
                     $dispo     = $stock > 0;
                     $stockClass = !$dispo ? 'stock-out' : '';
+                    $id_card    = 'prod-card-' . (int)$produit['id'];
+                    $id_modal   = 'prod-modal-' . (int)$produit['id'];
 
                     // Badge stock
                     if ($stock === 0)      { $badgeClass = 'badge-red';    $badgeLabel = 'Rupture'; }
@@ -53,10 +55,18 @@
                     $icons = ['Boisson' => '🥤', 'Snack' => '🍪', 'Nourriture' => '🍔'];
                     $emoji = $icons[$produit['categorie']] ?? '🛒';
                 ?>
-                <div class="prod-card <?= $stockClass ?>">
+                <div class="prod-card <?= $stockClass ?>"
+                     id="<?= $id_card ?>"
+                     onclick="ouvrirModalProduit('<?= $id_modal ?>')"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Voir le détail de <?= htmlspecialchars($produit['nom']) ?>">
 
-                    <!-- Image Url -->
+                    <!-- Image -->
                     <div class="prod-card-img">
+                        <?php if (!empty($badgeLabel)): ?>
+                            <span class="stock-badge <?= $badgeClass ?>"><?= $badgeLabel ?></span>
+                        <?php endif; ?>
                         <?php if (!empty($produit['image'])): ?>
                             <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy" decoding="async">
                         <?php else: ?>
@@ -64,40 +74,151 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- Infos produit -->
+                    <!-- Infos produit simplifiées -->
                     <div class="prod-card-body">
-                        <div class="prod-card-cat"><?= htmlspecialchars($produit['categorie']) ?></div>
                         <div class="prod-card-name"><?= htmlspecialchars($produit['nom']) ?></div>
                         <div class="prod-card-price"><?= formaterPrix($produit['prix']) ?></div>
-                    </div>
-
-                    <!-- Action ajouter au panier -->
-                    <div class="prod-card-footer">
-                        <form method="POST" action="" style="display:contents;">
-                            <input type="hidden" name="action_panier" value="add">
-                            <input type="hidden" name="id_produit"    value="<?= (int)$produit['id'] ?>">
-                            <?php if (isset($_GET['categorie'])): ?>
-                                <input type="hidden" name="categorie" value="<?= htmlspecialchars($_GET['categorie']) ?>">
-                            <?php endif; ?>
-
-                            <input type="number"
-                                   name="quantite"
-                                   value="1"
-                                   min="1"
-                                   max="<?= $stock ?>"
-                                   class="qty-input"
-                                   <?= !$dispo ? 'disabled' : '' ?>>
-
-                            <button type="submit" class="btn btn-primary" <?= !$dispo ? 'disabled' : '' ?>>
-                                <i class="fa-solid fa-cart-plus"></i>
-                                Ajouter
-                            </button>
-                        </form>
                     </div>
 
                 </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- Modal container pour les détails produit -->
+            <div id="prod-modal-container"></div>
+
+            <!-- Données JSON pour les modals -->
+            <script>
+            const produitsData = <?= json_encode(array_map(function($p) use ($donnee) {
+                $icons = ['Boisson' => '🥤', 'Snack' => '🍪', 'Nourriture' => '🍔'];
+                return [
+                    'id' => $p['id'],
+                    'nom' => $p['nom'],
+                    'prix' => $p['prix'],
+                    'categorie' => $p['categorie'],
+                    'stock' => (int)$p['stock'],
+                    'image' => $p['image'] ?? null,
+                    'description' => $p['description'] ?? 'Aucune description disponible.',
+                    'emoji' => $icons[$p['categorie']] ?? '🛒'
+                ];
+            }, $donnee)) ?>;
+            </script>
+
+            <script>
+            function ouvrirModalProduit(modalId) {
+                const overlay = document.getElementById('prodOverlay');
+                const container = document.getElementById('prod-modal-container');
+
+                const id = parseInt(modalId.replace('prod-modal-', ''));
+                const produit = produitsData.find(p => p.id == id);
+
+                if (!produit) return;
+
+                container.innerHTML = renderModalProduit(produit);
+
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.offsetHeight;
+                    modal.classList.add('open');
+                }
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function renderModalProduit(p) {
+                const dispo = p.stock > 0;
+                const stockLabel = p.stock === 0 ? 'Rupture de stock' :
+                                   p.stock <= 3 ? `Plus que ${p.stock} en stock !` :
+                                   `${p.stock} en stock`;
+                const stockBadge = p.stock === 0 ? 'badge-red' :
+                                   p.stock <= 3 ? 'badge-yellow' : 'badge-green';
+
+                const imageHtml = p.image
+                    ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nom)}">`
+                    : `<div class="prod-modal-emoji">${p.emoji}</div>`;
+
+                return `<div class="prod-modal" id="prod-modal-${p.id}" role="dialog" aria-modal="true" aria-label="Détail produit ${escapeHtml(p.nom)}" onclick="fermerModalProduit('prod-modal-${p.id}')">
+                    <div class="prod-modal-box" onclick="event.stopPropagation()">
+                        <div class="prod-modal-header">
+                            <div class="prod-modal-title">
+                                <i class="fa-solid fa-box-open"></i>
+                                ${escapeHtml(p.nom)}
+                            </div>
+                            <button class="prod-modal-close" onclick="fermerModalProduit('prod-modal-${p.id}')" aria-label="Fermer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="prod-modal-body">
+                            <div class="prod-modal-img">
+                                ${imageHtml}
+                            </div>
+                            <div class="prod-modal-infos">
+                                <div class="prod-modal-cat">${escapeHtml(p.categorie)}</div>
+                                <div class="prod-modal-price">${formaterPrix(p.prix)}</div>
+                                <div class="prod-modal-stock">
+                                    <span class="badge ${stockBadge}">${stockLabel}</span>
+                                </div>
+                                <div class="prod-modal-desc">${escapeHtml(p.description)}</div>
+                            </div>
+                        </div>
+                        <div class="prod-modal-footer">
+                            <button class="btn btn-ghost" onclick="fermerModalProduit('prod-modal-${p.id}')">
+                                <i class="fa-solid fa-xmark"></i> Fermer
+                            </button>
+                            <form method="POST" action="" style="display:contents;" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
+                                <input type="hidden" name="action_panier" value="add">
+                                <input type="hidden" name="id_produit" value="${p.id}">
+                                ${document.querySelector('[name="categorie"]')?.value ? `<input type="hidden" name="categorie" value="${document.querySelector('[name="categorie"]').value}">` : ''}
+                                <input type="number" name="quantite" value="1" min="1" max="${p.stock}" class="qty-input" ${!dispo ? 'disabled' : ''}>
+                                <button type="submit" class="btn btn-primary btn-lg" ${!dispo ? 'disabled' : ''}>
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                    Ajouter au panier
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            function formaterPrix(prix) {
+                return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(prix);
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function fermerModalProduit(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return;
+                modal.classList.remove('open');
+                document.getElementById('prodOverlay').classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => {
+                    const container = document.getElementById('prod-modal-container');
+                    if (container) container.innerHTML = '';
+                }, 150);
+            }
+
+            function fermerTousLesModalsProduit() {
+                document.querySelectorAll('.prod-modal.open').forEach(m => m.classList.remove('open'));
+                document.getElementById('prodOverlay').classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => {
+                    const container = document.getElementById('prod-modal-container');
+                    if (container) container.innerHTML = '';
+                }, 150);
+            }
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') fermerTousLesModalsProduit();
+            });
+            </script>
+
+            <!-- Overlay -->
+            <div id="prodOverlay" class="prod-overlay" onclick="fermerTousLesModalsProduit()"></div>
         <?php endif; ?>
 
     </div><!-- /colonne gauche -->

@@ -469,6 +469,168 @@ select.form-control { cursor: pointer; }
     border-radius: 20px;
     font-size: .75rem;
     font-weight: 700;
+    z-index: 2;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL PRODUIT (lazy-loaded)
+═══════════════════════════════════════════════════════ */
+
+.prod-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 900;
+    display: none;
+    cursor: pointer;
+}
+
+.prod-overlay.active { display: block; }
+
+.prod-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 901;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s ease;
+}
+
+.prod-modal.open {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.prod-modal-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    width: 480px;
+    max-width: 92vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    will-change: opacity;
+}
+
+.prod-modal-header {
+    background: var(--accent);
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.prod-modal-title {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.prod-modal-close {
+    background: rgba(255,255,255,.2);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background .15s;
+}
+
+.prod-modal-close:hover { background: rgba(255,255,255,.35); }
+
+.prod-modal-body {
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.prod-modal-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.prod-modal-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.prod-modal-emoji {
+    font-size: 5rem;
+}
+
+.prod-modal-infos {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.prod-modal-cat {
+    font-size: .8rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.prod-modal-price {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--text);
+}
+
+.prod-modal-stock {
+    margin-top: 4px;
+}
+
+.prod-modal-desc {
+    font-size: .95rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.prod-modal-footer {
+    padding: 16px 22px;
+    border-top: 2px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    background: var(--bg2);
+}
+
+.prod-modal-footer .qty-input { width: 70px; }
+
+/* Optimisation Raspberry Pi : réduire les animations produits */
+@media (prefers-reduced-motion: reduce) {
+    .prod-modal, .prod-modal-box {
+        transition: none !important;
+    }
 }
 
 /* Panier sticky sidebar */
