@@ -119,113 +119,131 @@
     </div><!-- /commandes-grid -->
 
 
-    <!-- ══ MODALS ═══════════════════════════════════════ -->
-    <?php foreach ($commandes as $commande):
+    <!-- ══ MODAL CONTAINER (lazy-loaded) ═══════════════════════════════════════ -->
+    <div id="cmd-modal-container"></div>
 
-        // Réutilise les produits déjà récupérés
-        $produits_modal = $produitsParCommande[$commande['id']] ?? [];
-        $id_modal = 'modal-' . (int)$commande['id'];
-    ?>
+    <!-- ══ DONNÉES JSON POUR JS ═══════════════════════════════════════ -->
+    <script>
+    const commandesData = <?= json_encode($produitsParCommande) ?>;
+    const commandesMeta = <?= json_encode(array_map(function($c) {
+        return ['id' => $c['id'], 'heure' => $c['heure'], 'num_borne' => $c['num_borne'] ?? null];
+    }, $commandes)) ?>;
+    </script>
 
-    <div class="cmd-modal"
-         id="<?= $id_modal ?>"
-         role="dialog"
-         aria-modal="true"
-         aria-label="Détail commande <?= (int)$commande['id'] ?>">
+    <script>
+    function ouvrirModal(modalId) {
+        const overlay = document.getElementById('cmdOverlay');
+        const container = document.getElementById('cmd-modal-container');
 
-        <!-- Clic sur la boîte ne ferme pas le modal -->
-        <div class="cmd-modal-box" onclick="event.stopPropagation()">
+        const id = parseInt(modalId.replace('modal-', ''));
+        const meta = commandesMeta.find(c => c.id == id);
+        const produits = commandesData[id] || [];
 
-            <!-- En-tête -->
-            <div class="cmd-modal-header">
-                <div class="cmd-modal-title">
-                    <i class="fa-solid fa-receipt"></i>
-                    Commande #<?= (int)$commande['id'] ?>
-                </div>
-                <button class="cmd-modal-close"
-                        onclick="fermerModal('<?= $id_modal ?>')"
-                        aria-label="Fermer">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
+        if (!meta) return;
 
-            <!-- Corps -->
-            <div class="cmd-modal-body">
+        container.innerHTML = renderModal(id, meta, produits);
 
-                <!-- Tuiles infos -->
-                <div class="cmd-modal-infos">
-                    <div class="cmd-modal-info-item">
-                        <span class="cmd-modal-info-label">
-                            <i class="fa-solid fa-clock"></i> Heure
-                        </span>
-                        <span class="cmd-modal-info-value">
-                            <?= htmlspecialchars($commande['heure']) ?>
-                        </span>
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.offsetHeight;
+            modal.classList.add('open');
+        }
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function renderModal(id, meta, produits) {
+        const nbProduits = produits.length;
+        let produitsHtml = '';
+
+        if (nbProduits > 0) {
+            produitsHtml = '<ul class="cmd-modal-articles">' +
+                produits.map(p => `<li class="cmd-modal-article-item">
+                    <span class="cmd-modal-article-name">${escapeHtml(p.nom)}</span>
+                    <span class="cmd-modal-article-qty">×${p.quantite}</span>
+                </li>`).join('') +
+                '</ul>';
+        } else {
+            produitsHtml = '<p style="color:var(--text-muted); font-style:italic; font-size:.9rem;">Aucun produit associé.</p>';
+        }
+
+        const borneHtml = meta.num_borne ?
+            `<div class="cmd-modal-info-item">
+                <span class="cmd-modal-info-label"><i class="fa-solid fa-desktop"></i> Borne</span>
+                <span class="cmd-modal-info-value">Borne ${escapeHtml(meta.num_borne)}</span>
+            </div>` : '';
+
+        return `<div class="cmd-modal" id="modal-${id}" role="dialog" aria-modal="true" aria-label="Détail commande ${id}">
+            <div class="cmd-modal-box" onclick="event.stopPropagation()">
+                <div class="cmd-modal-header">
+                    <div class="cmd-modal-title">
+                        <i class="fa-solid fa-receipt"></i> Commande #${id}
                     </div>
-                    <?php if (!empty($commande['num_borne'])): ?>
-                    <div class="cmd-modal-info-item">
-                        <span class="cmd-modal-info-label">
-                            <i class="fa-solid fa-desktop"></i> Borne
-                        </span>
-                        <span class="cmd-modal-info-value">
-                            Borne <?= htmlspecialchars($commande['num_borne']) ?>
-                        </span>
-                    </div>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Titre section articles -->
-                <div class="cmd-modal-articles-title">
-                    <i class="fa-solid fa-basket-shopping"></i>
-                    Articles commandés
-                    <span class="badge badge-green"><?= count($produits_modal) ?></span>
-                </div>
-
-                <!-- Liste COMPLÈTE — même style pour tous les articles -->
-                <?php if (!empty($produits_modal)): ?>
-                    <ul class="cmd-modal-articles">
-                        <?php foreach ($produits_modal as $p): ?>
-                            <li class="cmd-modal-article-item">
-                                <span class="cmd-modal-article-name">
-                                    <?= htmlspecialchars($p['nom']) ?>
-                                </span>
-                                <span class="cmd-modal-article-qty">
-                                    ×<?= (int)$p['quantite'] ?>
-                                </span>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php else: ?>
-                    <p style="color:var(--text-muted); font-style:italic; font-size:.9rem;">
-                        Aucun produit associé.
-                    </p>
-                <?php endif; ?>
-
-            </div><!-- /modal-body -->
-
-            <!-- Actions -->
-            <div class="cmd-modal-footer">
-                <button class="btn btn-ghost" onclick="fermerModal('<?= $id_modal ?>')">
-                    <i class="fa-solid fa-xmark"></i>
-                    Fermer
-                </button>
-                <form method="POST" action="" style="display:contents;">
-                    <input type="hidden" name="id" value="<?= (int)$commande['id'] ?>">
-                    <button type="submit"
-                            name="validate_commande"
-                            class="btn btn-success"
-                            onclick="return confirm('Valider cette commande ?')">
-                        <i class="fa-solid fa-check"></i>
-                        Valider la commande
+                    <button class="cmd-modal-close" onclick="fermerModal('modal-${id}')" aria-label="Fermer">
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
-                </form>
+                </div>
+                <div class="cmd-modal-body">
+                    <div class="cmd-modal-infos">
+                        <div class="cmd-modal-info-item">
+                            <span class="cmd-modal-info-label"><i class="fa-solid fa-clock"></i> Heure</span>
+                            <span class="cmd-modal-info-value">${escapeHtml(meta.heure)}</span>
+                        </div>
+                        ${borneHtml}
+                    </div>
+                    <div class="cmd-modal-articles-title">
+                        <i class="fa-solid fa-basket-shopping"></i> Articles commandés
+                        <span class="badge badge-green">${nbProduits}</span>
+                    </div>
+                    ${produitsHtml}
+                </div>
+                <div class="cmd-modal-footer">
+                    <button class="btn btn-ghost" onclick="fermerModal('modal-${id}')">
+                        <i class="fa-solid fa-xmark"></i> Fermer
+                    </button>
+                    <form method="POST" action="" style="display:contents;">
+                        <input type="hidden" name="id" value="${id}">
+                        <button type="submit" name="validate_commande" class="btn btn-success" onclick="return confirm('Valider cette commande ?')">
+                            <i class="fa-solid fa-check"></i> Valider la commande
+                        </button>
+                    </form>
+                </div>
             </div>
+        </div>`;
+    }
 
-        </div><!-- /modal-box -->
-    </div><!-- /modal -->
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-    <?php endforeach; ?>
+    function fermerModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        modal.classList.remove('open');
+        document.getElementById('cmdOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            const container = document.getElementById('cmd-modal-container');
+            if (container) container.innerHTML = '';
+        }, 150);
+    }
 
+    function fermerTousLesModals() {
+        document.querySelectorAll('.cmd-modal.open').forEach(m => m.classList.remove('open'));
+        document.getElementById('cmdOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            const container = document.getElementById('cmd-modal-container');
+            if (container) container.innerHTML = '';
+        }, 150);
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') fermerTousLesModals();
+    });
+    </script>
 
 <?php else: ?>
     <div class="empty-state">
@@ -236,34 +254,3 @@
 
 <!-- Overlay -->
 <div id="cmdOverlay" onclick="fermerTousLesModals()"></div>
-
-
-<script>
-function ouvrirModal(modalId) {
-    const modal   = document.getElementById(modalId);
-    const overlay = document.getElementById('cmdOverlay');
-    if (!modal) return;
-    modal.classList.add('open');
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function fermerModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (!modal) return;
-    modal.classList.remove('open');
-    document.getElementById('cmdOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function fermerTousLesModals() {
-    document.querySelectorAll('.cmd-modal.open')
-            .forEach(m => m.classList.remove('open'));
-    document.getElementById('cmdOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') fermerTousLesModals();
-});
-</script>
