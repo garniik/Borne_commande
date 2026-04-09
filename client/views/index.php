@@ -15,13 +15,15 @@
             <?php
             $cat_active = $_GET['categorie'] ?? '';
             $categories = [
-                ''  => ['label' => 'Tout',      'icon' => 'fa-border-all'],
-                '1' => ['label' => 'Boisson',   'icon' => 'fa-wine-glass'],
-                '2' => ['label' => 'Snack',     'icon' => 'fa-cookie-bite'],
-                '3' => ['label' => 'Nourriture','icon' => 'fa-utensils'],
+                ''         => ['label' => 'Tout',      'icon' => 'fa-border-all'],
+                'Soft'     => ['label' => 'Soft',      'icon' => 'fa-glass-water'],
+                'Alcool'   => ['label' => 'Alcool',    'icon' => 'fa-wine-bottle'],
+                'cocktail' => ['label' => 'Cocktail',  'icon' => 'fa-martini-glass-citrus'],
+                'Snack'    => ['label' => 'Snack',     'icon' => 'fa-cookie-bite'],
+                'Nourriture'=> ['label' => 'Nourriture','icon' => 'fa-utensils'],
             ];
             foreach ($categories as $id => $cat):
-                $url = '?element=client&action=index' . ($id !== '' ? '&categorie=' . $id . '&filtrer=1' : '');
+                $url = '?element=client&action=index' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
                 $actif = ($cat_active === $id) ? 'active' : '';
             ?>
                 <a href="<?= $url ?>" class="cat-btn <?= $actif ?>">
@@ -51,8 +53,15 @@
                     elseif ($stock <= 3)   { $badgeClass = 'badge-yellow'; $badgeLabel = 'Bientôt épuisé'; }
                     else                   { $badgeClass = ''; $badgeLabel = ''; }
 
-                    // Emoji icône si pas d'image
-                    $icons = ['Boisson' => '🥤', 'Snack' => '🍪', 'Nourriture' => '🍔'];
+                    // Emoji icône si pas d'image (par catégorie ou sous-catégorie)
+                    $icons = [
+                        'Soft'     => '🥤',
+                        'Alcool'   => '🍺',
+                        'cocktail' => '🍹',
+                        'Snack'    => '🍪',
+                        'Nourriture'=> '🍔',
+                        'Boisson'  => '🥤'
+                    ];
                     $emoji = $icons[$produit['categorie']] ?? '🛒';
                 ?>
                 <div class="prod-card <?= $stockClass ?>"
@@ -90,7 +99,14 @@
             <!-- Données JSON pour les modals -->
             <script>
             const produitsData = <?= json_encode(array_map(function($p) use ($donnee) {
-                $icons = ['Boisson' => '🥤', 'Snack' => '🍪', 'Nourriture' => '🍔'];
+                $icons = [
+                    'Soft'     => '🥤',
+                    'Alcool'   => '🍺',
+                    'cocktail' => '🍹',
+                    'Snack'    => '🍪',
+                    'Nourriture'=> '🍔',
+                    'Boisson'  => '🥤'
+                ];
                 return [
                     'id' => $p['id'],
                     'nom' => $p['nom'],
