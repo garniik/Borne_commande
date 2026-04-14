@@ -1,3 +1,4 @@
+<?php afficherMessagesFlash(); ?>
 
 <div class="client-layout">
 
@@ -6,15 +7,35 @@
     ══════════════════════════════════════════════════ -->
     <div>
 
-        <h1 class="page-title">Nos <span>Produits</span></h1>
-        <p class="page-subtitle">Choisissez vos articles et ajoutez-les au panier.</p>
+        <h1 class="page-title">Nos <span>Pizzas</span> & Produits</h1>
+        <p class="page-subtitle">Les pizzas sont disponibles uniquement Jeudi, Vendredi et Samedi à partir de 18h00.</p>
 
-        <!-- Filtres catégorie (boutons pilule) -->
+        <?php if (!empty($messageHoraire)): ?>
+        <div class="alert alert-info" style="margin-bottom: 20px; padding: 12px 16px; background: rgba(59, 130, 246, 0.15); border-left: 4px solid #3b82f6; border-radius: 8px; color: var(--text);">
+            <i class="fa-solid fa-clock" style="margin-right: 8px;"></i>
+            <?= htmlspecialchars($messageHoraire) ?>
+        </div>
+        <?php endif; ?>
+
+        <!-- Navigation -->
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <a href="?element=client&action=index" class="btn btn-ghost">
+                <i class="fa-solid fa-utensils"></i>
+                Tous les produits
+            </a>
+            <a href="?element=client&action=pizzas" class="btn btn-primary">
+                <i class="fa-solid fa-pizza-slice"></i>
+                Pizzas & Spécialités
+            </a>
+        </div>
+
+        <!-- Filtres catégorie -->
         <div class="cat-filters">
             <?php
             $cat_active = $_GET['categorie'] ?? '';
             $categories = [
                 ''         => ['label' => 'Tout',      'icon' => 'fa-border-all'],
+                'Pizza'    => ['label' => 'Pizzas',    'icon' => 'fa-pizza-slice'],
                 'Soft'     => ['label' => 'Soft',      'icon' => 'fa-glass-water'],
                 'Alcool'   => ['label' => 'Alcool',    'icon' => 'fa-wine-bottle'],
                 'cocktail' => ['label' => 'Cocktail',  'icon' => 'fa-martini-glass-citrus'],
@@ -22,7 +43,7 @@
                 'Pizza'=> ['label' => 'Pizza','icon' => 'fa-utensils'],
             ];
             foreach ($categories as $id => $cat):
-                $url = '?element=client&action=index' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
+                $url = '?element=client&action=pizzas' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
                 $actif = ($cat_active === $id) ? 'active' : '';
             ?>
                 <a href="<?= $url ?>" class="cat-btn <?= $actif ?>">
@@ -36,30 +57,43 @@
         <?php if (empty($donnee)): ?>
             <div class="empty-state">
                 <i class="fa-solid fa-face-sad-tear"></i>
-                <p>Aucun produit disponible dans cette catégorie.</p>
+                <p>Aucun produit disponible.</p>
             </div>
         <?php else: ?>
             <div class="produits-grid">
                 <?php foreach ($donnee as $produit):
-                    $stock     = (int)$produit['stock'];
+                    $stock     = (int)($produit['stock_affiche'] ?? 0);
                     $dispo     = $stock > 0;
                     $stockClass = !$dispo ? 'stock-out' : '';
-                    $id_card    = 'prod-card-' . (int)$produit['id'];
-                    $id_modal   = 'prod-modal-' . (int)$produit['id'];
+                    $isPizza   = !empty($produit['pizza_indispo']);
+                    $id_card   = 'prod-card-' . (int)$produit['id'];
+                    $id_modal  = 'prod-modal-' . (int)$produit['id'];
 
                     // Badge stock
-                    if ($stock === 0)      { $badgeClass = 'badge-red';    $badgeLabel = 'Rupture'; }
-                    elseif ($stock <= 3)   { $badgeClass = 'badge-yellow'; $badgeLabel = 'Bientôt épuisé'; }
-                    else                   { $badgeClass = ''; $badgeLabel = ''; }
+                    if ($stock === 0) {
+                        if ($isPizza && !$pizzasDispo) {
+                            $badgeClass = 'badge-blue';
+                            $badgeLabel = 'Disponible Jeu-Ven-Sam 18h+';
+                        } else {
+                            $badgeClass = 'badge-red';
+                            $badgeLabel = 'Rupture';
+                        }
+                    } elseif ($stock <= 3) {
+                        $badgeClass = 'badge-yellow';
+                        $badgeLabel = 'Bientôt épuisé';
+                    } else {
+                        $badgeClass = '';
+                        $badgeLabel = '';
+                    }
 
-                    // Emoji icône si pas d'image (par catégorie ou sous-catégorie)
+                    // Emoji
                     $icons = [
+                        'Pizza'    => '🍕',
                         'Soft'     => '🥤',
                         'Alcool'   => '🍺',
                         'cocktail' => '🍹',
                         'Snack'    => '🍪',
-                        'Pizza'=> '�',
-                        'Boisson'  => '🥤'
+                        'Pizza'=> '🍕',
                     ];
                     $emoji = $icons[$produit['categorie']] ?? '🛒';
                 ?>
@@ -82,36 +116,47 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- Infos produit simplifiées -->
+                    <!-- Infos produit -->
                     <div class="prod-card-body">
                         <div class="prod-card-name"><?= htmlspecialchars($produit['nom']) ?></div>
                         <div class="prod-card-price"><?= formaterPrix($produit['prix']) ?></div>
+                        <?php if ($isPizza && !$pizzasDispo): ?>
+                            <div class="prod-card-note" style="font-size: 0.75rem; color: var(--text-muted);">
+                                <i class="fa-solid fa-clock"></i> Jeu-Ven-Sam 18h+
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                 </div>
                 <?php endforeach; ?>
             </div>
 
-            <!-- Modal container pour les détails produit -->
+            <!-- Modal container -->
             <div id="prod-modal-container"></div>
 
-            <!-- Données JSON pour les modals -->
+            <!-- Données JSON -->
             <script>
-            const produitsData = <?= json_encode(array_map(function($p) use ($donnee) {
+            const produitsData = <?= json_encode(array_map(function($p) use ($donnee, $pizzasDispo) {
                 $icons = [
+                    'Pizza'    => '🍕',
                     'Soft'     => '🥤',
                     'Alcool'   => '🍺',
                     'cocktail' => '🍹',
                     'Snack'    => '🍪',
-                    'Pizza'=> '�',
-                    'Boisson'  => '🥤'
+                    'Pizza'=> '🍕',
                 ];
+                $isPizza = !empty($p['pizza_indispo']);
+                $stockAffiche = $isPizza && !$pizzasDispo ? 0 : (int)$p['stock'];
+                
                 return [
                     'id' => $p['id'],
                     'nom' => $p['nom'],
                     'prix' => $p['prix'],
                     'categorie' => $p['categorie'],
-                    'stock' => (int)$p['stock'],
+                    'stock' => $stockAffiche,
+                    'stock_reel' => (int)$p['stock'],
+                    'pizza_indispo' => $isPizza,
+                    'pizzas_horaire' => $pizzasDispo,
                     'image' => $p['image'] ?? null,
                     'description' => $p['description'] ?? 'Aucune description disponible.',
                     'emoji' => $icons[$p['categorie']] ?? '🛒'
@@ -142,15 +187,30 @@
 
             function renderModalProduit(p) {
                 const dispo = p.stock > 0;
-                const stockLabel = p.stock === 0 ? 'Rupture de stock' :
-                                   p.stock <= 3 ? `Plus que ${p.stock} en stock !` :
-                                   `${p.stock} en stock`;
-                const stockBadge = p.stock === 0 ? 'badge-red' :
-                                   p.stock <= 3 ? 'badge-yellow' : 'badge-green';
+                const isPizzaIndispo = p.pizza_indispo && !p.pizzas_horaire;
+                
+                let stockLabel, stockBadge;
+                if (isPizzaIndispo) {
+                    stockLabel = 'Disponible Jeu-Ven-Sam 18h+';
+                    stockBadge = 'badge-blue';
+                } else if (p.stock === 0) {
+                    stockLabel = 'Rupture de stock';
+                    stockBadge = 'badge-red';
+                } else if (p.stock <= 3) {
+                    stockLabel = `Plus que ${p.stock} en stock !`;
+                    stockBadge = 'badge-yellow';
+                } else {
+                    stockLabel = `${p.stock} en stock`;
+                    stockBadge = 'badge-green';
+                }
 
                 const imageHtml = p.image
                     ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nom)}">`
                     : `<div class="prod-modal-emoji">${p.emoji}</div>`;
+
+                const pizzaNote = isPizzaIndispo 
+                    ? `<div style="background: rgba(59,130,246,0.1); padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; color: #3b82f6;"><i class="fa-solid fa-clock"></i> Les pizzas sont disponibles uniquement le Jeudi, Vendredi et Samedi à partir de 18h00.</div>`
+                    : '';
 
                 return `<div class="prod-modal" id="prod-modal-${p.id}" role="dialog" aria-modal="true" aria-label="Détail produit ${escapeHtml(p.nom)}" onclick="fermerModalProduit('prod-modal-${p.id}')">
                     <div class="prod-modal-box" onclick="event.stopPropagation()">
@@ -168,6 +228,7 @@
                                 ${imageHtml}
                             </div>
                             <div class="prod-modal-infos">
+                                ${pizzaNote}
                                 <div class="prod-modal-cat">${escapeHtml(p.categorie)}</div>
                                 <div class="prod-modal-price">${formaterPrix(p.prix)}</div>
                                 <div class="prod-modal-stock">
@@ -183,11 +244,10 @@
                             <form method="POST" action="" style="display:contents;" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
-                                ${document.querySelector('[name="categorie"]')?.value ? `<input type="hidden" name="categorie" value="${document.querySelector('[name="categorie"]').value}">` : ''}
-                                <input type="number" name="quantite" value="1" min="1" max="${p.stock}" class="qty-input" ${!dispo ? 'disabled' : ''}>
+                                <input type="number" name="quantite" value="1" min="1" max="${dispo ? p.stock_reel : 1}" class="qty-input" ${!dispo ? 'disabled' : ''}>
                                 <button type="submit" class="btn btn-primary btn-lg" ${!dispo ? 'disabled' : ''}>
                                     <i class="fa-solid fa-cart-plus"></i>
-                                    Ajouter au panier
+                                    Ajouter
                                 </button>
                             </form>
                         </div>

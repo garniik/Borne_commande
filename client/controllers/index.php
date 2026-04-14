@@ -7,7 +7,7 @@ $filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST
 
 if ($filtre_actif && $categorie !== '') {
     // Convertir l'ID de catégorie en nom
-    $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Nourriture'];
+    $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Pizza'];
     $nom_categorie = $categories[$categorie] ?? $categorie;
     
     $filter_data = ['categorie' => $nom_categorie];
@@ -47,7 +47,7 @@ if ($action_panier === 'add' && $id_produit) {
     $redirect_url = '?element=client&action=index';
     if (isset($_POST['categorie']) && $_POST['categorie'] !== '') {
         // Chercher l'ID correspondant au nom de catégorie
-        $categories_noms_to_ids = ['Boisson' => '1', 'Snack' => '2', 'Nourriture' => '3'];
+        $categories_noms_to_ids = ['Boisson' => '1', 'Snack' => '2', 'Pizza' => '3'];
         $categorie_id = $categories_noms_to_ids[$_POST['categorie']] ?? $_POST['categorie'];
         $redirect_url .= '&categorie=' . urlencode($categorie_id) . '&filtrer=1';
     }
