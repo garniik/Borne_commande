@@ -22,7 +22,7 @@
                 'Pizza'=> ['label' => 'Pizza','icon' => 'fa-utensils'],
             ];
             foreach ($categories as $id => $cat):
-                $url = '?element=client&action=index' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
+                $url = '?element=client&action=pizza' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
                 $actif = ($cat_active === $id) ? 'active' : '';
             ?>
                 <a href="<?= $url ?>" class="cat-btn <?= $actif ?>">
