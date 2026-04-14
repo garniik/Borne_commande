@@ -31,7 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         unset($_SESSION['panier']);
-        header('Location: ?element=client&action=index');
+        
+        // Rediriger vers la page source (index ou pizza)
+        $source = GETPOST('source') ?? 'index';
+        $redirect_action = in_array($source, ['index', 'pizza']) ? $source : 'index';
+        
+        header('Location: ?element=client&action=' . $redirect_action);
         exit;
 
     } else {

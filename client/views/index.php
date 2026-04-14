@@ -344,7 +344,7 @@
                         </button>
                     </form>
                     
-                    <a href="?element=client&action=commande" class="btn btn-success btn-full btn-lg">
+                    <a href="?element=client&action=commande&source=index" class="btn btn-success btn-full btn-lg">
                         <i class="fa-solid fa-circle-check"></i>
                         Valider la commande
                     </a>

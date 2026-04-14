@@ -21,6 +21,9 @@
 
         <div class="card-body">
             <form method="POST" action="?element=client&action=commande">
+                <!-- Page source pour redirection -->
+                <input type="hidden" name="source" value="<?= htmlspecialchars($_GET['source'] ?? 'index') ?>">
+                
                 <!-- Numéro de borne -->
                 <div class="form-group">
                     <label class="form-label" for="num_borne">
