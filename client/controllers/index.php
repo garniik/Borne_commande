@@ -1,13 +1,16 @@
 <?php
 require_once(dirname(__FILE__) . '/../../class/produits.class.php');
 
+// Sur cette page (index), les pizzas sont toujours affichées comme indisponibles
+$messageHoraire = "Les pizzas sont disponibles uniquement le Jeudi, Vendredi et Samedi à partir de 18h00.";
+
 // Récupérer les paramètres de filtre (GET ou POST)
 $categorie = $_GET['categorie'] ?? $_POST['categorie'] ?? '';
 $filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST['categorie'] !== '');
 
 if ($filtre_actif && $categorie !== '') {
     // Convertir l'ID de catégorie en nom
-    $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Pizza'];
+    $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Nourriture'];
     $nom_categorie = $categories[$categorie] ?? $categorie;
     
     $filter_data = ['categorie' => $nom_categorie];
@@ -16,64 +19,78 @@ if ($filtre_actif && $categorie !== '') {
     $donnee = Produits::fetchAll($db);
 }
 
-// Trier : produits en stock en premier, rupture en bas
+// Marquer les pizzas comme indisponibles sur cette page
+foreach ($donnee as &$produit) {
+    if (strcasecmp($produit['categorie'], 'Pizza') === 0 || 
+        stripos($produit['nom'], 'pizza') !== false) {
+        $produit['stock_affiche'] = 0;
+        $produit['pizza_indispo'] = true;
+    } else {
+        $produit['stock_affiche'] = (int)$produit['stock'];
+        $produit['pizza_indispo'] = false;
+    }
+}
+unset($produit);
+
+// Trier : produits disponibles en premier, pizzas indispo en bas
 usort($donnee, function($a, $b) {
-    $stockA = (int)($a['stock'] ?? 0);
-    $stockB = (int)($b['stock'] ?? 0);
-    // Si A a du stock et B non, A passe avant
-    if ($stockA > 0 && $stockB === 0) return -1;
-    // Si B a du stock et A non, B passe avant
-    if ($stockB > 0 && $stockA === 0) return 1;
-    // Sinon garder l'ordre original (par ID ou nom)
+    $stockA = (int)($a['stock_affiche'] ?? 0);
+    $stockB = (int)($b['stock_affiche'] ?? 0);
+    $pizzaA = !empty($a['pizza_indispo']);
+    $pizzaB = !empty($b['pizza_indispo']);
+    
+    if ($stockA > 0 && ($stockB === 0 || $pizzaB)) return -1;
+    if ($stockB > 0 && ($stockA === 0 || $pizzaA)) return 1;
+    
     return (int)$a['id'] <=> (int)$b['id'];
 });
 
-// Gérer le panier (simple session)
+// Gérer le panier
 $action_panier = GETPOST('action_panier') ?? '';
 $id_produit = filter_var(GETPOST('id_produit'), FILTER_VALIDATE_INT);
 $quantite = max(1, (int)(GETPOST('quantite') ?? 1));
 
 if ($action_panier === 'add' && $id_produit) {
     $produit = Produits::findById($db, $id_produit);
+    
+    // Bloquer les pizzas sur cette page
+    $estPizza = (strcasecmp($produit['categorie'], 'Pizza') === 0 || 
+                stripos($produit['nom'], 'pizza') !== false);
+    
+    if ($estPizza) {
+        $_SESSION['mesgs']['errors'][] = 'Les pizzas ne sont pas disponibles actuellement.';
+        header('Location: ?element=client&action=index');
+        exit;
+    }
+    
     if ($produit && (int)$produit['stock'] >= $quantite) {
         if (!isset($_SESSION['panier'])) $_SESSION['panier'] = [];
         $_SESSION['panier'][$id_produit] = ($_SESSION['panier'][$id_produit] ?? 0) + $quantite;
-        $_SESSION['mesgs']['success'][] = 'Produit ajouté au panier.';
     } else {
         $_SESSION['mesgs']['errors'][] = 'Produit indisponible ou stock insuffisant.';
     }
     
-    // Préserver les paramètres de filtre lors de la redirection
-    $redirect_url = '?element=client&action=index';
-    if (isset($_POST['categorie']) && $_POST['categorie'] !== '') {
-        // Chercher l'ID correspondant au nom de catégorie
-        $categories_noms_to_ids = ['Boisson' => '1', 'Snack' => '2', 'Pizza' => '3'];
-        $categorie_id = $categories_noms_to_ids[$_POST['categorie']] ?? $_POST['categorie'];
-        $redirect_url .= '&categorie=' . urlencode($categorie_id) . '&filtrer=1';
-    }
-    header('Location: ' . $redirect_url);
+    header('Location: ?element=client&action=index');
     exit;
 }
 
-// Supprimer un article du panier
+// Supprimer du panier
 if ($action_panier === 'remove' && $id_produit) {
     if (isset($_SESSION['panier'][$id_produit])) {
         unset($_SESSION['panier'][$id_produit]);
-        $_SESSION['mesgs']['success'][] = 'Produit retiré du panier.';
     }
     header('Location: ?element=client&action=index');
     exit;
 }
 
-// Vider tout le panier
+// Vider le panier
 if ($action_panier === 'clear') {
     $_SESSION['panier'] = [];
-    $_SESSION['mesgs']['success'][] = 'Panier vidé.';
     header('Location: ?element=client&action=index');
     exit;
 }
 
-// Préparer les détails du panier pour l’affichage
+// Préparer le panier
 $panier = $_SESSION['panier'] ?? [];
 $details = [];
 $total = 0;
