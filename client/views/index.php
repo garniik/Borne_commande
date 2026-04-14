@@ -7,14 +7,9 @@
     ══════════════════════════════════════════════════ -->
     <div>
 
-        <h1 class="page-title">Nos <span>Pizzas</span> & Produits</h1>
+        <h1 class="page-title">Nos <span>Produits</span></h1>
+        <p class="page-subtitle">Choisissez vos articles et ajoutez-les au panier.</p>
 
-        <?php if (!empty($messageHoraire)): ?>
-        <div class="alert alert-info" style="margin-bottom: 20px; padding: 12px 16px; background: rgba(59, 130, 246, 0.15); border-left: 4px solid #3b82f6; border-radius: 8px; color: var(--text);">
-            <i class="fa-solid fa-clock" style="margin-right: 8px;"></i>
-            <?= htmlspecialchars($messageHoraire) ?>
-        </div>
-        <?php endif; ?>
 
         <!-- Filtres catégorie -->
         <div class="cat-filters">

@@ -1,9 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/../../class/produits.class.php');
 
-// Sur cette page (index), les pizzas sont toujours affichées comme indisponibles
-$messageHoraire = "Les pizzas sont disponibles uniquement le Jeudi, Vendredi et Samedi à partir de 18h00.";
-
 // Récupérer les paramètres de filtre (GET ou POST)
 $categorie = $_GET['categorie'] ?? $_POST['categorie'] ?? '';
 $filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST['categorie'] !== '');
