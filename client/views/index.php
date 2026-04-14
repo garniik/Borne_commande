@@ -17,15 +17,14 @@
             $cat_active = $_GET['categorie'] ?? '';
             $categories = [
                 ''         => ['label' => 'Tout',      'icon' => 'fa-border-all'],
-                'Pizza'    => ['label' => 'Pizzas',    'icon' => 'fa-pizza-slice'],
                 'Soft'     => ['label' => 'Soft',      'icon' => 'fa-glass-water'],
                 'Alcool'   => ['label' => 'Alcool',    'icon' => 'fa-wine-bottle'],
                 'cocktail' => ['label' => 'Cocktail',  'icon' => 'fa-martini-glass-citrus'],
                 'Snack'    => ['label' => 'Snack',     'icon' => 'fa-cookie-bite'],
-                'Pizza'=> ['label' => 'Pizza','icon' => 'fa-utensils'],
+                'Pizza'    => ['label' => 'Pizza',     'icon' => 'fa-pizza-slice'],
             ];
             foreach ($categories as $id => $cat):
-                $url = '?element=client&action=pizzas' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
+                $url = '?element=client&action=index' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
                 $actif = ($cat_active === $id) ? 'active' : '';
             ?>
                 <a href="<?= $url ?>" class="cat-btn <?= $actif ?>">

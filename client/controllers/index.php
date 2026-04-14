@@ -6,11 +6,8 @@ $categorie = $_GET['categorie'] ?? $_POST['categorie'] ?? '';
 $filtre_actif = isset($_GET['filtrer']) || (isset($_POST['categorie']) && $_POST['categorie'] !== '');
 
 if ($filtre_actif && $categorie !== '') {
-    // Convertir l'ID de catégorie en nom
-    $categories = ['1' => 'Boisson', '2' => 'Snack', '3' => 'Nourriture'];
-    $nom_categorie = $categories[$categorie] ?? $categorie;
-    
-    $filter_data = ['categorie' => $nom_categorie];
+    // Filtrer directement par nom de catégorie
+    $filter_data = ['categorie' => $categorie];
     $donnee = Produits::find($db, $filter_data);
 } else {
     $donnee = Produits::fetchAll($db);
