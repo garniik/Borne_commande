@@ -1,4 +1,3 @@
-<?php afficherMessagesFlash(); ?>
 
 <div class="client-layout">
 

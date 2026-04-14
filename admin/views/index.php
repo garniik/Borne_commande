@@ -1,4 +1,3 @@
-<?php afficherMessagesFlash(); ?>
 
 <!-- Navigation admin -->
 <div style="display:flex; gap:10px; margin-bottom:20px;">
