@@ -1,6 +1,6 @@
 
 <!-- Navigation admin -->
-<div style="display:flex; gap:10px; margin-bottom:20px;">
+<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
     <a href="?element=admin&action=produits" class="btn btn-ghost">
         <i class="fa-solid fa-box"></i>
         Produits
@@ -9,6 +9,10 @@
         <i class="fa-solid fa-clipboard-list"></i>
         Commandes
     </a>
+    <button class="btn btn-ghost" onclick="window.location.reload()">
+        <i class="fa-solid fa-rotate-right"></i>
+        Recharger
+    </button>
 </div>
 
 <!-- En-tête -->

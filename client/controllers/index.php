@@ -16,6 +16,18 @@ if ($filtre_actif && $categorie !== '') {
     $donnee = Produits::fetchAll($db);
 }
 
+// Trier : produits en stock en premier, rupture en bas
+usort($donnee, function($a, $b) {
+    $stockA = (int)($a['stock'] ?? 0);
+    $stockB = (int)($b['stock'] ?? 0);
+    // Si A a du stock et B non, A passe avant
+    if ($stockA > 0 && $stockB === 0) return -1;
+    // Si B a du stock et A non, B passe avant
+    if ($stockB > 0 && $stockA === 0) return 1;
+    // Sinon garder l'ordre original (par ID ou nom)
+    return (int)$a['id'] <=> (int)$b['id'];
+});
+
 // Gérer le panier (simple session)
 $action_panier = GETPOST('action_panier') ?? '';
 $id_produit = filter_var(GETPOST('id_produit'), FILTER_VALIDATE_INT);
