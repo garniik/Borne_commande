@@ -271,55 +271,81 @@ select.form-control { cursor: pointer; }
 }
 
 /* ═══════════════════════════════════════════════════════
-   MESSAGES FLASH
+   TOASTS (notifications popup temporaires)
 ═══════════════════════════════════════════════════════ */
 
-.flash {
+#toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
+    gap: 12px;
+    padding: 14px 16px;
     border-radius: var(--radius-sm);
-    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
     font-size: .9rem;
-    margin-bottom: 20px;
-    animation: slideIn .3s ease;
-}
-
-.flash-success { background: rgba(34,197,94,.15);  color: var(--green);  border-left: 4px solid var(--green); }
-.flash-error   { background: rgba(239,68,68,.15);  color: var(--red);    border-left: 4px solid var(--red); }
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ═══════════════════════════════════════════════════════
-   ALERTBOX (footer messages hérités)
-═══════════════════════════════════════════════════════ */
-
-.alertbox, .messagebox, .errorbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
-    border-radius: var(--radius-sm);
     font-weight: 700;
-    margin-bottom: 12px;
-    position: relative;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    min-width: 260px;
+    max-width: 380px;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity .3s ease, transform .3s ease;
 }
 
-.messagebox { background: rgba(34,197,94,.15); color: var(--green); border-left: 4px solid var(--green); }
-.errorbox   { background: rgba(239,68,68,.15); color: var(--red);   border-left: 4px solid var(--red); }
+.toast.toast-show {
+    opacity: 1;
+    transform: translateX(0);
+}
 
-.closebtn {
-    margin-left: auto;
+.toast i:first-child { font-size: 1.1rem; flex-shrink: 0; }
+
+.toast span { flex: 1; }
+
+.toast-success {
+    background: #fff;
+    color: var(--green);
+    border-left: 4px solid var(--green);
+}
+
+.toast-error {
+    background: #fff;
+    color: var(--red);
+    border-left: 4px solid var(--red);
+}
+
+.toast-close {
+    background: none;
+    border: none;
     cursor: pointer;
-    font-size: 1.2rem;
+    color: var(--text-muted);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: .85rem;
     opacity: .6;
-    transition: var(--transition);
+    transition: opacity .15s;
+    flex-shrink: 0;
 }
-.closebtn:hover { opacity: 1; }
+.toast-close:hover { opacity: 1; }
+
+@media (max-width: 600px) {
+    #toast-container {
+        bottom: 16px;
+        right: 12px;
+        left: 12px;
+    }
+    .toast { max-width: 100%; }
+}
 
 /* ═══════════════════════════════════════════════════════
    ★ PAGE CLIENT — PRODUITS (Cards Grille)
