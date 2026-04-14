@@ -59,7 +59,7 @@
                         <option value="Boisson">Alcool</option>
                         <option value="cocktail">Cocktail</option>
                         <option value="Snack">Snack</option>
-                        <option value="Pizza">Pizza</option>
+                        <option value="Nourriture">Nourriture</option>
                     </select>
                 </div>
 

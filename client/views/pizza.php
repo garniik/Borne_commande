@@ -14,12 +14,12 @@
             <?php
             $cat_active = $_GET['categorie'] ?? '';
             $categories = [
-                ''         => ['label' => 'Tout',      'icon' => 'fa-border-all'],
-                'Soft'     => ['label' => 'Soft',      'icon' => 'fa-glass-water'],
-                'Alcool'   => ['label' => 'Alcool',    'icon' => 'fa-wine-bottle'],
-                'cocktail' => ['label' => 'Cocktail',  'icon' => 'fa-martini-glass-citrus'],
-                'Snack'    => ['label' => 'Snack',     'icon' => 'fa-cookie-bite'],
-                'Pizza'=> ['label' => 'Pizza','icon' => 'fa-utensils'],
+                ''           => ['label' => 'Tout',       'icon' => 'fa-border-all'],
+                'Soft'       => ['label' => 'Soft',       'icon' => 'fa-glass-water'],
+                'Alcool'     => ['label' => 'Alcool',     'icon' => 'fa-wine-bottle'],
+                'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
+                'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
+                'Nourriture' => ['label' => 'Nourriture', 'icon' => 'fa-utensils'],
             ];
             foreach ($categories as $id => $cat):
                 $url = '?element=client&action=pizza' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
