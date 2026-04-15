@@ -114,5 +114,40 @@ class Commandes
             $_SESSION['mesgs']['errors'][] = $e->getMessage();
         }
     }
-    
+
+    /**
+     * Récupère les numéros de bornes déjà utilisés dans des commandes actives
+     * @return array Liste des num_borne utilisés
+     */
+    public function getBornesUtilisees()
+    {
+        try{
+            $stmt = $this->pdo->prepare("SELECT DISTINCT num_borne FROM commandes WHERE num_borne IS NOT NULL AND num_borne != ''");
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            return array_map('intval', $result);
+        }catch (Exception $e){
+            $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            return [];
+        }
+    }
+
+    /**
+     * Vérifie si une borne est disponible (non utilisée)
+     * @param int $num_borne Numéro de borne à vérifier
+     * @return bool True si disponible, false sinon
+     */
+    public function isBorneDisponible($num_borne)
+    {
+        try{
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM commandes WHERE num_borne = :num_borne");
+            $stmt->bindValue(':num_borne', $num_borne);
+            $stmt->execute();
+            return $stmt->fetchColumn() == 0;
+        }catch (Exception $e){
+            $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            return false;
+        }
+    }
+
 }

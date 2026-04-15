@@ -29,12 +29,26 @@
                     <label class="form-label" for="num_borne">
                         <i class="fa-solid fa-desktop"></i>
                         Numéro de borne
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">(1 à 24)</span>
                     </label>
-                    <input type="number"
-                           id="num_borne"
-                           name="num_borne"
-                           class="form-control"
-                           placeholder="Ex. 3">
+                    <select id="num_borne"
+                            name="num_borne"
+                            class="form-control"
+                            required>
+                        <option value="">— Choisir une borne —</option>
+                        <?php for ($i = 1; $i <= 24; $i++): ?>
+                            <?php $est_utilisee = in_array($i, $bornes_utilisees); ?>
+                            <option value="<?= $i ?>" <?= $est_utilisee ? 'disabled' : '' ?>>
+                                Borne <?= $i ?><?= $est_utilisee ? ' (occupée)' : '' ?>
+                            </option>
+                        <?php endfor; ?>
+                    </select>
+                    <?php if (!empty($bornes_utilisees)): ?>
+                        <small style="color: var(--text-muted); margin-top: 4px; display: block;">
+                            <i class="fa-solid fa-circle-info"></i>
+                            Les bornes marquées "occupées" sont déjà utilisées par une commande en cours.
+                        </small>
+                    <?php endif; ?>
                 </div>
 
                 <div class="form-actions" style="margin-top: 24px;">
