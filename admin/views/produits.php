@@ -55,8 +55,8 @@
                     <label class="form-label" for="categorie">Catégorie</label>
                     <select id="categorie" name="categorie" class="form-control" required>
                         <option value="">— Choisir —</option>
-                        <option value="Boisson">Soft</option>
-                        <option value="Boisson">Alcool</option>
+                        <option value="Soft">Soft</option>
+                        <option value="Alcool">Alcool</option>
                         <option value="cocktail">Cocktail</option>
                         <option value="Snack">Snack</option>
                         <option value="Nourriture">Nourriture</option>

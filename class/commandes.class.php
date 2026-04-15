@@ -62,7 +62,6 @@ class Commandes
 
             $this->pdo->commit();
 
-            $_SESSION['mesgs']['success'][] = 'Produit ajouté à la commande avec succès';
 
         }catch (Exception $e){
             $this->pdo->rollBack();
