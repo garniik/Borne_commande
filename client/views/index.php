@@ -91,7 +91,7 @@
                             <span class="stock-badge <?= $badgeClass ?>"><?= $badgeLabel ?></span>
                         <?php endif; ?>
                         <?php if (!empty($produit['image'])): ?>
-                            <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy" decoding="async">
+                            <img src="<?= htmlspecialchars('public/images/' . basename($produit['image'])) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy" decoding="async">
                         <?php else: ?>
                             <?= $emoji ?>
                         <?php endif; ?>
@@ -138,7 +138,7 @@
                     'stock_reel' => (int)$p['stock'],
                     'pizza_indispo' => $isPizza,
                     'pizzas_horaire' => $pizzasDispo,
-                    'image' => $p['image'] ?? null,
+                    'image' => !empty($p['image']) ? 'public/images/' . basename($p['image']) : null,
                     'description' => $p['description'] ?? 'Aucune description disponible.',
                     'emoji' => $icons[$p['categorie']] ?? '🛒'
                 ];

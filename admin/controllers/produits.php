@@ -1,45 +1,146 @@
 <?php
-require_once(dirname(__FILE__) . '/../../class/produits.class.php');
+/**
+ * admin/controllers/produits.php
+ *
+ * Gère : ajout produit (avec upload image), suppression,
+ *        ajout de stock, définition de stock.
+ */
 
+require_once dirname(__FILE__) . '/../../class/produits.class.php';
+
+// ── Dossier cible pour les images ─────────────────────────────────
+// On remonte depuis ce fichier jusqu'à la racine du projet, puis public/images/
+define('IMG_DIR', dirname(__FILE__) . '/../../public/images/');
+
+// Types MIME autorisés pour l'upload
+const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 Mo
+
+/**
+ * Gère l'upload d'une image et retourne le nom du fichier sauvegardé,
+ * ou une chaîne vide si aucun fichier n'a été envoyé.
+ * En cas d'erreur, ajoute un message dans $_SESSION['mesgs']['errors'].
+ */
+function traiterUploadImage(): string
+{
+    // Aucun fichier envoyé ou champ vide → pas d'image
+    if (empty($_FILES['image']) || $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE) {
+        return '';
+    }
+
+    $file = $_FILES['image'];
+
+    // Vérification des erreurs PHP d'upload
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $_SESSION['mesgs']['errors'][] = 'Erreur lors de l\'upload (code ' . $file['error'] . ').';
+        return '';
+    }
+
+    // Vérification de la taille
+    if ($file['size'] > MAX_SIZE_BYTES) {
+        $_SESSION['mesgs']['errors'][] = 'L\'image dépasse la taille maximale autorisée (5 Mo).';
+        return '';
+    }
+
+    // Vérification du type MIME réel (pas juste l'extension déclarée)
+    $finfo    = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($file['tmp_name']);
+
+    if (!in_array($mimeType, ALLOWED_MIME, true)) {
+        $_SESSION['mesgs']['errors'][] = 'Format d\'image non supporté. Utilisez JPG, PNG, WebP ou GIF.';
+        return '';
+    }
+
+    // Construction du nom de fichier : slug du nom produit + timestamp + extension
+    $extensions = [
+        'image/jpeg' => 'jpg',
+        'image/png'  => 'png',
+        'image/webp' => 'webp',
+        'image/gif'  => 'gif',
+    ];
+    $ext = $extensions[$mimeType];
+
+    // Slug à partir du nom du produit pour un nom lisible
+    $nomProduit  = $_POST['nom'] ?? 'produit';
+    $slug        = preg_replace('/[^a-z0-9]+/', '-', strtolower(trim($nomProduit)));
+    $slug        = trim($slug, '-') ?: 'produit';
+    $nomFichier  = $slug . '-' . time() . '.' . $ext;
+    $destination = IMG_DIR . $nomFichier;
+
+    // Déplacement du fichier temporaire vers la destination finale
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        $_SESSION['mesgs']['errors'][] = 'Impossible de sauvegarder l\'image. Vérifiez les permissions du dossier public/images/.';
+        return '';
+    }
+
+    return $nomFichier; // Ce nom sera stocké en BDD
+}
+
+// ── Ajout d'un produit ────────────────────────────────────────────
 if (isset($_POST['add'])) {
-    $produit = new Produits($db);
-    $produit->hydrate([
-        'nom' => $_POST['nom'],
-        'categorie' => $_POST['categorie'],
-        'prix' => $_POST['prix'],
-        'stock' => $_POST['stock'],
-        'description' => $_POST['description'],
-        'image' => $_POST['image'],
-    ]);
-    $produit->create();
+
+    $nomImage = traiterUploadImage(); // '' si pas d'image ou erreur
+
+    // Si traiterUploadImage a ajouté une erreur, on n'insère pas
+    if (empty($_SESSION['mesgs']['errors'])) {
+        $produit = new Produits($db);
+        $produit->hydrate([
+            'nom'         => $_POST['nom']         ?? '',
+            'categorie'   => $_POST['categorie']   ?? '',
+            'prix'        => $_POST['prix']         ?? 0,
+            'stock'       => $_POST['stock']        ?? 0,
+            'description' => $_POST['description'] ?? '',
+            'image'       => $nomImage,             // nom du fichier, pas une URL
+        ]);
+        $produit->create();
+    }
+
+    header('Location: index.php?element=admin&action=produits');
+    exit;
 }
 
+// ── Suppression d'un produit ──────────────────────────────────────
 if (isset($_POST['delete'])) {
+    // Récupérer le nom de l'image avant de supprimer le produit
+    $row = Produits::findById($db, (int)$_POST['id']);
+    if ($row && !empty($row['image'])) {
+        $cheminImage = IMG_DIR . basename($row['image']); // basename() = sécurité
+        if (is_file($cheminImage)) {
+            unlink($cheminImage); // Supprime aussi le fichier physique
+        }
+    }
+
     $produit = new Produits($db);
-    $produit->hydrate(['id' => $_POST['id']]);
+    $produit->hydrate(['id' => (int)$_POST['id']]);
     $produit->delete();
+
+    header('Location: index.php?element=admin&action=produits');
+    exit;
 }
 
+// ── Ajout de stock ────────────────────────────────────────────────
 if (isset($_POST['add_stock'])) {
     $quantite = $_POST['quantite'] ?? '';
-    if ($quantite === '' || $quantite === null) {
+    if ($quantite === '') {
         $_SESSION['mesgs']['errors'][] = 'Veuillez saisir une quantité pour ajouter au stock.';
     } else {
         $produit = new Produits($db);
-        $produit->hydrate(['id' => $_POST['id']]);
+        $produit->hydrate(['id' => (int)$_POST['id']]);
         $produit->addStock((int)$quantite);
     }
 }
 
+// ── Définition du stock ───────────────────────────────────────────
 if (isset($_POST['set_stock'])) {
     $quantite = $_POST['quantite'] ?? '';
-    if ($quantite === '' || $quantite === null) {
+    if ($quantite === '') {
         $_SESSION['mesgs']['errors'][] = 'Veuillez saisir une quantité pour définir le stock.';
     } else {
         $produit = new Produits($db);
-        $produit->hydrate(['id' => $_POST['id']]);
+        $produit->hydrate(['id' => (int)$_POST['id']]);
         $produit->setStock((int)$quantite);
     }
 }
 
+// ── Récupération de tous les produits ─────────────────────────────
 $donnee = Produits::fetchAll($db);
