@@ -230,7 +230,7 @@ function srcImage(string $nomFichier): string
 
                             <!-- Actions -->
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes($produit['description'] ?? '')) ?>')">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes(str_replace(["\r\n", "\r", "\n"], "\\n", $produit['description'] ?? ''))) ?>')">
                                     <i class="fa-solid fa-pen"></i> Modifier
                                 </button>
                                 <form method="post" style="display:inline; margin-left:8px;" onsubmit="return confirm('Supprimer ce produit et son image ?')">
