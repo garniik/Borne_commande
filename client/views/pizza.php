@@ -17,7 +17,7 @@
                 ''           => ['label' => 'Tout',       'icon' => 'fa-border-all'],
                 'Soft'       => ['label' => 'Soft',       'icon' => 'fa-glass-water'],
                 'Chaud' =>['label' => 'Boissons Chaudes', 'icon'=>'fa-mug-hot'],
-                'Alcool'     => ['label' => 'Alcool',     'icon' => 'fa-wine-bottle'],
+                'Bière'     => ['label' => 'Bière',     'icon' => 'fa-wine-bottle'],
                 'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
                 'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
                 'Nourriture' => ['label' => 'Nourriture', 'icon' => 'fa-utensils'],
@@ -57,7 +57,7 @@
                     $icons = [
                         'Soft'     => '🥤',
                         'Boissons chaudes' => '☕︎',
-                        'Alcool'   => '🍺',
+                        'Bière'   => '🍺',
                         'cocktail' => '🍹',
                         'Snack'    => '🍪',
                         'Pizza'=> '�',
@@ -103,7 +103,7 @@
                 $icons = [
                     'Soft'     => '🥤',
                     'Boissons Chaudes' => '☕︎',
-                    'Alcool'   => '🍺',
+                    'Bière'   => '🍺',
                     'cocktail' => '🍹',
                     'Snack'    => '🍪',
                     'Pizza'=> '�',

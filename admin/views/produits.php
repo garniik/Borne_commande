@@ -75,7 +75,7 @@ function srcImage(string $nomFichier): string
                         <option value="">— Choisir —</option>
                         <option value="Soft">Soft</option>
                         <option value="Chaud">Boissons Chaudes</option>
-                        <option value="Alcool">Alcool</option>
+                        <option value="Bière">Bière</option>
                         <option value="Cocktail">Cocktail</option>
                         <option value="Snack">Snack</option>
                         <option value="Nourriture">Nourriture</option>
@@ -472,7 +472,7 @@ document.addEventListener('keydown', e => {
                     <select id="edit_categorie" name="edit_categorie" class="form-control" required>
                         <option value="Soft">Soft</option>
                         <option value="Chaud">Boissons Chaudes</option>
-                        <option value="Alcool">Alcool</option>
+                        <option value="Bière">Bière</option>
                         <option value="Cocktail">Cocktail</option>
                         <option value="Snack">Snack</option>
                         <option value="Nourriture">Nourriture</option>
