@@ -397,7 +397,6 @@ function clearImage() {
         zone.classList.remove('dragover');
         const files = e.dataTransfer.files;
         if (files.length > 0) {
-            // Injecter le fichier dans l'input et déclencher la prévisualisation
             const dt = new DataTransfer();
             dt.items.add(files[0]);
             input.files = dt.files;
@@ -405,4 +404,185 @@ function clearImage() {
         }
     });
 })();
+
+/* ── Modal édition produit ──────────────────────────────────────── */
+function ouvrirModalEdit(id, nom, categorie, prix, stock, description) {
+    document.getElementById('edit_id').value = id;
+    document.getElementById('edit_nom').value = nom;
+    document.getElementById('edit_categorie').value = categorie;
+    document.getElementById('edit_prix').value = prix;
+    document.getElementById('edit_stock').value = stock;
+    document.getElementById('edit_description').value = description;
+    
+    document.getElementById('modalOverlay').classList.add('active');
+    document.getElementById('modalEdit').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function fermerModalEdit() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.getElementById('modalEdit').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('modalOverlay').addEventListener('click', fermerModalEdit);
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') fermerModalEdit();
+});
 </script>
+
+<!-- ═════════════════════════════════════════════════════════════════
+     MODAL ÉDITION PRODUIT
+     ═════════════════════════════════════════════════════════════════ -->
+<div id="modalOverlay" class="modal-overlay"></div>
+
+<div id="modalEdit" class="modal-edit" role="dialog" aria-modal="true" aria-label="Modifier le produit">
+    <div class="modal-edit-box" onclick="event.stopPropagation()">
+        
+        <div class="modal-edit-header">
+            <div class="modal-edit-title">
+                <i class="fa-solid fa-pen-to-square"></i>
+                Modifier le produit
+            </div>
+            <button class="modal-edit-close" onclick="fermerModalEdit()" aria-label="Fermer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <form method="POST" action="" class="modal-edit-form">
+            <input type="hidden" name="edit_id" id="edit_id">
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="edit_nom">Nom *</label>
+                    <input type="text" id="edit_nom" name="edit_nom" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit_categorie">Catégorie *</label>
+                    <select id="edit_categorie" name="edit_categorie" class="form-control" required>
+                        <option value="Soft">Soft</option>
+                        <option value="Alcool">Alcool</option>
+                        <option value="Cocktail">Cocktail</option>
+                        <option value="Snack">Snack</option>
+                        <option value="Nourriture">Nourriture</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit_prix">Prix (€) *</label>
+                    <input type="number" id="edit_prix" name="edit_prix" class="form-control" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit_stock">Stock *</label>
+                    <input type="number" id="edit_stock" name="edit_stock" class="form-control" min="0" required>
+                </div>
+                
+                <div class="form-group form-full">
+                    <label class="form-label" for="edit_description">Description</label>
+                    <textarea id="edit_description" name="edit_description" class="form-control" rows="3" placeholder="Description du produit..."></textarea>
+                </div>
+            </div>
+            
+            <div class="modal-edit-footer">
+                <button type="button" class="btn btn-ghost" onclick="fermerModalEdit()">
+                    <i class="fa-solid fa-xmark"></i> Annuler
+                </button>
+                <button type="submit" name="update" class="btn btn-success">
+                    <i class="fa-solid fa-check"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+        
+    </div>
+</div>
+
+<style>
+/* ── Modal édition ──────────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 900;
+    display: none;
+    cursor: pointer;
+}
+.modal-overlay.active { display: block; }
+
+.modal-edit {
+    position: fixed;
+    inset: 0;
+    z-index: 901;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.modal-edit.open {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.modal-edit-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    box-shadow: 0 24px 64px rgba(0,0,0,.18);
+    width: 520px;
+    max-width: 92vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.modal-edit-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-edit-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background .15s;
+}
+
+.modal-edit-close:hover {
+    background: var(--surface2);
+}
+
+.modal-edit-form {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-edit-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    background: var(--surface);
+}
+</style>
