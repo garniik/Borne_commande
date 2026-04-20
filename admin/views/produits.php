@@ -95,11 +95,10 @@ function srcImage(string $nomFichier): string
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="seul">Commande seule autorisée *</label>
-                    <select id="seul" name="seul" class="form-control" required>
-                        <option value="0">Non (doit être accompagné)</option>
-                        <option value="1">Oui (peut être commandé seul)</option>
-                    </select>
+                    <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                        <input type="checkbox" id="seul" name="seul" value="1" style="width:18px;height:18px;">
+                        <span>Peut être commandé seul</span>
+                    </label>
                 </div>
 
                 <div class="form-group form-full">
@@ -421,7 +420,7 @@ function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description) {
     document.getElementById('edit_categorie').value = categorie;
     document.getElementById('edit_prix').value = prix;
     document.getElementById('edit_stock').value = stock;
-    document.getElementById('edit_seul').value = seul;
+    document.getElementById('edit_seul').checked = (seul == 1);
     document.getElementById('edit_description').value = description;
     
     document.getElementById('modalOverlay').classList.add('active');
@@ -491,11 +490,10 @@ document.addEventListener('keydown', e => {
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="edit_seul">Commande seule autorisée *</label>
-                    <select id="edit_seul" name="edit_seul" class="form-control" required>
-                        <option value="0">Non (doit être accompagné)</option>
-                        <option value="1">Oui (peut être commandé seul)</option>
-                    </select>
+                    <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                        <input type="checkbox" id="edit_seul" name="edit_seul" value="1" style="width:18px;height:18px;">
+                        <span>Peut être commandé seul</span>
+                    </label>
                 </div>
                 
                 <div class="form-group form-full">
