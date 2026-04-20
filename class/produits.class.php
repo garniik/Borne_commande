@@ -13,11 +13,11 @@
         public function hydrate(array $data)
         {
             $this->id = filter_var($data['id'] ?? 0, FILTER_VALIDATE_INT);
-            $this->nom = htmlspecialchars($data['nom'] ?? '');
-            $this->categorie = htmlspecialchars($data['categorie'] ?? '');
-            $this->description = htmlspecialchars($data['description'] ?? '');
+            $this->nom = trim($data['nom'] ?? '');
+            $this->categorie = trim($data['categorie'] ?? '');
+            $this->description = trim($data['description'] ?? '');
             $this->prix = filter_var($data['prix'] ?? 0, FILTER_VALIDATE_FLOAT);
-            $this->image = htmlspecialchars($data['image'] ?? '');
+            $this->image = trim($data['image'] ?? '');
             $this->stock = filter_var($data['stock'] ?? 0, FILTER_VALIDATE_INT);
         }
 
