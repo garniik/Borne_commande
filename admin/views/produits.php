@@ -174,6 +174,7 @@ function srcImage(string $nomFichier): string
                         <th>Stock</th>
                         <th>Ajouter stock</th>
                         <th>Définir stock</th>
+                        <th>Modifier prix</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -244,6 +245,20 @@ function srcImage(string $nomFichier): string
                                            style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;">
                                     <button type="submit" name="set_stock" class="btn btn-primary btn-sm">
                                         <i class="fa-solid fa-pen"></i> Définir
+                                    </button>
+                                </form>
+                            </td>
+
+                            <!-- Modifier le prix -->
+                            <td>
+                                <form method="post" class="stock-form">
+                                    <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
+                                    <input type="number" name="prix" class="form-control"
+                                           placeholder="Prix" step="0.01" min="0"
+                                           style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;"
+                                           value="<?= htmlspecialchars($produit['prix']) ?>">
+                                    <button type="submit" name="set_prix" class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-pen"></i> Modifier
                                     </button>
                                 </form>
                             </td>
