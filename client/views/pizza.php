@@ -16,6 +16,7 @@
             $categories = [
                 ''           => ['label' => 'Tout',       'icon' => 'fa-border-all'],
                 'Soft'       => ['label' => 'Soft',       'icon' => 'fa-glass-water'],
+                'Boissons Chaudes' =>['label' => 'Boissons Chaudes', 'icon'=>'fa-coffee-cup'],
                 'Alcool'     => ['label' => 'Alcool',     'icon' => 'fa-wine-bottle'],
                 'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
                 'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
@@ -55,6 +56,7 @@
                     // Emoji icône si pas d'image (par catégorie ou sous-catégorie)
                     $icons = [
                         'Soft'     => '🥤',
+                        'Boissons chaudes' => '☕︎',
                         'Alcool'   => '🍺',
                         'cocktail' => '🍹',
                         'Snack'    => '🍪',
@@ -100,6 +102,7 @@
             const produitsData = <?= json_encode(array_map(function($p) use ($donnee) {
                 $icons = [
                     'Soft'     => '🥤',
+                    'Boissons Chaudes' => '☕︎',
                     'Alcool'   => '🍺',
                     'cocktail' => '🍹',
                     'Snack'    => '🍪',

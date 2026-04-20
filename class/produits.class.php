@@ -9,6 +9,7 @@
         private float $prix;
         private string $image;
         private int $stock;
+        private int $seul;
 
         public function hydrate(array $data)
         {
@@ -19,6 +20,7 @@
             $this->prix = filter_var($data['prix'] ?? 0, FILTER_VALIDATE_FLOAT);
             $this->image = trim($data['image'] ?? '');
             $this->stock = filter_var($data['stock'] ?? 0, FILTER_VALIDATE_INT);
+            $this->seul = filter_var($data['seul'] ?? 0, FILTER_VALIDATE_INT);
         }
 
         function __construct(object $pdo)
@@ -31,19 +33,21 @@
             $this->prix = 0;
             $this->image = '';
             $this->stock = 0;
+            $this->seul = 0;
         }
 
         public function create()
         {
             try{
                 $this->pdo->beginTransaction();
-                $stmt = $this->pdo->prepare("INSERT INTO produits (nom, categorie, description, prix, image, stock) VALUES (:nom, :categorie, :description, :prix, :image, :stock)");
+                $stmt = $this->pdo->prepare("INSERT INTO produits (nom, categorie, description, prix, image, stock, seul) VALUES (:nom, :categorie, :description, :prix, :image, :stock, :seul)");
                 $stmt->bindValue(':nom', $this->nom);
                 $stmt->bindValue(':categorie', $this->categorie);
                 $stmt->bindValue(':description', $this->description);
                 $stmt->bindValue(':prix', $this->prix);
                 $stmt->bindValue(':image', $this->image);
                 $stmt->bindValue(':stock', $this->stock);
+                $stmt->bindValue(':seul', $this->seul);
                 $stmt->execute();
 
                 $this->pdo->commit();

@@ -18,6 +18,7 @@
             $categories = [
                 ''           => ['label' => 'Tout',       'icon' => 'fa-border-all'],
                 'Soft'       => ['label' => 'Soft',       'icon' => 'fa-glass-water'],
+                'Boissons Chaudes' =>['label' => 'Boissons Chaudes', 'icon'=>'fa-coffee-cup'],
                 'Alcool'     => ['label' => 'Alcool',     'icon' => 'fa-wine-bottle'],
                 'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
                 'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
@@ -71,6 +72,7 @@
                     $icons = [
                         'Pizza'    => '🍕',
                         'Soft'     => '🥤',
+                        'Boissons Chaudes' => '☕︎',
                         'Alcool'   => '🍺',
                         'cocktail' => '🍹',
                         'Snack'    => '🍪',
@@ -121,6 +123,7 @@
                 $icons = [
                     'Pizza'    => '🍕',
                     'Soft'     => '🥤',
+                    'Boissons Chaudes' => '☕︎',
                     'Alcool'   => '🍺',
                     'cocktail' => '🍹',
                     'Snack'    => '🍪',
