@@ -20,7 +20,7 @@
                 'Bière'     => ['label' => 'Bière',     'icon' => 'fa-wine-bottle'],
                 'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
                 'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
-                'Nourriture' => ['label' => 'Nourriture', 'icon' => 'fa-utensils'],
+                'Pizza' => ['label' => 'Pizza', 'icon' => 'fa-utensils'],
             ];
             foreach ($categories as $id => $cat):
                 $url = '?element=client&action=pizza' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');

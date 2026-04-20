@@ -22,7 +22,7 @@
                 'Bière'     => ['label' => 'Bière',     'icon' => 'fa-wine-bottle'],
                 'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
                 'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
-                'Nourriture' => ['label' => 'Nourriture', 'icon' => 'fa-utensils'],
+                'Pizza' => ['label' => 'Pizza', 'icon' => 'fa-utensils'],
             ];
             foreach ($categories as $id => $cat):
                 $url = '?element=client&action=index' . ($id !== '' ? '&categorie=' . urlencode($id) . '&filtrer=1' : '');
@@ -174,10 +174,7 @@
                 const isPizzaIndispo = p.pizza_indispo && !p.pizzas_horaire;
                 
                 let stockLabel, stockBadge;
-                if (isPizzaIndispo) {
-                    stockLabel = 'Disponible Jeu-Ven-Sam 18h+';
-                    stockBadge = 'badge-blue';
-                } else if (p.stock === 0) {
+                if (p.stock === 0) {
                     stockLabel = 'Rupture de stock';
                     stockBadge = 'badge-red';
                 } else if (p.stock <= 3) {

@@ -78,7 +78,7 @@ function srcImage(string $nomFichier): string
                         <option value="Bière">Bière</option>
                         <option value="Cocktail">Cocktail</option>
                         <option value="Snack">Snack</option>
-                        <option value="Nourriture">Nourriture</option>
+                        <option value="Pizza">Pizza</option>
                     </select>
                 </div>
 
@@ -475,7 +475,7 @@ document.addEventListener('keydown', e => {
                         <option value="Bière">Bière</option>
                         <option value="Cocktail">Cocktail</option>
                         <option value="Snack">Snack</option>
-                        <option value="Nourriture">Nourriture</option>
+                        <option value="Pizza">Pizza</option>
                     </select>
                 </div>
                 
