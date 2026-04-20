@@ -16,7 +16,7 @@
             $categories = [
                 ''           => ['label' => 'Tout',       'icon' => 'fa-border-all'],
                 'Soft'       => ['label' => 'Soft',       'icon' => 'fa-glass-water'],
-                'Boissons Chaudes' =>['label' => 'Boissons Chaudes', 'icon'=>'fa-mug-hot'],
+                'Chaud' =>['label' => 'Boissons Chaudes', 'icon'=>'fa-mug-hot'],
                 'Alcool'     => ['label' => 'Alcool',     'icon' => 'fa-wine-bottle'],
                 'cocktail'   => ['label' => 'Cocktail',   'icon' => 'fa-martini-glass-citrus'],
                 'Snack'      => ['label' => 'Snack',      'icon' => 'fa-cookie-bite'],
