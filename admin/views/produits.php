@@ -94,6 +94,14 @@ function srcImage(string $nomFichier): string
                            placeholder="0" min="0" required>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label" for="seul">Commande seule autorisée *</label>
+                    <select id="seul" name="seul" class="form-control" required>
+                        <option value="0">Non (doit être accompagné)</option>
+                        <option value="1">Oui (peut être commandé seul)</option>
+                    </select>
+                </div>
+
                 <div class="form-group form-full">
                     <label class="form-label" for="description">Description</label>
                     <textarea id="description" name="description" class="form-control"
@@ -223,7 +231,7 @@ function srcImage(string $nomFichier): string
 
                             <!-- Actions -->
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, '<?= htmlspecialchars(addslashes($produit['description'] ?? '')) ?>')">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes($produit['description'] ?? '')) ?>')">
                                     <i class="fa-solid fa-pen"></i> Modifier
                                 </button>
                                 <form method="post" style="display:inline; margin-left:8px;" onsubmit="return confirm('Supprimer ce produit et son image ?')">
@@ -407,12 +415,13 @@ function clearImage() {
 })();
 
 /* ── Modal édition produit ──────────────────────────────────────── */
-function ouvrirModalEdit(id, nom, categorie, prix, stock, description) {
+function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description) {
     document.getElementById('edit_id').value = id;
     document.getElementById('edit_nom').value = nom;
     document.getElementById('edit_categorie').value = categorie;
     document.getElementById('edit_prix').value = prix;
     document.getElementById('edit_stock').value = stock;
+    document.getElementById('edit_seul').value = seul;
     document.getElementById('edit_description').value = description;
     
     document.getElementById('modalOverlay').classList.add('active');
@@ -479,6 +488,14 @@ document.addEventListener('keydown', e => {
                 <div class="form-group">
                     <label class="form-label" for="edit_stock">Stock *</label>
                     <input type="number" id="edit_stock" name="edit_stock" class="form-control" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit_seul">Commande seule autorisée *</label>
+                    <select id="edit_seul" name="edit_seul" class="form-control" required>
+                        <option value="0">Non (doit être accompagné)</option>
+                        <option value="1">Oui (peut être commandé seul)</option>
+                    </select>
                 </div>
                 
                 <div class="form-group form-full">

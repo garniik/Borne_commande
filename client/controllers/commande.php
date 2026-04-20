@@ -36,6 +36,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // ── Vérification des produits "seul" ──────────────
+    // Si tous les produits du panier ont seul=0, on ne peut pas valider
+    $tousNonSeuls = true;
+    foreach ($panier as $id_produit => $quantite) {
+        $row = Produits::findById($db, (int)$id_produit);
+        if ($row && ($row['seul'] ?? 0) == 1) {
+            $tousNonSeuls = false;
+            break;
+        }
+    }
+    if ($tousNonSeuls) {
+        $_SESSION['mesgs']['errors'][] = "Veuiller passer dirrectement au bars pour commander ces produits.";
+        header('Location: ?element=client&action=commande');
+        exit;
+    }
+
     // ── Création de la commande ───────────────────────
     $commande = new Commandes($db);
     $commande->hydrate($_POST);

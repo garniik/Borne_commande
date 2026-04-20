@@ -91,6 +91,7 @@ if (isset($_POST['add'])) {
             'stock'       => $_POST['stock']        ?? 0,
             'description' => $_POST['description'] ?? '',
             'image'       => $nomImage,             // nom du fichier, pas une URL
+            'seul'        => $_POST['seul']         ?? 0,
         ]);
         $produit->create();
     }
@@ -152,6 +153,7 @@ if (isset($_POST['update'])) {
         'prix'        => $_POST['edit_prix']         ?? 0,
         'stock'       => $_POST['edit_stock']        ?? 0,
         'description' => $_POST['edit_description'] ?? '',
+        'seul'        => $_POST['edit_seul']         ?? 0,
     ]);
     $produit->update();
     
