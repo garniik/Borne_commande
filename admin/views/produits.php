@@ -172,10 +172,7 @@ function srcImage(string $nomFichier): string
                         <th>Catégorie</th>
                         <th>Prix</th>
                         <th>Stock</th>
-                        <th>Ajouter stock</th>
-                        <th>Définir stock</th>
-                        <th>Modifier prix</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -223,49 +220,12 @@ function srcImage(string $nomFichier): string
                                 <span class="badge <?= $sc ?>"><?= $sl ?></span>
                             </td>
 
-                            <!-- Ajouter du stock -->
+                            <!-- Actions -->
                             <td>
-                                <form method="post" class="stock-form">
-                                    <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
-                                    <input type="number" name="quantite" class="form-control"
-                                           placeholder="Qté"
-                                           style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;">
-                                    <button type="submit" name="add_stock" class="btn btn-success btn-sm">
-                                        <i class="fa-solid fa-plus"></i> Ajouter
-                                    </button>
-                                </form>
-                            </td>
-
-                            <!-- Définir le stock -->
-                            <td>
-                                <form method="post" class="stock-form">
-                                    <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
-                                    <input type="number" name="quantite" class="form-control"
-                                           placeholder="Stock" min="0"
-                                           style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;">
-                                    <button type="submit" name="set_stock" class="btn btn-primary btn-sm">
-                                        <i class="fa-solid fa-pen"></i> Définir
-                                    </button>
-                                </form>
-                            </td>
-
-                            <!-- Modifier le prix -->
-                            <td>
-                                <form method="post" class="stock-form">
-                                    <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
-                                    <input type="number" name="prix" class="form-control"
-                                           placeholder="Prix" step="0.01" min="0"
-                                           style="width:75px; min-height:38px; padding:6px 10px; font-size:.85rem;"
-                                           value="<?= htmlspecialchars($produit['prix']) ?>">
-                                    <button type="submit" name="set_prix" class="btn btn-primary btn-sm">
-                                        <i class="fa-solid fa-pen"></i> Modifier
-                                    </button>
-                                </form>
-                            </td>
-
-                            <!-- Supprimer -->
-                            <td>
-                                <form method="post" onsubmit="return confirm('Supprimer ce produit et son image ?')">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, '<?= htmlspecialchars(addslashes($produit['description'] ?? '')) ?>')">
+                                    <i class="fa-solid fa-pen"></i> Modifier
+                                </button>
+                                <form method="post" style="display:inline; margin-left:8px;" onsubmit="return confirm('Supprimer ce produit et son image ?')">
                                     <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
                                     <button type="submit" name="delete" class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i> Supprimer
