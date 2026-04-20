@@ -53,13 +53,8 @@
 
                     // Badge stock
                     if ($stock === 0) {
-                        if ($isPizza && !$pizzasDispo) {
-                            $badgeClass = 'badge-blue';
-                            $badgeLabel = 'Disponible Jeu-Ven-Sam 18h+';
-                        } else {
-                            $badgeClass = 'badge-red';
-                            $badgeLabel = 'Rupture';
-                        }
+                        $badgeClass = 'badge-red';
+                        $badgeLabel = 'Rupture';
                     } elseif ($stock <= 3) {
                         $badgeClass = 'badge-yellow';
                         $badgeLabel = 'Bientôt épuisé';
