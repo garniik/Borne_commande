@@ -142,5 +142,22 @@ if (isset($_POST['set_stock'])) {
     }
 }
 
+// ── Mise à jour d'un produit ──────────────────────────────────────
+if (isset($_POST['update'])) {
+    $produit = new Produits($db);
+    $produit->hydrate([
+        'id'          => (int)$_POST['edit_id'],
+        'nom'         => $_POST['edit_nom']         ?? '',
+        'categorie'   => $_POST['edit_categorie']   ?? '',
+        'prix'        => $_POST['edit_prix']         ?? 0,
+        'stock'       => $_POST['edit_stock']        ?? 0,
+        'description' => $_POST['edit_description'] ?? '',
+    ]);
+    $produit->update();
+    
+    header('Location: index.php?element=admin&action=produits');
+    exit;
+}
+
 // ── Récupération de tous les produits ─────────────────────────────
 $donnee = Produits::fetchAll($db);
