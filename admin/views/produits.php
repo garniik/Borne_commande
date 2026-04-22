@@ -18,8 +18,9 @@ function srcImage(string $nomFichier): string
 
 <!-- En-tête de page avec navigation et bouton -->
 <div class="admin-header">
+
+    <!-- Gauche : navigation -->
     <div class="admin-header-left">
-        <!-- Navigation -->
         <div class="admin-nav">
             <a href="?element=admin&action=produits" class="btn btn-primary">
                 <i class="fa-solid fa-box"></i> Produits
@@ -28,8 +29,10 @@ function srcImage(string $nomFichier): string
                 <i class="fa-solid fa-clipboard-list"></i> Commandes
             </a>
         </div>
+    </div>
 
-        <!-- Titre et sous-titre -->
+    <!-- Centre : titre -->
+    <div class="admin-header-center">
         <h1 class="page-title">
             <span>Gestion</span> des produits
         </h1>
@@ -38,11 +41,14 @@ function srcImage(string $nomFichier): string
         </p>
     </div>
 
-    <!-- Bouton à droite -->
-    <button class="btn btn-primary" onclick="toggleForm()">
-        <i class="fa-solid fa-plus"></i>
-        Nouveau produit
-    </button>
+    <!-- Droite : bouton -->
+    <div class="admin-header-right">
+        <button class="btn btn-primary" onclick="toggleForm()">
+            <i class="fa-solid fa-plus"></i>
+            Nouveau produit
+        </button>
+    </div>
+
 </div>
 
 <?php afficherMessagesFlash(); ?>

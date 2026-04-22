@@ -144,3 +144,30 @@
     .prod-table th:nth-child(4),
     .prod-table td:nth-child(4) { display: none; }
   }
+
+  .admin-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+  /* Gauche */
+  .admin-header-left {
+      justify-self: start;
+  }
+
+  .admin-nav {
+      display: flex;
+      gap: 10px;
+  }
+
+  /* Centre */
+  .admin-header-center {
+      text-align: center;
+  }
+
+  /* Droite */
+  .admin-header-right {
+      justify-self: end;
+  }
