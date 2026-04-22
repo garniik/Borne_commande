@@ -2,7 +2,9 @@
 <div class="w3-top">
   <div class="w3-bar w3-card">
     <div class="w3-dropdown-hover">
-      <button class="w3-bar-item w3-button logo">Bienvenue <?= $_SESSION['login']; ?></button>
+      <a href="index.php" class="w3-bar-item logo-link">
+        <img src="public/images/logo.jpg" alt="Logo" class="header-logo">
+      </a>
       <div class="w3-dropdown-content w3-bar-block w3-card-4">
         <a href="index.php" class="w3-bar-item w3-button">Accueil</a>
         <a href="#" class="w3-bar-item w3-button"><i><?= $_SESSION['user']['firstname'] .' '. $_SESSION['user']['lastname']; ?></i></a>
