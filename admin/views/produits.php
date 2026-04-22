@@ -16,19 +16,20 @@ function srcImage(string $nomFichier): string
 }
 ?>
 
-<!-- Navigation admin -->
-<div class="admin-nav">
-    <a href="?element=admin&action=produits" class="btn btn-primary">
-        <i class="fa-solid fa-box"></i> Produits
-    </a>
-    <a href="?element=admin&action=commandes" class="btn btn-ghost">
-        <i class="fa-solid fa-clipboard-list"></i> Commandes
-    </a>
-</div>
-
-<!-- En-tête de page -->
+<!-- En-tête de page avec navigation et bouton -->
 <div class="admin-header">
-    <div>
+    <div class="admin-header-left">
+        <!-- Navigation -->
+        <div class="admin-nav">
+            <a href="?element=admin&action=produits" class="btn btn-primary">
+                <i class="fa-solid fa-box"></i> Produits
+            </a>
+            <a href="?element=admin&action=commandes" class="btn btn-ghost">
+                <i class="fa-solid fa-clipboard-list"></i> Commandes
+            </a>
+        </div>
+
+        <!-- Titre et sous-titre -->
         <h1 class="page-title">
             <span>Gestion</span> des produits
         </h1>
@@ -36,6 +37,8 @@ function srcImage(string $nomFichier): string
             <?= count($donnee ?? []) ?> produit<?= count($donnee ?? []) > 1 ? 's' : '' ?> enregistré<?= count($donnee ?? []) > 1 ? 's' : '' ?>
         </p>
     </div>
+
+    <!-- Bouton à droite -->
     <button class="btn btn-primary" onclick="toggleForm()">
         <i class="fa-solid fa-plus"></i>
         Nouveau produit
