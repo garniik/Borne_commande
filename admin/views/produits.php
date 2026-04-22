@@ -403,9 +403,11 @@ function fermerModalEdit() {
     document.body.style.overflow = '';
 }
 
-document.getElementById('modalOverlay').addEventListener('click', fermerModalEdit);
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') fermerModalEdit();
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('modalOverlay').addEventListener('click', fermerModalEdit);
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') fermerModalEdit();
+    });
 });
 </script>
 
