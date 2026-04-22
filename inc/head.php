@@ -1,32 +1,33 @@
 <?php
-/**
- * inc/head.php — En-tête HTML commun à toutes les pages
- */
+// if (isset($_POST['cancel']))
+//     header("location:index.php");
 ?>
 <!doctype html>
 <html lang="fr">
+
 <head>
     <meta charset="utf-8">
-    <title>Borne Commande<?php if (!empty($title_page)) echo ' — ' . htmlspecialchars($title_page); ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="theme-color" content="#14532d">
-
-    <!-- Icônes -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-          integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-          crossorigin="anonymous" referrerpolicy="no-referrer">
-
-    <!-- Styles (ordre important : css/style.css est la source principale) -->
-    <link rel="stylesheet" href="css/style.css">
-
-    <!-- Helpers PHP (fonctions flash, formaterPrix…) -->
+    <title>page commande <?= $title_page; ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="public/css/styles.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="public/js/scripts.js"></script>
     <?php require_once dirname(__FILE__) . '/../lib/helpers.php'; ?>
 </head>
+
 <body>
-
-<!-- Navbar -->
-<?php include dirname(__FILE__) . '/top.php'; ?>
-
-<!-- Contenu principal -->
-<div class="page-wrapper">
+    <div class="menutop w3-top">
+        <?php
+        if ($authorized == true)
+            include dirname(__FILE__) . '/top.php';
+        ?>
+    </div>
+    <div class="menuleft">
+        <?php
+        if ($authorized == true)
+            include  dirname(__FILE__) . '/left.php';
+        ?>
+    </div>
+    <div class="maincontent  w3-display-container w3-center">
