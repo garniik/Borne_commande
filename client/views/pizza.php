@@ -290,6 +290,27 @@
                     <?php endforeach; ?>
                 </ul>
 
+                <!-- ── Résumé commandabilité ─────────────────────────── -->
+                <?php
+                $aUnProduitSeul = false;
+                foreach ($details as $ligne) {
+                    if (($ligne['produit']['seul'] ?? 0) == 1) {
+                        $aUnProduitSeul = true;
+                        break;
+                    }
+                }
+                ?>
+                <div class="panier-validity <?= $aUnProduitSeul ? 'valid' : 'invalid' ?>">
+                    <i class="fa-solid <?= $aUnProduitSeul ? 'fa-check-circle' : 'fa-exclamation-triangle' ?>"></i>
+                    <span>
+                        <?php if ($aUnProduitSeul): ?>
+                            Commande possible
+                        <?php else: ?>
+                            Passer au bar
+                        <?php endif; ?>
+                    </span>
+                </div>
+
                 <!-- Total + boutons -->
                 <div class="panier-footer">
                     <div class="panier-total">

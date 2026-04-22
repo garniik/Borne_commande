@@ -775,6 +775,29 @@ select.form-control { cursor: pointer; }
 
 .panier-total-montant { color: var(--accent); font-size: 1.4rem; }
 
+/* ── Indicateur de validité commande ──────────────── */
+.panier-validity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    margin: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: .9rem;
+}
+.panier-validity.valid {
+    background: #dcfce7;
+    color: #15803d;
+    border: 2px solid #86efac;
+}
+.panier-validity.invalid {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 2px solid #fca5a5;
+}
+.panier-validity i { font-size: 1.2rem; }
+
 /* ═══════════════════════════════════════════════════════
    ★ PAGE COMMANDE (validation)
 ═══════════════════════════════════════════════════════ */
