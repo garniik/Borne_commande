@@ -78,7 +78,7 @@
                             <span class="stock-badge <?= $badgeClass ?>"><?= $badgeLabel ?></span>
                         <?php endif; ?>
                         <?php if (!empty($produit['image'])): ?>
-                            <img src="<?= htmlspecialchars($produit['image']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy" decoding="async">
+                            <img src="<?= htmlspecialchars('public/images/' . basename($produit['image'])) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" loading="lazy" decoding="async">
                         <?php else: ?>
                             <?= $emoji ?>
                         <?php endif; ?>
