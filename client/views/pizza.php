@@ -115,7 +115,7 @@
                     'prix' => $p['prix'],
                     'categorie' => $p['categorie'],
                     'stock' => (int)$p['stock'],
-                    'image' => $p['image'] ?? null,
+                    'image' => !empty($p['image']) ? 'public/images/' . basename($p['image']) : null,
                     'description' => $p['description'] ?? 'Aucune description disponible.',
                     'emoji' => $icons[$p['categorie']] ?? '🛒'
                 ];
