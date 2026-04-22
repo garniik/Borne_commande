@@ -1,5 +1,5 @@
 </div>
-<div style="clear:both;"></div>
+<div class="clear-both"></div>
 <?php
 if ($db) {
     $db = NULL;

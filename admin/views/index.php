@@ -1,6 +1,6 @@
 
 <!-- Navigation admin -->
-<div style="display:flex; gap:10px; margin-bottom:20px;">
+<div class="flex-wrap-gap mb-20">
     <a href="?element=admin&action=produits" class="btn btn-ghost">
         <i class="fa-solid fa-box"></i>
         Produits

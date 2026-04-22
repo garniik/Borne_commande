@@ -185,7 +185,7 @@
                     : `<div class="prod-modal-emoji">${p.emoji}</div>`;
 
                 const pizzaNote = isPizzaIndispo 
-                    ? `<div style="background: rgba(59,130,246,0.1); padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; color: #3b82f6;"><i class="fa-solid fa-clock"></i> Les pizzas sont disponibles uniquement le Jeudi, Vendredi et Samedi à partir de 18h00.</div>`
+                    ? `<div class="pizza-notice"><i class="fa-solid fa-clock"></i> Les pizzas sont disponibles uniquement le Jeudi, Vendredi et Samedi à partir de 18h00.</div>`
                     : '';
 
                 return `<div class="prod-modal" id="prod-modal-${p.id}" role="dialog" aria-modal="true" aria-label="Détail produit ${escapeHtml(p.nom)}" onclick="fermerModalProduit('prod-modal-${p.id}')">
@@ -217,7 +217,7 @@
                             <button class="btn btn-ghost" onclick="fermerModalProduit('prod-modal-${p.id}')">
                                 <i class="fa-solid fa-xmark"></i> Fermer
                             </button>
-                            <form method="POST" action="" style="display:contents;" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
+                            <form method="POST" action="" class="contents" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
                                 <input type="number" name="quantite" value="1" min="1" max="${dispo ? p.stock_reel : 1}" class="qty-input" ${!dispo ? 'disabled' : ''}>

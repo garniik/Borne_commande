@@ -183,7 +183,7 @@
                             <button class="btn btn-ghost" onclick="fermerModalProduit('prod-modal-${p.id}')">
                                 <i class="fa-solid fa-xmark"></i> Fermer
                             </button>
-                            <form method="POST" action="" style="display:contents;" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
+                            <form method="POST" action="" class="contents" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
                                 ${document.querySelector('[name="categorie"]')?.value ? `<input type="hidden" name="categorie" value="${document.querySelector('[name="categorie"]').value}">` : ''}

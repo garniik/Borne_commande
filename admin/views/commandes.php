@@ -1,6 +1,6 @@
 
 <!-- Navigation admin -->
-<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+<div class="flex-wrap-gap mb-20">
     <a href="?element=admin&action=produits" class="btn btn-ghost">
         <i class="fa-solid fa-box"></i>
         Produits
@@ -16,7 +16,7 @@
 </div>
 
 <!-- En-tête -->
-<div style="margin-bottom:28px;">
+<div class="mb-28">
     <h1 class="page-title">Commandes <span>en cours</span></h1>
     <p class="page-subtitle">
         <?= count($commandes ?? []) ?> commande<?= count($commandes ?? []) > 1 ? 's' : '' ?> —
@@ -163,7 +163,7 @@
                 </li>`).join('') +
                 '</ul>';
         } else {
-            produitsHtml = '<p style="color:var(--text-muted); font-style:italic; font-size:.9rem;">Aucun produit associé.</p>';
+            produitsHtml = '<p class="text-muted">Aucun produit associé.</p>';
         }
 
         const borneHtml = meta.num_borne ?
@@ -200,7 +200,7 @@
                     <button class="btn btn-ghost" onclick="fermerModal('modal-${id}')">
                         <i class="fa-solid fa-xmark"></i> Fermer
                     </button>
-                    <form method="POST" action="" style="display:contents;">
+                    <form method="POST" action="" class="contents">
                         <input type="hidden" name="id" value="${id}">
                         <button type="submit" name="validate_commande" class="btn btn-success" onclick="return confirm('Valider cette commande ?')">
                             <i class="fa-solid fa-check"></i> Valider la commande

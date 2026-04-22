@@ -123,7 +123,7 @@ function srcImage(string $nomFichier): string
                     <!-- Zone de drop / clic tactile -->
                     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('image').click()">
                         <!-- Prévisualisation (cachée au départ) -->
-                        <img id="previewImg" src="" alt="Aperçu" class="upload-preview" style="display:none;">
+                        <img id="previewImg" src="" alt="Aperçu" class="upload-preview hidden">
 
                         <!-- Placeholder affiché quand pas d'image -->
                         <div class="upload-placeholder" id="uploadPlaceholder">
@@ -133,7 +133,7 @@ function srcImage(string $nomFichier): string
                         </div>
 
                         <!-- Nom du fichier sélectionné -->
-                        <div class="upload-filename" id="uploadFilename" style="display:none;"></div>
+                        <div class="upload-filename hidden" id="uploadFilename"></div>
                     </div>
 
                     <!-- Input file réel (invisible, déclenché par la zone) -->
@@ -210,36 +210,6 @@ function srcImage(string $nomFichier): string
         </form>
     </div>
 
-    <style>
-    .filter-bar {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    .filter-search {
-        position: relative;
-        flex: 1;
-        min-width: 250px;
-    }
-    .filter-search i {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--text-muted);
-        pointer-events: none;
-    }
-    .filter-search input {
-        padding-left: 36px;
-        width: 100%;
-    }
-    .filter-select {
-        width: auto;
-        min-width: 160px;
-    }
-    </style>
-
     <?php if (!empty($donnee)): ?>
         <div class="admin-table-wrapper">
             <table class="admin-table">
@@ -269,11 +239,10 @@ function srcImage(string $nomFichier): string
                                             <img src="<?= $src ?>"
                                                  alt="<?= htmlspecialchars($produit['nom']) ?>"
                                                  loading="lazy"
-                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <i class="fa-solid fa-image"
-                                               style="display:none; color:var(--text-muted); font-size:.9rem;"></i>
+                                                 onerror="this.classList.add('hidden'); this.nextElementSibling.style.display='flex';">
+                                            <i class="fa-solid fa-image hidden image-placeholder-icon"></i>
                                         <?php else: ?>
-                                            <i class="fa-solid fa-image" style="color:var(--text-muted); font-size:.9rem;"></i>
+                                            <i class="fa-solid fa-image image-placeholder-icon"></i>
                                         <?php endif; ?>
                                     </div>
                                     <div>
@@ -322,75 +291,6 @@ function srcImage(string $nomFichier): string
         </div>
     <?php endif; ?>
 </div>
-
-
-<style>
-/* ── Zone d'upload image ─────────────────────────────────────────── */
-.upload-zone {
-    border: 2px dashed var(--border-color, #d1d5db);
-    border-radius: 12px;
-    padding: 28px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color .2s, background .2s;
-    background: var(--surface2, #f9fafb);
-    position: relative;
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.upload-zone:hover,
-.upload-zone:focus-within {
-    border-color: var(--accent, #0ea5e9);
-    background: #f0f9ff;
-}
-
-.upload-zone.has-image {
-    padding: 12px;
-    border-style: solid;
-    border-color: var(--accent, #0ea5e9);
-}
-
-.upload-icon {
-    font-size: 2.2rem;
-    color: var(--text-muted, #94a3b8);
-    display: block;
-}
-
-.upload-label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text, #0f172a);
-}
-
-.upload-hint {
-    font-size: .8rem;
-    color: var(--text-muted, #94a3b8);
-}
-
-.upload-preview {
-    max-width: 100%;
-    max-height: 220px;
-    border-radius: 8px;
-    object-fit: contain;
-    box-shadow: 0 2px 12px rgba(0,0,0,.12);
-}
-
-.upload-filename {
-    font-size: .82rem;
-    font-weight: 600;
-    color: var(--accent, #0ea5e9);
-    margin-top: 6px;
-    word-break: break-all;
-}
-</style>
-
 
 <script>
 /* ── Formulaire toggle ──────────────────────────────────────────── */
@@ -583,92 +483,3 @@ document.addEventListener('keydown', e => {
         
     </div>
 </div>
-
-<style>
-/* ── Modal édition ──────────────────────────────────────────────── */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.5);
-    z-index: 900;
-    display: none;
-    cursor: pointer;
-}
-.modal-overlay.active { display: block; }
-
-.modal-edit {
-    position: fixed;
-    inset: 0;
-    z-index: 901;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity .2s ease;
-}
-
-.modal-edit.open {
-    pointer-events: auto;
-    opacity: 1;
-}
-
-.modal-edit-box {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 2px solid var(--border);
-    box-shadow: 0 24px 64px rgba(0,0,0,.18);
-    width: 520px;
-    max-width: 92vw;
-    max-height: 85vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.modal-edit-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-}
-
-.modal-edit-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.modal-edit-close {
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
-    transition: background .15s;
-}
-
-.modal-edit-close:hover {
-    background: var(--surface2);
-}
-
-.modal-edit-form {
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.modal-edit-footer {
-    padding: 16px 20px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    background: var(--surface);
-}
-</style>
