@@ -10,6 +10,66 @@
     <h1 class="page-title">Valider la <span>commande</span></h1>
     <p class="page-subtitle">Renseignez vos informations pour finaliser la commande.</p>
 
+    <!-- ── Résumé du panier ─────────────────────────────── -->
+    <?php
+    $panier = $_SESSION['panier'] ?? [];
+    $aUnProduitSeul = false;
+    $detailsPanier = [];
+    $total = 0;
+
+    if (!empty($panier)) {
+        foreach ($panier as $id_produit => $quantite) {
+            $row = Produits::findById($db, (int)$id_produit);
+            if ($row) {
+                $detailsPanier[] = ['produit' => $row, 'quantite' => $quantite];
+                $total += $row['prix'] * $quantite;
+                if (($row['seul'] ?? 0) == 1) {
+                    $aUnProduitSeul = true;
+                }
+            }
+        }
+    }
+    ?>
+
+    <?php if (!empty($detailsPanier)): ?>
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fa-solid fa-basket-shopping"></i>
+                Résumé de votre panier
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="panier-liste" style="max-height: 200px; overflow-y: auto; margin-bottom: 12px;">
+                <?php foreach ($detailsPanier as $ligne): ?>
+                    <li class="panier-item" style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                        <span style="flex: 1; font-weight: 600;"><?= htmlspecialchars($ligne['produit']['nom']) ?></span>
+                        <span style="color: var(--text-muted);">×<?= (int)$ligne['quantite'] ?></span>
+                        <span style="font-weight: 700; color: var(--accent);"><?= number_format($ligne['produit']['prix'] * $ligne['quantite'], 2, ',', ' ') ?> €</span>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">
+                <span>Total</span>
+                <span style="color: var(--accent); font-size: 1.3rem;"><?= number_format($total, 2, ',', ' ') ?> €</span>
+            </div>
+
+            <!-- ── Indicateur commandabilité ───────────────── -->
+            <div class="panier-validity <?= $aUnProduitSeul ? 'valid' : 'invalid' ?>">
+                <i class="fa-solid <?= $aUnProduitSeul ? 'fa-check-circle' : 'fa-exclamation-triangle' ?>"></i>
+                <span>
+                    <?php if ($aUnProduitSeul): ?>
+                        Commande possible depuis cette borne
+                    <?php else: ?>
+                        Veuillez passer au bar pour commander
+                    <?php endif; ?>
+                </span>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <!-- Formulaire de validation -->
     <div class="card">
         <div class="card-header">
