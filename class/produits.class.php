@@ -165,6 +165,32 @@
                 return [];
             }
         }
+
+        public static function search($db, ?string $search = null, ?string $categorie = null){
+            try {
+                $sql = "SELECT * FROM produits WHERE 1=1";
+                $params = [];
+
+                if ($search !== null && $search !== '') {
+                    $sql .= " AND nom LIKE :search";
+                    $params[':search'] = '%' . $search . '%';
+                }
+
+                if ($categorie !== null && $categorie !== '') {
+                    $sql .= " AND categorie = :categorie";
+                    $params[':categorie'] = $categorie;
+                }
+
+                $sql .= " ORDER BY nom ASC";
+
+                $stmt = $db->prepare($sql);
+                $stmt->execute($params);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                error_log("Erreur lors de la recherche des produits: " . $e->getMessage());
+                return [];
+            }
+        }
     }
 
 

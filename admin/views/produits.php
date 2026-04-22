@@ -171,6 +171,42 @@ function srcImage(string $nomFichier): string
         </div>
     </div>
 
+    <!-- ── Filtres de recherche ─────────────────────────────── -->
+    <div class="card-body" style="padding-bottom: 0;">
+        <form method="GET" action="" class="form-grid" style="gap: 12px; margin-bottom: 16px;">
+            <input type="hidden" name="element" value="admin">
+            <input type="hidden" name="action" value="produits">
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="search">Rechercher</label>
+                <input type="text" id="search" name="search" class="form-control"
+                       placeholder="Nom du produit..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="filtre_categorie">Catégorie</label>
+                <select id="filtre_categorie" name="categorie" class="form-control">
+                    <option value="">— Toutes —</option>
+                    <option value="Soft" <?= ($_GET['categorie'] ?? '') === 'Soft' ? 'selected' : '' ?>>Soft</option>
+                    <option value="Chaud" <?= ($_GET['categorie'] ?? '') === 'Chaud' ? 'selected' : '' ?>>Boissons Chaudes</option>
+                    <option value="Bière" <?= ($_GET['categorie'] ?? '') === 'Bière' ? 'selected' : '' ?>>Bière</option>
+                    <option value="Cocktail" <?= ($_GET['categorie'] ?? '') === 'Cocktail' ? 'selected' : '' ?>>Cocktail</option>
+                    <option value="Snack" <?= ($_GET['categorie'] ?? '') === 'Snack' ? 'selected' : '' ?>>Snack</option>
+                    <option value="Pizza" <?= ($_GET['categorie'] ?? '') === 'Pizza' ? 'selected' : '' ?>>Pizza</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0; display: flex; align-items: flex-end; gap: 8px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-filter"></i> Filtrer
+                </button>
+                <a href="?element=admin&action=produits" class="btn btn-ghost">
+                    <i class="fa-solid fa-xmark"></i> Réinitialiser
+                </a>
+            </div>
+        </form>
+    </div>
+
     <?php if (!empty($donnee)): ?>
         <div class="admin-table-wrapper">
             <table class="admin-table">

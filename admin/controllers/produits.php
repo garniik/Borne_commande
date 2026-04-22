@@ -161,5 +161,12 @@ if (isset($_POST['update'])) {
     exit;
 }
 
-// ── Récupération de tous les produits ─────────────────────────────
-$donnee = Produits::fetchAll($db);
+// ── Récupération des produits (avec filtres si présents) ──────────
+$search = $_GET['search'] ?? null;
+$categorie = $_GET['categorie'] ?? null;
+
+if ($search !== null || $categorie !== null) {
+    $donnee = Produits::search($db, $search, $categorie);
+} else {
+    $donnee = Produits::fetchAll($db);
+}
