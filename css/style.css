@@ -798,6 +798,25 @@ select.form-control { cursor: pointer; }
 }
 .panier-validity i { font-size: 1.2rem; }
 
+/* ── Panier compact (page commande) ───────────────── */
+.card-compact { margin-bottom: 20px; }
+.panier-liste-compact { max-height: 200px; overflow-y: auto; margin-bottom: 12px; }
+.panier-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.panier-item:last-child { border-bottom: none; }
+.panier-nom { flex: 1; font-weight: 600; }
+.panier-qty { color: var(--text-muted); }
+.panier-prix { font-weight: 700; color: var(--accent); }
+.panier-total-row { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px; }
+.form-hint { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; }
+.form-help-text { color: var(--text-muted); margin-top: 4px; display: block; }
+.form-actions-spaced { margin-top: 24px; }
+
+/* ── Notes et helpers ────────────────────────────── */
+.prod-card-note { font-size: 0.75rem; color: var(--text-muted); }
+.panier-item-form { display: inline; margin-left: 8px; }
+.btn-icon { padding: 4px 8px; min-height: auto; font-size: 0.75rem; }
+.form-clear { margin-bottom: 10px; }
+
 /* ═══════════════════════════════════════════════════════
    ★ PAGE COMMANDE (validation)
 ═══════════════════════════════════════════════════════ */

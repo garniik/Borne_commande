@@ -17,7 +17,7 @@ function srcImage(string $nomFichier): string
 ?>
 
 <!-- Navigation admin -->
-<div style="display:flex; gap:10px; margin-bottom:20px;">
+<div class="admin-nav">
     <a href="?element=admin&action=produits" class="btn btn-primary">
         <i class="fa-solid fa-box"></i> Produits
     </a>
@@ -27,12 +27,12 @@ function srcImage(string $nomFichier): string
 </div>
 
 <!-- En-tête de page -->
-<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:28px;">
+<div class="admin-header">
     <div>
-        <h1 class="page-title" style="margin-bottom:4px;">
+        <h1 class="page-title">
             <span>Gestion</span> des produits
         </h1>
-        <p class="page-subtitle" style="margin-bottom:0;">
+        <p class="page-subtitle">
             <?= count($donnee ?? []) ?> produit<?= count($donnee ?? []) > 1 ? 's' : '' ?> enregistré<?= count($donnee ?? []) > 1 ? 's' : '' ?>
         </p>
     </div>
@@ -49,7 +49,7 @@ function srcImage(string $nomFichier): string
      FORMULAIRE D'AJOUT
      Important : enctype="multipart/form-data" obligatoire pour l'upload
 ══════════════════════════════════════════════════════ -->
-<div id="formAjout" class="card collapse-panel" style="margin-bottom:28px;">
+<div id="formAjout" class="card collapse-panel">
     <div class="card-header">
         <div class="card-title">
             <i class="fa-solid fa-box-open"></i>
@@ -95,8 +95,8 @@ function srcImage(string $nomFichier): string
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-                        <input type="checkbox" id="seul" name="seul" value="1" style="width:18px;height:18px;">
+                    <label class="form-label checkbox-label">
+                        <input type="checkbox" id="seul" name="seul" value="1" class="checkbox-input">
                         <span>Peut être commandé seul</span>
                     </label>
                 </div>
@@ -132,14 +132,13 @@ function srcImage(string $nomFichier): string
                            id="image"
                            name="image"
                            accept="image/jpeg,image/png,image/webp,image/gif"
-                           style="display:none;"
+                           class="hidden-input"
                            onchange="previewImage(this)">
 
                     <!-- Bouton pour effacer la sélection -->
                     <button type="button"
                             id="btnClearImage"
-                            class="btn btn-ghost btn-sm"
-                            style="margin-top:8px; display:none;"
+                            class="btn btn-ghost btn-sm btn-clear-image"
                             onclick="clearImage()">
                         <i class="fa-solid fa-xmark"></i> Retirer l'image
                     </button>
@@ -294,7 +293,7 @@ function srcImage(string $nomFichier): string
                                 <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes(str_replace(["\r\n", "\r", "\n"], "\\n", $produit['description'] ?? ''))) ?>')">
                                     <i class="fa-solid fa-pen"></i> Modifier
                                 </button>
-                                <form method="post" style="display:inline; margin-left:8px;" onsubmit="return confirm('Supprimer ce produit et son image ?')">
+                                <form method="post" class="delete-form" onsubmit="return confirm('Supprimer ce produit et son image ?')">
                                     <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
                                     <button type="submit" name="delete" class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i> Supprimer
@@ -551,8 +550,8 @@ document.addEventListener('keydown', e => {
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-                        <input type="checkbox" id="edit_seul" name="edit_seul" value="1" style="width:18px;height:18px;">
+                    <label class="form-label checkbox-label">
+                        <input type="checkbox" id="edit_seul" name="edit_seul" value="1" class="checkbox-input">
                         <span>Peut être commandé seul</span>
                     </label>
                 </div>

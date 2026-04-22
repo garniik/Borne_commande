@@ -279,10 +279,10 @@
                                 <?= formaterPrix($ligne['produit']['prix'] * $ligne['quantite']) ?>
                             </span>
                             <!-- Bouton supprimer -->
-                            <form method="POST" action="" style="display:inline; margin-left: 8px;">
+                            <form method="POST" action="" class="panier-item-form">
                                 <input type="hidden" name="action_panier" value="remove">
                                 <input type="hidden" name="id_produit" value="<?= (int)$ligne['produit']['id'] ?>">
-                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 4px 8px; min-height: auto; font-size: 0.75rem;">
+                                <button type="submit" class="btn btn-danger btn-sm btn-icon">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
@@ -319,7 +319,7 @@
                     </div>
                     
                     <!-- Bouton vider le panier -->
-                    <form method="POST" action="" style="margin-bottom: 10px;">
+                    <form method="POST" action="" class="form-clear">
                         <input type="hidden" name="action_panier" value="clear">
                         <button type="submit" class="btn btn-ghost btn-sm btn-full" onclick="return confirm('Vider tout le panier ?')">
                             <i class="fa-solid fa-trash-can"></i>

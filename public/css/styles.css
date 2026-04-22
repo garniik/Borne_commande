@@ -18,7 +18,19 @@
  
   .prod-page { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text); padding: 28px 0; }
  
-  /* ── Header ──────────────────────────────────────── */
+  /* ── Admin layout ──────────────────────────────── */
+.admin-nav { display: flex; gap: 10px; margin-bottom: 20px; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 28px; }
+.page-title { margin-bottom: 4px; }
+.page-subtitle { margin-bottom: 0; }
+.collapse-panel { margin-bottom: 28px; }
+.delete-form { display: inline; margin-left: 8px; }
+.checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.checkbox-input { width: 18px; height: 18px; }
+.btn-clear-image { margin-top: 8px; display: none; }
+.hidden-input { display: none; }
+
+/* ── Header ──────────────────────────────────────── */
   .prod-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
   .prod-header h1 { font-size: 1.75rem; font-weight: 700; margin: 0; }
   .prod-header h1 span { color: var(--accent); }

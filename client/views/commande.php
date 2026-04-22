@@ -32,7 +32,7 @@
     ?>
 
     <?php if (!empty($detailsPanier)): ?>
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card card-compact">
         <div class="card-header">
             <div class="card-title">
                 <i class="fa-solid fa-basket-shopping"></i>
@@ -40,19 +40,19 @@
             </div>
         </div>
         <div class="card-body">
-            <ul class="panier-liste" style="max-height: 200px; overflow-y: auto; margin-bottom: 12px;">
+            <ul class="panier-liste panier-liste-compact">
                 <?php foreach ($detailsPanier as $ligne): ?>
-                    <li class="panier-item" style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
-                        <span style="flex: 1; font-weight: 600;"><?= htmlspecialchars($ligne['produit']['nom']) ?></span>
-                        <span style="color: var(--text-muted);">×<?= (int)$ligne['quantite'] ?></span>
-                        <span style="font-weight: 700; color: var(--accent);"><?= number_format($ligne['produit']['prix'] * $ligne['quantite'], 2, ',', ' ') ?> €</span>
+                    <li class="panier-item">
+                        <span class="panier-nom"><?= htmlspecialchars($ligne['produit']['nom']) ?></span>
+                        <span class="panier-qty">×<?= (int)$ligne['quantite'] ?></span>
+                        <span class="panier-prix"><?= formaterPrix($ligne['produit']['prix'] * $ligne['quantite']) ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px;">
+            <div class="panier-total-row">
                 <span>Total</span>
-                <span style="color: var(--accent); font-size: 1.3rem;"><?= number_format($total, 2, ',', ' ') ?> €</span>
+                <span class="panier-total-montant"><?= formaterPrix($total) ?></span>
             </div>
 
             <!-- ── Indicateur commandabilité ───────────────── -->
@@ -75,7 +75,7 @@
         <div class="card-header">
             <div class="card-title">
                 <i class="fa-solid fa-pen-to-square"></i>
-                Vos informations
+                Veuillez choisir un numero de Borne
             </div>
         </div>
 
@@ -89,7 +89,7 @@
                     <label class="form-label" for="num_borne">
                         <i class="fa-solid fa-desktop"></i>
                         Numéro de borne
-                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">(1 à 24)</span>
+                        <span class="form-hint">(1 à 24)</span>
                     </label>
                     <select id="num_borne"
                             name="num_borne"
@@ -104,14 +104,14 @@
                         <?php endfor; ?>
                     </select>
                     <?php if (!empty($bornes_utilisees)): ?>
-                        <small style="color: var(--text-muted); margin-top: 4px; display: block;">
+                        <small class="form-help-text">
                             <i class="fa-solid fa-circle-info"></i>
                             Les bornes marquées "occupées" sont déjà utilisées par une commande en cours.
                         </small>
                     <?php endif; ?>
                 </div>
 
-                <div class="form-actions" style="margin-top: 24px;">
+                <div class="form-actions form-actions-spaced">
                     <a href="?element=client&action=index" class="btn btn-ghost">
                         Annuler
                     </a>
