@@ -145,10 +145,11 @@
             }
 
             function renderModalProduit(p) {
-                const dispo = p.infinite_stock === 1 || p.stock > 0;
+                const isInfinite = p.infinite_stock == 1;
+                const dispo = isInfinite || p.stock > 0;
                 
                 let stockLabel, stockBadge;
-                if (p.infinite_stock === 1) {
+                if (isInfinite) {
                     stockLabel = 'Stock illimité';
                     stockBadge = 'badge-green';
                 } else if (p.stock === 0) {
@@ -198,7 +199,7 @@
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
                                 ${document.querySelector('[name="categorie"]')?.value ? `<input type="hidden" name="categorie" value="${document.querySelector('[name="categorie"]').value}">` : ''}
-                                <input type="number" name="quantite" value="1" min="1" max="${p.infinite_stock === 1 ? 99 : p.stock}" class="qty-input" ${!dispo ? 'disabled' : ''}>
+                                <input type="number" name="quantite" value="1" min="1" max="${isInfinite ? 99 : p.stock}" class="qty-input" ${!dispo ? 'disabled' : ''}>
                                 <button type="submit" class="btn btn-primary btn-lg" ${!dispo ? 'disabled' : ''}>
                                     <i class="fa-solid fa-cart-plus"></i>
                                     Ajouter au panier

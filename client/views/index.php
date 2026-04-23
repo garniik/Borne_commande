@@ -171,10 +171,11 @@
 
             function renderModalProduit(p) {
                 const isPizzaIndispo = p.pizza_indispo && !p.pizzas_horaire;
-                const dispo = p.infinite_stock === 1 || p.stock > 0;
+                const isInfinite = p.infinite_stock == 1;
+                const dispo = isInfinite || p.stock > 0;
                 
                 let stockLabel, stockBadge;
-                if (p.infinite_stock === 1) {
+                if (isInfinite) {
                     stockLabel = 'Stock illimité';
                     stockBadge = 'badge-green';
                 } else if (p.stock === 0) {
@@ -228,7 +229,7 @@
                             <form method="POST" action="" class="contents" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
-                                <input type="number" name="quantite" value="1" min="1" max="${p.infinite_stock === 1 ? 99 : (dispo ? p.stock_reel : 1)}" class="qty-input" ${!dispo ? 'disabled' : ''}>
+                                <input type="number" name="quantite" value="1" min="1" max="${isInfinite ? 99 : (dispo ? p.stock_reel : 1)}" class="qty-input" ${!dispo ? 'disabled' : ''}>
                                 <button type="submit" class="btn btn-primary btn-lg" ${!dispo ? 'disabled' : ''}>
                                     <i class="fa-solid fa-cart-plus"></i>
                                     Ajouter
