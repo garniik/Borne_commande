@@ -98,9 +98,18 @@ function srcImage(string $nomFichier): string
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="stock">Stock initial *</label>
+                    <label class="form-label" for="stock">Stock</label>
                     <input type="number" id="stock" name="stock" class="form-control"
-                           placeholder="0" min="0" required>
+                           placeholder="0" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label checkbox-label">
+                        <input type="checkbox" id="infinite_stock" name="infinite_stock" value="1" class="checkbox-input"
+                               onchange="document.getElementById('stock').disabled = this.checked">
+                        <span>Stock illimité (ne sera jamais en rupture)</span>
+                    </label>
+                    <small class="form-text">Cochez pour les boissons en bouteille, bierre pression, etc.</small>
                 </div>
 
                 <div class="form-group">
@@ -268,7 +277,7 @@ function srcImage(string $nomFichier): string
 
                             <!-- Actions -->
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes(str_replace(["\r\n", "\r", "\n"], "\\n", $produit['description'] ?? ''))) ?>')">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes(str_replace(["\r\n", "\r", "\n"], "\\n", $produit['description'] ?? ''))) ?>', <?= (int)($produit['infinite_stock'] ?? 0) ?>, '<?= htmlspecialchars(addslashes($produit['image'] ?? '')) ?>')">
                                     <i class="fa-solid fa-pen"></i> Modifier
                                 </button>
                                 <form method="post" class="delete-form" onsubmit="return confirm('Supprimer ce produit et son image ?')">
@@ -383,7 +392,7 @@ function clearImage() {
 })();
 
 /* ── Modal édition produit ──────────────────────────────────────── */
-function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description) {
+function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description, infiniteStock, image) {
     document.getElementById('edit_id').value = id;
     document.getElementById('edit_nom').value = nom;
     document.getElementById('edit_categorie').value = categorie;
@@ -391,6 +400,9 @@ function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description) {
     document.getElementById('edit_stock').value = stock;
     document.getElementById('edit_seul').checked = (seul == 1);
     document.getElementById('edit_description').value = description;
+    document.getElementById('edit_infinite_stock').checked = (infiniteStock == 1);
+    document.getElementById('edit_stock').disabled = (infiniteStock == 1);
+    document.getElementById('edit_image_current').value = image;
     
     document.getElementById('modalOverlay').classList.add('active');
     document.getElementById('modalEdit').classList.add('open');
@@ -456,8 +468,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="edit_stock">Stock *</label>
-                    <input type="number" id="edit_stock" name="edit_stock" class="form-control" min="0" required>
+                    <label class="form-label" for="edit_stock">Stock</label>
+                    <input type="number" id="edit_stock" name="edit_stock" class="form-control" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label checkbox-label">
+                        <input type="checkbox" id="edit_infinite_stock" name="edit_infinite_stock" value="1" class="checkbox-input"
+                               onchange="document.getElementById('edit_stock').disabled = this.checked">
+                        <span>Stock illimité (ne sera jamais en rupture)</span>
+                    </label>
+                    <small class="form-text">Cochez pour les boissons en bouteille, snacks non stockés, etc.</small>
                 </div>
                 
                 <div class="form-group">
@@ -466,6 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>Peut être commandé seul</span>
                     </label>
                 </div>
+                
+                <input type="hidden" id="edit_image_current" name="image_current" value="">
                 
                 <div class="form-group form-full">
                     <label class="form-label" for="edit_description">Description</label>

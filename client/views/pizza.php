@@ -115,6 +115,7 @@
                     'prix' => $p['prix'],
                     'categorie' => $p['categorie'],
                     'stock' => (int)$p['stock'],
+                    'infinite_stock' => (int)($p['infinite_stock'] ?? 0),
                     'image' => !empty($p['image']) ? 'public/images/' . basename($p['image']) : null,
                     'description' => $p['description'] ?? 'Aucune description disponible.',
                     'emoji' => $icons[$p['categorie']] ?? '🛒'
@@ -144,12 +145,22 @@
             }
 
             function renderModalProduit(p) {
-                const dispo = p.stock > 0;
-                const stockLabel = p.stock === 0 ? 'Rupture de stock' :
-                                   p.stock <= 3 ? `Plus que ${p.stock} en stock !` :
-                                   `${p.stock} en stock`;
-                const stockBadge = p.stock === 0 ? 'badge-red' :
-                                   p.stock <= 3 ? 'badge-yellow' : 'badge-green';
+                const dispo = p.infinite_stock === 1 || p.stock > 0;
+                
+                let stockLabel, stockBadge;
+                if (p.infinite_stock === 1) {
+                    stockLabel = 'Stock illimité';
+                    stockBadge = 'badge-green';
+                } else if (p.stock === 0) {
+                    stockLabel = 'Rupture de stock';
+                    stockBadge = 'badge-red';
+                } else if (p.stock <= 3) {
+                    stockLabel = `Plus que ${p.stock} en stock !`;
+                    stockBadge = 'badge-yellow';
+                } else {
+                    stockLabel = `${p.stock} en stock`;
+                    stockBadge = 'badge-green';
+                }
 
                 const imageHtml = p.image
                     ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.nom)}">`
@@ -187,7 +198,7 @@
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
                                 ${document.querySelector('[name="categorie"]')?.value ? `<input type="hidden" name="categorie" value="${document.querySelector('[name="categorie"]').value}">` : ''}
-                                <input type="number" name="quantite" value="1" min="1" max="${p.stock}" class="qty-input" ${!dispo ? 'disabled' : ''}>
+                                <input type="number" name="quantite" value="1" min="1" max="${p.infinite_stock === 1 ? 99 : p.stock}" class="qty-input" ${!dispo ? 'disabled' : ''}>
                                 <button type="submit" class="btn btn-primary btn-lg" ${!dispo ? 'disabled' : ''}>
                                     <i class="fa-solid fa-cart-plus"></i>
                                     Ajouter au panier

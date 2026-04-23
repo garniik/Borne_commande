@@ -138,6 +138,7 @@
                     'categorie' => $p['categorie'],
                     'stock' => $stockAffiche,
                     'stock_reel' => (int)$p['stock'],
+                    'infinite_stock' => (int)($p['infinite_stock'] ?? 0),
                     'pizza_indispo' => $isPizza,
                     'pizzas_horaire' => $pizzasDispo,
                     'image' => !empty($p['image']) ? 'public/images/' . basename($p['image']) : null,
@@ -169,11 +170,14 @@
             }
 
             function renderModalProduit(p) {
-                const dispo = p.stock > 0;
                 const isPizzaIndispo = p.pizza_indispo && !p.pizzas_horaire;
+                const dispo = p.infinite_stock === 1 || p.stock > 0;
                 
                 let stockLabel, stockBadge;
-                if (p.stock === 0) {
+                if (p.infinite_stock === 1) {
+                    stockLabel = 'Stock illimité';
+                    stockBadge = 'badge-green';
+                } else if (p.stock === 0) {
                     stockLabel = 'Rupture de stock';
                     stockBadge = 'badge-red';
                 } else if (p.stock <= 3) {
@@ -224,7 +228,7 @@
                             <form method="POST" action="" class="contents" onsubmit="fermerModalProduit('prod-modal-${p.id}')">
                                 <input type="hidden" name="action_panier" value="add">
                                 <input type="hidden" name="id_produit" value="${p.id}">
-                                <input type="number" name="quantite" value="1" min="1" max="${dispo ? p.stock_reel : 1}" class="qty-input" ${!dispo ? 'disabled' : ''}>
+                                <input type="number" name="quantite" value="1" min="1" max="${p.infinite_stock === 1 ? 99 : (dispo ? p.stock_reel : 1)}" class="qty-input" ${!dispo ? 'disabled' : ''}>
                                 <button type="submit" class="btn btn-primary btn-lg" ${!dispo ? 'disabled' : ''}>
                                     <i class="fa-solid fa-cart-plus"></i>
                                     Ajouter

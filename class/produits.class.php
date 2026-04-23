@@ -10,6 +10,7 @@
         private string $image;
         private int $stock;
         private int $seul;
+        private int $infinite_stock;
 
         public function hydrate(array $data)
         {
@@ -21,6 +22,7 @@
             $this->image = trim($data['image'] ?? '');
             $this->stock = filter_var($data['stock'] ?? 0, FILTER_VALIDATE_INT);
             $this->seul = filter_var($data['seul'] ?? 0, FILTER_VALIDATE_INT);
+            $this->infinite_stock = filter_var($data['infinite_stock'] ?? 0, FILTER_VALIDATE_INT);
         }
 
         function __construct(object $pdo)
@@ -34,13 +36,14 @@
             $this->image = '';
             $this->stock = 0;
             $this->seul = 0;
+            $this->infinite_stock = 0;
         }
 
         public function create()
         {
             try{
                 $this->pdo->beginTransaction();
-                $stmt = $this->pdo->prepare("INSERT INTO produits (nom, categorie, description, prix, image, stock, seul) VALUES (:nom, :categorie, :description, :prix, :image, :stock, :seul)");
+                $stmt = $this->pdo->prepare("INSERT INTO produits (nom, categorie, description, prix, image, stock, seul, infinite_stock) VALUES (:nom, :categorie, :description, :prix, :image, :stock, :seul, :infinite_stock)");
                 $stmt->bindValue(':nom', $this->nom);
                 $stmt->bindValue(':categorie', $this->categorie);
                 $stmt->bindValue(':description', $this->description);
@@ -48,6 +51,7 @@
                 $stmt->bindValue(':image', $this->image);
                 $stmt->bindValue(':stock', $this->stock);
                 $stmt->bindValue(':seul', $this->seul);
+                $stmt->bindValue(':infinite_stock', $this->infinite_stock);
                 $stmt->execute();
 
                 $this->pdo->commit();
@@ -138,7 +142,7 @@
         public function update(): bool {
             if ($this->id === 0) return false;
             try {
-                $stmt = $this->pdo->prepare("UPDATE produits SET nom = :nom, categorie = :categorie, description = :description, prix = :prix, stock = :stock, seul = :seul WHERE id = :id");
+                $stmt = $this->pdo->prepare("UPDATE produits SET nom = :nom, categorie = :categorie, description = :description, prix = :prix, stock = :stock, seul = :seul, infinite_stock = :infinite_stock WHERE id = :id");
                 return $stmt->execute([
                     ':nom' => $this->nom,
                     ':categorie' => $this->categorie,
@@ -146,6 +150,7 @@
                     ':prix' => $this->prix,
                     ':stock' => $this->stock,
                     ':seul' => $this->seul,
+                    ':infinite_stock' => $this->infinite_stock,
                     ':id' => $this->id
                 ]);
             } catch (Exception $e) {

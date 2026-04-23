@@ -85,13 +85,14 @@ if (isset($_POST['add'])) {
     if (empty($_SESSION['mesgs']['errors'])) {
         $produit = new Produits($db);
         $produit->hydrate([
-            'nom'         => $_POST['nom']         ?? '',
-            'categorie'   => $_POST['categorie']   ?? '',
-            'prix'        => $_POST['prix']         ?? 0,
-            'stock'       => $_POST['stock']        ?? 0,
-            'description' => $_POST['description'] ?? '',
-            'image'       => $nomImage,             // nom du fichier, pas une URL
-            'seul'        => $_POST['seul']         ?? 0,
+            'nom'            => $_POST['nom']            ?? '',
+            'categorie'      => $_POST['categorie']      ?? '',
+            'prix'           => $_POST['prix']           ?? 0,
+            'stock'          => $_POST['stock']          ?? 0,
+            'description'    => $_POST['description']    ?? '',
+            'image'          => $nomImage,                // nom du fichier, pas une URL
+            'seul'           => $_POST['seul']           ?? 0,
+            'infinite_stock' => $_POST['infinite_stock'] ?? 0,
         ]);
         $produit->create();
     }
@@ -147,13 +148,14 @@ if (isset($_POST['set_stock'])) {
 if (isset($_POST['update'])) {
     $produit = new Produits($db);
     $produit->hydrate([
-        'id'          => (int)$_POST['edit_id'],
-        'nom'         => $_POST['edit_nom']         ?? '',
-        'categorie'   => $_POST['edit_categorie']   ?? '',
-        'prix'        => $_POST['edit_prix']         ?? 0,
-        'stock'       => $_POST['edit_stock']        ?? 0,
-        'description' => $_POST['edit_description'] ?? '',
-        'seul'        => $_POST['edit_seul']         ?? 0,
+        'id'             => (int)$_POST['edit_id'],
+        'nom'            => $_POST['edit_nom']         ?? '',
+        'categorie'      => $_POST['edit_categorie']   ?? '',
+        'prix'           => $_POST['edit_prix']        ?? 0,
+        'stock'          => $_POST['edit_stock']       ?? 0,
+        'description'    => $_POST['edit_description'] ?? '',
+        'seul'           => $_POST['edit_seul']        ?? 0,
+        'infinite_stock' => $_POST['edit_infinite_stock'] ?? 0,
     ]);
     $produit->update();
     
