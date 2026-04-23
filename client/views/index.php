@@ -176,7 +176,7 @@
                 
                 let stockLabel, stockBadge;
                 if (isInfinite) {
-                    stockLabel = 'Stock illimité';
+                    stockLabel = 'en stock';
                     stockBadge = 'badge-green';
                 } else if (p.stock === 0) {
                     stockLabel = 'Rupture de stock';

@@ -107,7 +107,7 @@ function srcImage(string $nomFichier): string
                     <label class="form-label checkbox-label">
                         <input type="checkbox" id="infinite_stock" name="infinite_stock" value="1" class="checkbox-input"
                                onchange="document.getElementById('stock').disabled = this.checked">
-                        <span>Stock illimité (ne sera jamais en rupture)</span>
+                        <span>en stock (ne sera jamais en rupture)</span>
                     </label>
                     <small class="form-text">Cochez pour les boissons en bouteille, bierre pression, etc.</small>
                 </div>
@@ -235,7 +235,7 @@ function srcImage(string $nomFichier): string
                     <?php foreach ($donnee as $produit):
                         $stock = (int)$produit['stock'];
                         $infinite = (int)($produit['infinite_stock'] ?? 0);
-                        if ($infinite === 1)     { $sc = 'badge-green'; $sl = 'Illimité'; }
+                        if ($infinite === 1)     { $sc = 'badge-green'; $sl = 'en stock'; }
                         elseif ($stock === 0)    { $sc = 'badge-red';    $sl = 'Rupture'; }
                         elseif ($stock <= 3)     { $sc = 'badge-yellow'; $sl = $stock . ' restant(s)'; }
                         else                     { $sc = 'badge-green';  $sl = $stock; }
@@ -478,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <label class="form-label checkbox-label">
                         <input type="checkbox" id="edit_infinite_stock" name="edit_infinite_stock" value="1" class="checkbox-input"
                                onchange="document.getElementById('edit_stock').disabled = this.checked">
-                        <span>Stock illimité (ne sera jamais en rupture)</span>
+                        <span>en stock (ne sera jamais en rupture)</span>
                     </label>
                     <small class="form-text">Cochez pour les boissons en bouteille, snacks non stockés, etc.</small>
                 </div>
