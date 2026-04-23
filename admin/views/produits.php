@@ -234,9 +234,11 @@ function srcImage(string $nomFichier): string
                 <tbody>
                     <?php foreach ($donnee as $produit):
                         $stock = (int)$produit['stock'];
-                        if ($stock === 0)    { $sc = 'badge-red';    $sl = 'Rupture'; }
-                        elseif ($stock <= 3) { $sc = 'badge-yellow'; $sl = $stock . ' restant(s)'; }
-                        else                { $sc = 'badge-green';  $sl = $stock; }
+                        $infinite = (int)($produit['infinite_stock'] ?? 0);
+                        if ($infinite === 1)     { $sc = 'badge-green'; $sl = 'Illimité'; }
+                        elseif ($stock === 0)    { $sc = 'badge-red';    $sl = 'Rupture'; }
+                        elseif ($stock <= 3)     { $sc = 'badge-yellow'; $sl = $stock . ' restant(s)'; }
+                        else                     { $sc = 'badge-green';  $sl = $stock; }
                     ?>
                         <tr>
                             <!-- Nom + thumbnail -->

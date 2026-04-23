@@ -84,15 +84,18 @@ if (isset($_POST['add'])) {
     // Si traiterUploadImage a ajouté une erreur, on n'insère pas
     if (empty($_SESSION['mesgs']['errors'])) {
         $produit = new Produits($db);
+        $infiniteStock = $_POST['infinite_stock'] ?? 0;
+        $stockValue = $infiniteStock == 1 ? 999999 : ($_POST['stock'] ?? 0);
+        
         $produit->hydrate([
             'nom'            => $_POST['nom']            ?? '',
             'categorie'      => $_POST['categorie']      ?? '',
             'prix'           => $_POST['prix']           ?? 0,
-            'stock'          => $_POST['stock']          ?? 0,
+            'stock'          => $stockValue,
             'description'    => $_POST['description']    ?? '',
             'image'          => $nomImage,                // nom du fichier, pas une URL
             'seul'           => $_POST['seul']           ?? 0,
-            'infinite_stock' => $_POST['infinite_stock'] ?? 0,
+            'infinite_stock' => $infiniteStock,
         ]);
         $produit->create();
     }
@@ -147,15 +150,18 @@ if (isset($_POST['set_stock'])) {
 // ── Mise à jour d'un produit ──────────────────────────────────────
 if (isset($_POST['update'])) {
     $produit = new Produits($db);
+    $infiniteStock = $_POST['edit_infinite_stock'] ?? 0;
+    $stockValue = $infiniteStock == 1 ? 999999 : ($_POST['edit_stock'] ?? 0);
+    
     $produit->hydrate([
         'id'             => (int)$_POST['edit_id'],
         'nom'            => $_POST['edit_nom']         ?? '',
         'categorie'      => $_POST['edit_categorie']   ?? '',
         'prix'           => $_POST['edit_prix']        ?? 0,
-        'stock'          => $_POST['edit_stock']       ?? 0,
+        'stock'          => $stockValue,
         'description'    => $_POST['edit_description'] ?? '',
         'seul'           => $_POST['edit_seul']        ?? 0,
-        'infinite_stock' => $_POST['edit_infinite_stock'] ?? 0,
+        'infinite_stock' => $infiniteStock,
     ]);
     $produit->update();
     
