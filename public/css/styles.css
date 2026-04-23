@@ -68,7 +68,7 @@
   .btn-danger:hover { background: var(--danger); color: #fff; }
  
   /* ── Barre de recherche / filtre ─────────────────── */
-  .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .filter-bar { display: flex; gap: 12px; flex-wrap: nowrap; align-items: flex-end; }
   .filter-group { display: flex; flex-direction: column; gap: 5px; }
   .filter-group label { font-size: .75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
   .filter-group input,
@@ -177,7 +177,7 @@
       display: flex;
       gap: 12px;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
   }
   .filter-search {
       position: relative;

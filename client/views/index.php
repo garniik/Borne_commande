@@ -52,7 +52,11 @@
                     $id_modal  = 'prod-modal-' . (int)$produit['id'];
 
                     // Badge stock
-                    if ($stock === 0) {
+                    if($isPizza) {
+                        $badgeClass = 'badge-blue';
+                        $badgeLabel = 'Indisponible';
+                    }
+                    elseif ($stock === 0) {
                         $badgeClass = 'badge-red';
                         $badgeLabel = 'Rupture';
                     } elseif ($stock <= 3) {
