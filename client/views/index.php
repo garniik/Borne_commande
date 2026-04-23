@@ -129,7 +129,14 @@
                     'Pizza'=> '🍕',
                 ];
                 $isPizza = !empty($p['pizza_indispo']);
-                $stockAffiche = $isPizza && !$pizzasDispo ? 0 : (int)$p['stock'];
+                $isInfinite = (int)($p['infinite_stock'] ?? 0) === 1;
+                if ($isInfinite) {
+                    $stockAffiche = 999;
+                } elseif ($isPizza && !$pizzasDispo) {
+                    $stockAffiche = 0;
+                } else {
+                    $stockAffiche = (int)$p['stock'];
+                }
                 
                 return [
                     'id' => $p['id'],

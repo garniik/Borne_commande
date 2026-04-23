@@ -109,12 +109,13 @@
                     'Pizza'=> '�',
                     'Boisson'  => '🥤'
                 ];
+                $isInfinite = (int)($p['infinite_stock'] ?? 0) === 1;
                 return [
                     'id' => $p['id'],
                     'nom' => $p['nom'],
                     'prix' => $p['prix'],
                     'categorie' => $p['categorie'],
-                    'stock' => (int)$p['stock'],
+                    'stock' => $isInfinite ? 999 : (int)$p['stock'],
                     'infinite_stock' => (int)($p['infinite_stock'] ?? 0),
                     'image' => !empty($p['image']) ? 'public/images/' . basename($p['image']) : null,
                     'description' => $p['description'] ?? 'Aucune description disponible.',
