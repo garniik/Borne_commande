@@ -200,10 +200,13 @@
                     <button class="btn btn-ghost" onclick="fermerModal('modal-${id}')">
                         <i class="fa-solid fa-xmark"></i> Fermer
                     </button>
-                    <form method="POST" action="" class="contents">
+                    <form method="POST" action="" style="display:contents;">
                         <input type="hidden" name="id" value="${id}">
+                        <button type="submit" name="cancel_commande" class="btn btn-danger" onclick="return confirm('Annuler cette commande ? Les articles seront remis en stock.')">
+                            <i class="fa-solid fa-ban"></i> Annuler
+                        </button>
                         <button type="submit" name="validate_commande" class="btn btn-success" onclick="return confirm('Valider cette commande ?')">
-                            <i class="fa-solid fa-check"></i> Valider la commande
+                            <i class="fa-solid fa-check"></i> Valider
                         </button>
                     </form>
                 </div>

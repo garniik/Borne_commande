@@ -115,6 +115,26 @@ class Commandes
     }
 
     /**
+     * Récupère tous les produits d'une commande avec leurs quantités
+     * @return array Liste des produits avec id_produit, quantite, nom, prix
+     */
+    public function getProduitsCommande($id)
+    {
+        try{
+            $stmt = $this->pdo->prepare("SELECT pc.id_produit, pc.quantite, p.nom, p.prix, p.infinite_stock
+             FROM produit_commander pc
+             JOIN produits p ON pc.id_produit = p.id
+             WHERE pc.id_commande = :id");
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        }catch (Exception $e){
+            $_SESSION['mesgs']['errors'][] = $e->getMessage();
+            return [];
+        }
+    }
+
+    /**
      * Récupère les numéros de bornes déjà utilisés dans des commandes actives
      * @return array Liste des num_borne utilisés
      */
