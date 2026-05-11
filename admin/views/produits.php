@@ -131,9 +131,6 @@ function srcImage(string $nomFichier): string
 
                     <!-- Zone de drop / clic tactile -->
                     <div class="upload-zone" id="uploadZone" onclick="document.getElementById('image').click()">
-                        <!-- Prévisualisation (cachée au départ) -->
-                        <img id="previewImg" src="" alt="Aperçu" class="upload-preview hidden">
-
                         <!-- Placeholder affiché quand pas d'image -->
                         <div class="upload-placeholder" id="uploadPlaceholder">
                             <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
@@ -150,16 +147,7 @@ function srcImage(string $nomFichier): string
                            id="image"
                            name="image"
                            accept="image/jpeg,image/png,image/webp,image/gif"
-                           class="hidden-input"
-                           onchange="previewImage(this)">
-
-                    <!-- Bouton pour effacer la sélection -->
-                    <button type="button"
-                            id="btnClearImage"
-                            class="btn btn-ghost btn-sm btn-clear-image"
-                            onclick="clearImage()">
-                        <i class="fa-solid fa-xmark"></i> Retirer l'image
-                    </button>
+                           class="hidden-input">
                 </div>
                 <!-- ── Fin champ upload ────────────────────────── -->
 
@@ -327,10 +315,6 @@ function previewImage(input) {
     const reader = new FileReader();
 
     reader.onload = function(e) {
-        // Afficher la prévisualisation
-        preview.src          = e.target.result;
-        preview.style.display = 'block';
-
         // Cacher le placeholder, afficher le nom
         placeholder.style.display = 'none';
         filename.textContent       = file.name;
@@ -418,7 +402,6 @@ function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description, inf
     
     // Réinitialiser le champ upload
     document.getElementById('edit_image').value = '';
-    document.getElementById('edit-upload-preview').classList.remove('has-image');
     
     document.getElementById('modalOverlay').classList.add('active');
     document.getElementById('modalEdit').classList.add('open');
@@ -436,24 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') fermerModalEdit();
     });
-    
-    // Prévisualisation de l'image dans le modal d'édition
-    const editImageInput = document.getElementById('edit_image');
-    if (editImageInput) {
-        editImageInput.addEventListener('change', function() {
-            const preview = document.getElementById('edit-preview-img');
-            const previewContainer = document.getElementById('edit-upload-preview');
-            
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    previewContainer.classList.add('has-image');
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-    }
+
 });
 </script>
 
@@ -540,12 +506,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="fa-solid fa-cloud-arrow-up"></i>
                             <span>Cliquez ou glissez une image ici</span>
                             <small>JPG, PNG, WebP, GIF - max 5Mo</small>
-                        </div>
-                        <div class="upload-preview" id="edit-upload-preview">
-                            <img id="edit-preview-img" src="" alt="Preview">
-                            <button type="button" class="upload-remove" onclick="document.getElementById('edit_image').value=''; document.getElementById('edit-upload-preview').classList.remove('has-image');">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
