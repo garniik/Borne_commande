@@ -142,13 +142,14 @@
         public function update(): bool {
             if ($this->id === 0) return false;
             try {
-                $stmt = $this->pdo->prepare("UPDATE produits SET nom = :nom, categorie = :categorie, description = :description, prix = :prix, stock = :stock, seul = :seul, infinite_stock = :infinite_stock WHERE id = :id");
+                $stmt = $this->pdo->prepare("UPDATE produits SET nom = :nom, categorie = :categorie, description = :description, prix = :prix, stock = :stock, image = :image, seul = :seul, infinite_stock = :infinite_stock WHERE id = :id");
                 return $stmt->execute([
                     ':nom' => $this->nom,
                     ':categorie' => $this->categorie,
                     ':description' => $this->description,
                     ':prix' => $this->prix,
                     ':stock' => $this->stock,
+                    ':image' => $this->image,
                     ':seul' => $this->seul,
                     ':infinite_stock' => $this->infinite_stock,
                     ':id' => $this->id
