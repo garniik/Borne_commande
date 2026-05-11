@@ -436,6 +436,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') fermerModalEdit();
     });
+    
+    // Prévisualisation de l'image dans le modal d'édition
+    const editImageInput = document.getElementById('edit_image');
+    if (editImageInput) {
+        editImageInput.addEventListener('change', function() {
+            const preview = document.getElementById('edit-preview-img');
+            const previewContainer = document.getElementById('edit-upload-preview');
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewContainer.classList.add('has-image');
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
 });
 </script>
 
