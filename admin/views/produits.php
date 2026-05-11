@@ -406,6 +406,20 @@ function ouvrirModalEdit(id, nom, categorie, prix, stock, seul, description, inf
     document.getElementById('edit_stock').disabled = (infiniteStock == 1);
     document.getElementById('edit_image_current').value = image;
     
+    // Afficher l'aperçu de l'image actuelle
+    const previewContainer = document.getElementById('edit-image-preview-container');
+    const previewImg = document.getElementById('edit-image-preview');
+    if (image) {
+        previewImg.src = 'public/images/' + encodeURIComponent(image);
+        previewContainer.style.display = 'block';
+    } else {
+        previewContainer.style.display = 'none';
+    }
+    
+    // Réinitialiser le champ upload
+    document.getElementById('edit_image').value = '';
+    document.getElementById('edit-upload-preview').classList.remove('has-image');
+    
     document.getElementById('modalOverlay').classList.add('active');
     document.getElementById('modalEdit').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -443,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         </div>
         
-        <form method="POST" action="" class="modal-edit-form">
+        <form method="POST" action="" class="modal-edit-form" enctype="multipart/form-data">
             <input type="hidden" name="edit_id" id="edit_id">
             
             <div class="form-grid">
@@ -491,6 +505,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 <input type="hidden" id="edit_image_current" name="image_current" value="">
+                
+                <!-- Aperçu de l'image actuelle -->
+                <div class="form-group form-full" id="edit-image-preview-container" style="display:none;">
+                    <label class="form-label">Image actuelle</label>
+                    <div class="edit-image-preview">
+                        <img id="edit-image-preview" src="" alt="Image actuelle" style="max-height:100px; border-radius:8px;">
+                    </div>
+                </div>
+                
+                <div class="form-group form-full">
+                    <label class="form-label" for="edit_image">Nouvelle image (laisser vide pour conserver l'actuelle)</label>
+                    <div class="upload-zone">
+                        <input type="file" id="edit_image" name="edit_image" class="upload-input" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <div class="upload-placeholder">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Cliquez ou glissez une image ici</span>
+                            <small>JPG, PNG, WebP, GIF - max 5Mo</small>
+                        </div>
+                        <div class="upload-preview" id="edit-upload-preview">
+                            <img id="edit-preview-img" src="" alt="Preview">
+                            <button type="button" class="upload-remove" onclick="document.getElementById('edit_image').value=''; document.getElementById('edit-upload-preview').classList.remove('has-image');">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="form-group form-full">
                     <label class="form-label" for="edit_description">Description</label>
