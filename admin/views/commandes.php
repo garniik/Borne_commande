@@ -261,9 +261,13 @@
 (function () {
     if (typeof commandesMeta === 'undefined' || !Array.isArray(commandesMeta) || commandesMeta.length === 0) return;
 
-    var audio = new Audio('public/son/32642695.mp3');
-    audio.volume = 1;
-    audio.play().catch(function (e) {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var source = ctx.createMediaElementSource(new Audio('public/son/32642695.mp3'));
+    var gain = ctx.createGain();
+    gain.gain.value = 3; // 1 = normal, 2 = double, 3 = triple — ajuste selon besoin
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    source.mediaElement.play().catch(function (e) {
         console.warn('Audio bloqué :', e);
     });
 })();
