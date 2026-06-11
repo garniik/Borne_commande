@@ -261,7 +261,7 @@
 (function () {
     if (typeof commandesMeta === 'undefined' || !Array.isArray(commandesMeta) || commandesMeta.length === 0) return;
 
-    var audio = new Audio('/son/32642695.mp3');
+    var audio = new Audio('public/son/32642695.mp3');
     audio.volume = 1;
     audio.play().catch(function (e) {
         console.warn('Audio bloqué :', e);
