@@ -255,4 +255,34 @@
 <?php endif; ?>
 
 <!-- Overlay -->
+<script>
+// Play a short notification sound when the admin commandes page has at least one commande.
+// Uses Web Audio API; browsers may block autoplay unless user interacted with the page.
+(function() {
+    try {
+        // commandesMeta is defined above when commandes exist
+        if (typeof commandesMeta !== 'undefined' && Array.isArray(commandesMeta) && commandesMeta.length > 0) {
+            // create and play a short beep
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.type = 'sine';
+            o.frequency.value = 880; // A5
+            o.connect(g);
+            g.connect(ctx.destination);
+            g.gain.value = 0.0001;
+            // small ramp to audible volume
+            const now = ctx.currentTime;
+            g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
+            o.start(now);
+            // stop after 300ms
+            g.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+            setTimeout(() => { try { o.stop(); ctx.close(); } catch(e){} }, 350);
+        }
+    } catch (e) {
+        // ignore errors (older browsers / autoplay restrictions)
+        console.warn('Play order sound failed', e);
+    }
+})();
+</script>
 <div id="cmdOverlay" onclick="fermerTousLesModals()"></div>
