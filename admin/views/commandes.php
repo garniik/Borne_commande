@@ -264,7 +264,7 @@
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
     var source = ctx.createMediaElementSource(new Audio('public/son/notification.mp3'));
     var gain = ctx.createGain();
-    gain.gain.value = 2; // 1 = normal, 2 = double, 3 = triple — ajuste selon besoin
+    gain.gain.value = 1; // 1 = normal, 2 = double, 3 = triple — ajuste selon besoin
     source.connect(gain);
     gain.connect(ctx.destination);
     source.mediaElement.play().catch(function (e) {
