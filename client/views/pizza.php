@@ -332,9 +332,9 @@
                     </div>
                     
                     <!-- Bouton vider le panier -->
-                    <form method="POST" action="" class="form-clear">
+                    <form method="POST" action="" class="form-clear" data-confirm="Vider tout le panier ?">
                         <input type="hidden" name="action_panier" value="clear">
-                        <button type="submit" class="btn btn-ghost btn-sm btn-full" onclick="return confirm('Vider tout le panier ?')">
+                        <button type="submit" class="btn btn-ghost btn-sm btn-full">
                             <i class="fa-solid fa-trash-can"></i>
                             Vider le panier
                         </button>

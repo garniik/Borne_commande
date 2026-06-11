@@ -270,7 +270,7 @@ function srcImage(string $nomFichier): string
                                 <button type="button" class="btn btn-primary btn-sm" onclick="ouvrirModalEdit(<?= (int)$produit['id'] ?>, '<?= htmlspecialchars(addslashes($produit['nom'])) ?>', '<?= htmlspecialchars(addslashes($produit['categorie'])) ?>', <?= (float)$produit['prix'] ?>, <?= (int)$produit['stock'] ?>, <?= (int)($produit['seul'] ?? 0) ?>, '<?= htmlspecialchars(addslashes(str_replace(["\r\n", "\r", "\n"], "\\n", $produit['description'] ?? ''))) ?>', <?= (int)($produit['infinite_stock'] ?? 0) ?>, '<?= htmlspecialchars(addslashes($produit['image'] ?? '')) ?>')">
                                     <i class="fa-solid fa-pen"></i> Modifier
                                 </button>
-                                <form method="post" class="delete-form" onsubmit="return confirm('Supprimer ce produit et son image ?')">
+                                <form method="post" class="delete-form" data-confirm="Supprimer ce produit et son image ?">
                                     <input type="hidden" name="id" value="<?= (int)$produit['id'] ?>">
                                     <button type="submit" name="delete" class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i> Supprimer

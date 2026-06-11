@@ -202,10 +202,10 @@
                     </button>
                     <form method="POST" action="" style="display:contents;">
                         <input type="hidden" name="id" value="${id}">
-                        <button type="submit" name="cancel_commande" class="btn btn-danger" onclick="return confirm('Annuler cette commande ? Les articles seront remis en stock.')">
+                        <button type="submit" name="cancel_commande" class="btn btn-danger" data-confirm="Annuler cette commande ? Les articles seront remis en stock.">
                             <i class="fa-solid fa-ban"></i> Annuler
                         </button>
-                        <button type="submit" name="validate_commande" class="btn btn-success" onclick="return confirm('Valider cette commande ?')">
+                        <button type="submit" name="validate_commande" class="btn btn-success" data-confirm="Valider cette commande ?">
                             <i class="fa-solid fa-check"></i> Valider
                         </button>
                     </form>

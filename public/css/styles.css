@@ -398,6 +398,40 @@
   height: 42px;
   border-radius: 8px;
   object-fit: cover;
+}
+
+/* Custom confirm modal to replace native confirm() */
+.custom-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 12, 20, 0.45);
+  z-index: 9999;
+}
+.custom-confirm-overlay.active {
+  display: flex;
+}
+.custom-confirm-modal {
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  max-width: 440px;
+  width: 100%;
+  border: 1px solid var(--border);
+}
+.custom-confirm-message {
+  margin-bottom: 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+.custom-confirm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
   background: var(--surface2);
   border: 1px solid var(--border);
   display: flex;
