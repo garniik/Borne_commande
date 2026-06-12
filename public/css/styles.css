@@ -421,7 +421,6 @@ button:disabled,
     outline: none;
     transition: var(--transition);
     min-height: var(--touch);
-    width: 100%;
     resize: vertical;
 }
 
