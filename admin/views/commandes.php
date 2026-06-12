@@ -29,18 +29,6 @@
     $produitsParCommande = [];
 ?>
 
-    <!-- Local overrides to ensure admin commandes styles apply (for quick testing) -->
-    <style>
-        .cmd-card-id{ font-size:1.05rem !important; }
-        .cmd-card-borne{ font-size:.9rem !important; }
-        .cmd-meta-row{ font-size:.95rem !important; }
-        .cmd-articles-label{ font-size:.82rem !important; }
-        .cmd-article-item{ font-size:.98rem !important; }
-        .cmd-more-badge{ font-size:.85rem !important; }
-        .cmd-footer-hint{ font-size:.85rem !important; }
-        .checkbox-input{ width:14px !important; height:14px !important; }
-    </style>
-
     <div class="commandes-grid">
 
         <?php foreach ($commandes as $commande):
@@ -276,7 +264,7 @@
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
     var source = ctx.createMediaElementSource(new Audio('public/son/notification.mp3'));
     var gain = ctx.createGain();
-    gain.gain.value = 1; // 1 = normal, 2 = double, 3 = triple — ajuste selon besoin
+    gain.gain.value = 2; // 1 = normal, 2 = double, 3 = triple — ajuste selon besoin
     source.connect(gain);
     gain.connect(ctx.destination);
     source.mediaElement.play().catch(function (e) {
