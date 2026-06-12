@@ -29,6 +29,18 @@
     $produitsParCommande = [];
 ?>
 
+    <!-- Local overrides to ensure admin commandes styles apply (for quick testing) -->
+    <style>
+        .cmd-card-id{ font-size:1.05rem !important; }
+        .cmd-card-borne{ font-size:.9rem !important; }
+        .cmd-meta-row{ font-size:.95rem !important; }
+        .cmd-articles-label{ font-size:.82rem !important; }
+        .cmd-article-item{ font-size:.98rem !important; }
+        .cmd-more-badge{ font-size:.85rem !important; }
+        .cmd-footer-hint{ font-size:.85rem !important; }
+        .checkbox-input{ width:14px !important; height:14px !important; }
+    </style>
+
     <div class="commandes-grid">
 
         <?php foreach ($commandes as $commande):
@@ -55,12 +67,12 @@
 
         <!-- ══ CARD RÉSUMÉ ══════════════════════════════ -->
         <div class="cmd-card"
-             id="<?= $id_card ?>"
-             onclick="ouvrirModal('<?= $id_modal ?>')"
-             role="button"
-             tabindex="0"
-             aria-label="Voir le détail de la commande <?= (int)$commande['id'] ?>"
-             onkeydown="if(event.key==='Enter'||event.key===' ') ouvrirModal('<?= $id_modal ?>')">
+            id="<?= $id_card ?>"
+            onclick="ouvrirModal('<?= $id_modal ?>')"
+            role="button"
+            tabindex="0"
+            aria-label="Voir le détail de la commande <?= (int)$commande['id'] ?>"
+            onkeydown="if(event.key==='Enter'||event.key===' ') ouvrirModal('<?= $id_modal ?>')">
 
             <!-- En-tête coloré -->
             <div class="cmd-card-header">
