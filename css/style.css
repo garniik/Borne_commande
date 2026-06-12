@@ -1021,7 +1021,7 @@ select.form-control { cursor: pointer; }
 }
 
 .cmd-card-id {
-    font-size: .9rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: #fff;
     display: flex;
