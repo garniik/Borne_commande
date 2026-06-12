@@ -481,7 +481,7 @@ select.form-control { cursor: pointer; }
     cursor: pointer;
 }
 
-.checkbox-input { width: 14px; height: 14px; }
+.checkbox-input { width: 20px; height: 20px; }
 
 /* Upload zone */
 .upload-zone {
