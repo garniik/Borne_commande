@@ -75,7 +75,7 @@
         <div class="card-header">
             <div class="card-title">
                 <i class="fa-solid fa-pen-to-square"></i>
-                Veuillez choisir un numero de Borne
+                valider la commande <!-- Veuillez choisir un numero de Borne -->
             </div>
         </div>
 
@@ -85,7 +85,7 @@
                 <input type="hidden" name="source" value="<?= htmlspecialchars($_GET['source'] ?? 'index') ?>">
                 
                 <!-- Numéro de borne -->
-                 
+
                 <!-- <div class="form-group">
                     <label class="form-label" for="num_borne">
                         <i class="fa-solid fa-desktop"></i>
@@ -111,7 +111,6 @@
                         </small>
                     <?php endif; ?>
                 </div> -->
-                
 
                 <div class="form-actions form-actions-spaced">
                     <a href="?element=client&action=index" class="btn btn-ghost">
