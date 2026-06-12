@@ -482,7 +482,7 @@ select.form-control { cursor: pointer; }
     cursor: pointer;
 }
 
-.checkbox-input { width: 18px; height: 18px; }
+.checkbox-input { width: 14px; height: 14px; }
 
 /* Upload zone */
 .upload-zone {
@@ -1341,10 +1341,10 @@ select.form-control { cursor: pointer; }
     flex-shrink: 0;
 }
 
-.cmd-card-id { font-size: .9rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 7px; }
+.cmd-card-id { font-size: 1.05rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 7px; }
 
 .cmd-card-borne {
-    font-size: .78rem;
+    font-size: .9rem;
     font-weight: 700;
     color: rgba(255,255,255,.9);
     background: rgba(0,0,0,.18);
@@ -1358,16 +1358,16 @@ select.form-control { cursor: pointer; }
 
 .cmd-card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
 
-.cmd-meta-row { display: flex; align-items: center; gap: 8px; font-size: .88rem; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; }
+.cmd-meta-row { display: flex; align-items: center; gap: 8px; font-size: .95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; }
 .cmd-meta-icon { color: var(--accent); }
 
 .cmd-separator { height: 1px; background: var(--border); margin-bottom: 12px; }
 
-.cmd-articles-label { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-bottom: 8px; }
+.cmd-articles-label { font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-bottom: 8px; }
 
 .cmd-articles-list { list-style: none; display: flex; flex-direction: column; margin-bottom: 0; }
 
-.cmd-article-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+.cmd-article-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: .98rem; }
 .cmd-article-item:last-child { border-bottom: none; }
 .cmd-article-name { font-weight: 600; color: var(--text); }
 .cmd-article-qty  { font-weight: 800; color: var(--accent); white-space: nowrap; }
@@ -1381,7 +1381,7 @@ select.form-control { cursor: pointer; }
     background: rgba(34,197,94,.1);
     color: var(--accent);
     border-radius: 20px;
-    font-size: .78rem;
+    font-size: .85rem;
     font-weight: 700;
     align-self: flex-start;
 }
@@ -1396,7 +1396,7 @@ select.form-control { cursor: pointer; }
     flex-shrink: 0;
 }
 
-.cmd-footer-hint { font-size: .78rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+.cmd-footer-hint { font-size: .85rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
 
 /* Overlay + modal commande */
 #cmdOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 900; display: none; cursor: pointer; }
