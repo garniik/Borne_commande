@@ -85,7 +85,8 @@
                 <input type="hidden" name="source" value="<?= htmlspecialchars($_GET['source'] ?? 'index') ?>">
                 
                 <!-- Numéro de borne -->
-                <div class="form-group">
+                 
+                <!-- <div class="form-group">
                     <label class="form-label" for="num_borne">
                         <i class="fa-solid fa-desktop"></i>
                         Numéro de borne
@@ -109,7 +110,8 @@
                             Les bornes marquées "occupées" sont déjà utilisées par une commande en cours.
                         </small>
                     <?php endif; ?>
-                </div>
+                </div> -->
+                
 
                 <div class="form-actions form-actions-spaced">
                     <a href="?element=client&action=index" class="btn btn-ghost">
