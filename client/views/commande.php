@@ -75,7 +75,7 @@
         <div class="card-header">
             <div class="card-title">
                 <i class="fa-solid fa-pen-to-square"></i>
-                valider la commande <!-- Veuillez choisir un numero de Borne -->
+                Veuillez choisir un numero de commande
             </div>
         </div>
 
@@ -85,32 +85,31 @@
                 <input type="hidden" name="source" value="<?= htmlspecialchars($_GET['source'] ?? 'index') ?>">
                 
                 <!-- Numéro de borne -->
-
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label class="form-label" for="num_borne">
                         <i class="fa-solid fa-desktop"></i>
-                        Numéro de borne
+                        Numéro de commande
                         <span class="form-hint">(1 à 24)</span>
                     </label>
                     <select id="num_borne"
                             name="num_borne"
                             class="form-control"
                             required>
-                        <option value="">— Choisir une borne —</option>
+                        <option value="">— Choisir une commande —</option>
                         <?php for ($i = 1; $i <= 24; $i++): ?>
                             <?php $est_utilisee = in_array($i, $bornes_utilisees); ?>
                             <option value="<?= $i ?>" <?= $est_utilisee ? 'disabled' : '' ?>>
-                                Borne <?= $i ?><?= $est_utilisee ? ' (occupée)' : '' ?>
+                                Commande <?= $i ?><?= $est_utilisee ? ' (occupée)' : '' ?>
                             </option>
                         <?php endfor; ?>
                     </select>
                     <?php if (!empty($bornes_utilisees)): ?>
                         <small class="form-help-text">
                             <i class="fa-solid fa-circle-info"></i>
-                            Les bornes marquées "occupées" sont déjà utilisées par une commande en cours.
+                            Les numéros marqués "occupés" sont déjà utilisés par une commande en cours.
                         </small>
                     <?php endif; ?>
-                </div> -->
+                </div>
 
                 <div class="form-actions form-actions-spaced">
                     <a href="?element=client&action=index" class="btn btn-ghost">
